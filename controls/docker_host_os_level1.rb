@@ -2,7 +2,10 @@
 # copyright: 2015, The Authors
 # license: All rights reserved
 
-title 'sample section'
+title 'CIS Docker Benchmark'
+
+
+
 
 # you can also use plain tests
 describe file('/tmp') do
