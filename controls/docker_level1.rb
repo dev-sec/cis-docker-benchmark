@@ -85,7 +85,7 @@ control 'cis-docker-1.5' do
   end
 end
 
-control 'cis-docker-1.5' do
+control 'cis-docker-1.6' do
   impact 1.0
   title 'Only allow trusted users to control Docker daemon'
   desc 'The Docker daemon currently requires \'root\' privileges. A user added to the \'docker\' group gives him full \'root\' access rights'
