@@ -1,23 +1,25 @@
 # encoding: utf-8
-# copyright: 2015, The Authors
-# license: All rights reserved
+#
+# Copyright 2016, Patrick Muench
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# author: Christoph Hartmann
+# author: Dominik Richter
+# author: Patrick Muench
 
-title 'CIS Docker Benchmark'
+title 'CIS Docker Benchmark Level 1'
 
-
-
-
-# you can also use plain tests
-describe file('/tmp') do
-  it { should be_directory }
-end
-
-# you add controls here
-control 'tmp-1.0' do                        # A unique ID for this control
-  impact 0.7                                # The criticality, if this control fails.
-  title 'Create /tmp directory'             # A human-readable title
-  desc 'An optional description...'
-  describe file('/tmp') do                  # The actual test
-    it { should be_directory }
-  end
+only_if do
+  command('docker').exist?
 end
