@@ -1,0 +1,29 @@
+---
+AllCops:
+  Exclude:
+  - vendor/**/*
+  - "*/puppet/Puppetfile"
+  - "*/puppet/.tmp/**/*"
+Documentation:
+  Enabled: false
+AlignParameters:
+  Enabled: true
+Encoding:
+  Enabled: true
+HashSyntax:
+  Enabled: true
+LineLength:
+  Enabled: false
+EmptyLinesAroundBlockBody:
+  Enabled: false
+MethodLength:
+  Max: 40
+NumericLiterals:
+  MinDigits: 10
+Metrics/CyclomaticComplexity:
+  Max: 10
+Metrics/PerceivedComplexity:
+  Max: 10
+Metrics/AbcSize:
+  Max: 29
+
