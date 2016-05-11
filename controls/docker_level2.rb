@@ -18,7 +18,7 @@
 # author: Dominik Richter
 # author: Patrick Muench
 
-title 'CIS Docker Benchmark Level 1'
+title 'CIS Docker Benchmark - Level 2 - Docker'
 
 only_if do
   command('docker').exist?
