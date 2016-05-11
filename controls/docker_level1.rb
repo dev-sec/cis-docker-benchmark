@@ -110,7 +110,7 @@ control 'cis-docker-1.7' do
   ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   describe auditd_rules do
-    its(:lines) { should contain_match(%r{-w /usr/bin/docker -p rwxa -k docker}) }
+    its(:lines) { should include('-w /usr/bin/docker -p rwxa -k docker') }
   end
 end
 
@@ -121,7 +121,7 @@ control 'cis-docker-1.8' do
   ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   describe auditd_rules do
-    its(:lines) { should contain_match(%r{-w /var/lib/docker/ -p rwxa -k docker}) }
+    its(:lines) { should include('-w /var/lib/docker/ -p rwxa -k docker') }
   end
 end
 
@@ -132,7 +132,7 @@ control 'cis-docker-1.9' do
   ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   describe auditd_rules do
-    its(:lines) { should contain_match(%r{-w /etc/docker/ -p rwxa -k docker}) }
+    its(:lines) { should include('-w /etc/docker/ -p rwxa -k docker') }
   end
 end
 
@@ -142,11 +142,22 @@ control 'cis-docker-1.10' do
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. docker.service is one such file. The docker.service file might be present if the daemon parameters have been changed by an administrator. It holds various parameters for Docker daemon. It must be audited, if applicable.'
   ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
-  docker_service_path = command('systemctl show -p FragmentPath docker.service').stdout.split('=')[1].delete("\n")
-  rule = '%r{-w ' << docker_service_path << ' -p rwxa -k docker}'
-  puts rule
+  rule = '-w ' << command('systemctl show -p FragmentPath docker.service').stdout.split('=')[1].delete("\n") << ' -p rwxa -k docker'
 
   describe auditd_rules do
-    its(:lines) { should contain_match(rule) }
+    its(:lines) { should include(rule) }
+  end
+end
+
+control 'cis-docker-1.11' do
+  impact 1.0
+  title 'Audit Docker files and directories - docker.service'
+  desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. docker.service is one such file. The docker.service file might be present if the daemon parameters have been changed by an administrator. It holds various parameters for Docker daemon. It must be audited, if applicable.'
+  ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
+
+  rule = '-w ' << command('systemctl show -p FragmentPath docker.socket').stdout.split('=')[1].delete("\n") << ' -p rwxa -k docker'
+
+  describe auditd_rules do
+    its(:lines) { should include(rule) }
   end
 end
