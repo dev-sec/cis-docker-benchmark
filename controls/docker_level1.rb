@@ -110,7 +110,7 @@ control 'cis-docker-1.7' do
   ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   describe auditd_rules do
-      its(:lines) { should contain_match(%r{-w /usr/bin/docker -p rwxa -k docker}) }
+    its(:lines) { should contain_match(%r{-w /usr/bin/docker -p rwxa -k docker}) }
   end
 end
 
@@ -143,7 +143,7 @@ control 'cis-docker-1.10' do
   ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   docker_service_path = command('systemctl show -p FragmentPath docker.service').stdout.split('=')[1].delete("\n")
-  rule = "%r{-w " << docker_service_path <<" -p rwxa -k docker}"
+  rule = '%r{-w ' << docker_service_path << ' -p rwxa -k docker}'
   puts rule
 
   describe auditd_rules do

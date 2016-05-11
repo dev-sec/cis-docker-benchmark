@@ -24,4 +24,3 @@ namespace :test do
     sh("bundle exec inspec check #{dir}")
   end
 end
-
