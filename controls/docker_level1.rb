@@ -61,10 +61,49 @@ end
 control 'cis-docker-2.4' do
   impact 1.0
   title 'Do not use insecure registries'
-  desc 'Docker considers a private registry either secure or insecure. By default, registries are considered secure'
+  desc 'Docker considers a private registry either secure or insecure. By default, registries are considered secure.'
   ref 'https://docs.docker.com/registry/insecure/'
 
   describe json('/etc/docker/daemon.json') do
     its(['insecure-registries']) { should be_empty }
+  end
+end
+
+control 'cis-docker-2.5' do
+  impact 1.0
+  title 'Do not use the aufs storage driver'
+  desc 'The \'aufs\' storage driver is the oldest storage driver. It is based on a Linux kernel patch-set that is unlikely to be merged into the main Linux kernel. \'aufs\' driver is also known to cause some serious kernel crashes. \'aufs\' just has legacy support from Docker. Most importantly, \'aufs\' is not a supported driver in many Linux distributions using latest Linux kernels.'
+  ref 'https://docs.docker.com/engine/reference/commandline/cli/#daemon-storage-driver-option'
+  ref 'https://github.com/docker/docker/issues/6047'
+  ref 'http://muehe.org/posts/switching-docker-from-aufs-to-devicemapper/'
+  ref 'http://jpetazzo.github.io/assets/2015-03-05-deep-dive-into-docker-storage-drivers.html#1'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['storage-driver']) { should_not eq('aufs') }
+  end
+end
+
+control 'cis-docker-2.6' do
+  impact 1.0
+  title 'Configure TLS authentication for Docker daemon'
+  desc 'It is possible to make the Docker daemon to listen on a specific IP and port and any other Unix socket other than default Unix socket. Configure TLS authentication to restrict access to Docker daemon via IP and port.'
+  ref 'https://docs.docker.com/engine/security/https/'
+  ref 'http://www.hnwatcher.com/r/1644394/Intro-to-Docker-Swarm-Part-2-Comfiguration-Modes-and-Requirements'
+  ref 'http://www.blackfinsecurity.com/docker-swarm-with-tls-authentication/'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['tls']) { should eq(true) }
+  end
+  describe json('/etc/docker/daemon.json') do
+    its(['tlsverify']) { should eq(true) }
+  end
+  describe json('/etc/docker/daemon.json') do
+    its(['tlscacert']) { should eq('ca.pem') }
+  end
+  describe json('/etc/docker/daemon.json') do
+    its(['tlscert']) { should eq('cert.pem') }
+  end
+  describe json('/etc/docker/daemon.json') do
+    its(['tlskey']) { should eq('key.pem') }
   end
 end
