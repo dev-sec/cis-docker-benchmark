@@ -29,6 +29,7 @@ control 'cis-docker-1.1' do
   title 'Create a separate partition for containers'
   desc 'All Docker containers and their data and metadata is stored under /var/lib/docker directory. By default, /var/lib/docker would be mounted under / or /var partitions based on availability.'
   ref 'http://www.projectatomic.io/docs/docker-storage-recommendation/'
+
   describe mount('/var/lib/docker') do
     it { should be_mounted }
   end
@@ -41,8 +42,8 @@ control 'cis-docker-1.2' do
   ref 'https://docs.docker.com/engine/installation/binaries/#check-kernel-dependencies'
   ref 'https://docs.docker.com/engine/installation/#installation-list'
 
-  kernel_version = command('uname -r').stdout
-  kernel_compare = Gem::Version.new('3.10') < Gem::Version.new(kernel_version)
+  kernel_version = command('uname -r | grep -o \'^\w\.\w*\.\w*\'').stdout
+  kernel_compare = Gem::Version.new('3.10') <= Gem::Version.new(kernel_version)
 
   describe kernel_compare do
     it { should eq true }
@@ -92,11 +93,60 @@ control 'cis-docker-1.6' do
   ref 'https://docs.docker.com/engine/security/security/'
   ref 'https://www.andreas-jung.com/contents/on-docker-security-docker-group-considered-harmful'
   ref 'http://www.projectatomic.io/blog/2015/08/why-we-dont-let-non-root-users-run-docker-in-centos-fedora-or-rhel/'
+
   describe group('docker') do
     it { should exist }
   end
 
   describe etc_group.where(group_name: 'docker') do
-    its('users') { should include 'user' }
+    its('users') { should include 'vagrant' }
+  end
+end
+
+control 'cis-docker-1.7' do
+  impact 1.0
+  title 'Audit docker daemon'
+  desc 'Apart from auditing your regular Linux file system and system calls, audit Docker daemon as well. Docker daemon runs with \'root\' privileges. It is thus necessary to audit its activities and usage.'
+  ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
+
+  describe auditd_rules do
+      its(:lines) { should contain_match(%r{-w /usr/bin/docker -p rwxa -k docker}) }
+  end
+end
+
+control 'cis-docker-1.8' do
+  impact 1.0
+  title 'Audit Docker files and directories - /var/lib/docker'
+  desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /var/lib/docker is one such directory. It holds all the information about containers. It must be audited.'
+  ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
+
+  describe auditd_rules do
+    its(:lines) { should contain_match(%r{-w /var/lib/docker/ -p rwxa -k docker}) }
+  end
+end
+
+control 'cis-docker-1.9' do
+  impact 1.0
+  title 'Audit Docker files and directories - /etc/docker'
+  desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /etc/docker is one such directory. It holds various certificates and keys used for TLS communication between Docker daemon and Docker client. It must be audited.'
+  ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
+
+  describe auditd_rules do
+    its(:lines) { should contain_match(%r{-w /etc/docker/ -p rwxa -k docker}) }
+  end
+end
+
+control 'cis-docker-1.10' do
+  impact 1.0
+  title 'Audit Docker files and directories - docker.service'
+  desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. docker.service is one such file. The docker.service file might be present if the daemon parameters have been changed by an administrator. It holds various parameters for Docker daemon. It must be audited, if applicable.'
+  ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
+
+  docker_service_path = command('systemctl show -p FragmentPath docker.service').stdout.split('=')[1].delete("\n")
+  rule = "%r{-w " << docker_service_path <<" -p rwxa -k docker}"
+  puts rule
+
+  describe auditd_rules do
+    its(:lines) { should contain_match(rule) }
   end
 end
