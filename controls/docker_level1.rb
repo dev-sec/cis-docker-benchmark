@@ -90,6 +90,7 @@ control 'cis-docker-2.6' do
   ref 'https://docs.docker.com/engine/security/https/'
   ref 'http://www.hnwatcher.com/r/1644394/Intro-to-Docker-Swarm-Part-2-Comfiguration-Modes-and-Requirements'
   ref 'http://www.blackfinsecurity.com/docker-swarm-with-tls-authentication/'
+  ref 'http://tech.paulcz.net/2016/01/secure-docker-with-tls/'
 
   describe json('/etc/docker/daemon.json') do
     its(['tls']) { should eq(true) }
@@ -98,12 +99,40 @@ control 'cis-docker-2.6' do
     its(['tlsverify']) { should eq(true) }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['tlscacert']) { should eq('ca.pem') }
+    its(['tlscacert']) { should eq('/etc/docker/ssl/ca.pem') }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['tlscert']) { should eq('cert.pem') }
+    its(['tlscert']) { should eq('/etc/docker/ssl/server_cert.pem') }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['tlskey']) { should eq('key.pem') }
+    its(['tlskey']) { should eq('/etc/docker/ssl/server_key.pem') }
+  end
+end
+
+control 'cis-docker-2.7' do
+  impact 1.0
+  title 'Set default ulimit as appropriate'
+  desc 'ulimit provides control over the resources available to the shell and to processes started by it. Setting system resource limits judiciously saves you from many disasters such as a fork bomb. Sometimes, even friendly users and legitimate processes can overuse system resources and in-turn can make the system unusable.'
+  ref 'https://docs.docker.com/engine/reference/commandline/daemon/#default-ulimits'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['default-ulimits','nproc']) { should eq('1024:2408') }
+  end
+  describe json('/etc/docker/daemon.json') do
+    its(['default-ulimits','nofile']) { should eq('100:200') }
+  end
+end
+
+control 'cis-docker-2.8' do
+  impact 1.0
+  title 'Enable user namespace support'
+  desc 'Enable user namespace support in Docker daemon to utilize container user to host user re-mapping. This recommendation is beneficial where containers you are using do not have an explicit container user defined in the container image. If container images that you are using have a pre-defined non-root user, this recommendation may be skipped since this feature is still in its infancy and might give you unpredictable issues and complexities.'
+  ref 'http://man7.org/linux/man-pages/man7/user_namespaces.7.html'
+  ref 'https://docs.docker.com/engine/reference/commandline/daemon/'
+  ref 'http://events.linuxfoundation.org/sites/events/files/slides/User%20Namespaces%20-%20ContainerCon%202015%20-%2016-9-final_0.pdf'
+  ref 'https://github.com/docker/docker/issues/21050'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['userns-remap']) { should eq('default') }
   end
 end
