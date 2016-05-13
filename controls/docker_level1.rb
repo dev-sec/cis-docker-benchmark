@@ -122,3 +122,155 @@ control 'cis-docker-2.7' do
     its(['default-ulimits', 'nofile']) { should eq('100:200') }
   end
 end
+
+control 'cis-docker-3.1' do
+  impact 1.0
+  title 'Verify that docker.service file ownership is set to root:root'
+  desc 'Verify that the \'docker.service\' file ownership and group-ownership are correctly set to \'root\''
+  ref 'https://docs.docker.com/engine/admin/systemd/'
+
+  describe file(command('systemctl show -p FragmentPath docker.service').stdout.split('=')[1].delete("\n")) do
+    it { should exist }
+    it { should be_file }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+  end
+end
+
+control 'cis-docker-3.2' do
+  impact 1.0
+  title 'Verify that docker.service file permissions are set to 644 or more restrictive'
+  desc 'Verify that the \'docker.service\' file permissions are correctly set to \'644\' or more restrictive'
+  ref 'https://docs.docker.com/engine/admin/systemd/'
+
+  describe file(command('systemctl show -p FragmentPath docker.service').stdout.split('=')[1].delete("\n")) do
+    it { should exist }
+    it { should be_file }
+    it { should be_readable.by('owner') }
+    it { should be_writable.by('owner') }
+    it { should be_readable.by('group') }
+    it { should_not be_writable.by('group') }
+    it { should be_readable.by('other') }
+    it { should_not be_writable.by('other') }
+    it { should_not be_executable }
+  end
+end
+
+control 'cis-docker-3.3' do
+  impact 1.0
+  title 'Verify that docker.socket file ownership is set to root:root'
+  desc 'Verify that the \'docker.socket\' file ownership and group-ownership are correctly set to \'root\''
+  ref 'https://docs.docker.com/engine/quickstart/'
+  ref 'https://github.com/YungSang/fedora-atomic-packer/blob/master/oem/docker.socket'
+  ref 'https://daviddaeschler.com/2014/12/14/centos-7rhel-7-and-docker-containers-on-boot/'
+
+  describe file(command('systemctl show -p FragmentPath docker.socket').stdout.split('=')[1].delete("\n")) do
+    it { should exist }
+    it { should be_file }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+  end
+end
+
+control 'cis-docker-3.4' do
+  impact 1.0
+  title 'Verify that docker.socket file permissions are set to 644 or more restrictive'
+  desc 'Verify that the \'docker.socket\' file permissions are correctly set to \'644\' or more restrictive.'
+  ref 'https://docs.docker.com/engine/quickstart/'
+  ref 'https://github.com/YungSang/fedora-atomic-packer/blob/master/oem/docker.socket'
+  ref 'https://daviddaeschler.com/2014/12/14/centos-7rhel-7-and-docker-containers-on-boot/'
+
+  describe file(command('systemctl show -p FragmentPath docker.service').stdout.split('=')[1].delete("\n")) do
+    it { should exist }
+    it { should be_file }
+    it { should be_readable.by('owner') }
+    it { should be_writable.by('owner') }
+    it { should be_readable.by('group') }
+    it { should_not be_writable.by('group') }
+    it { should be_readable.by('other') }
+    it { should_not be_writable.by('other') }
+    it { should_not be_executable }
+  end
+end
+
+control 'cis-docker-3.5' do
+  impact 1.0
+  title 'Verify that /etc/docker directory ownership is set to root:root'
+  desc '\'/etc/docker\' directory contains certificates and keys in addition to various sensitive files. Hence, it should be owned and group-owned by \'root\' to maintain the integrity of the directory.'
+  ref 'https://docs.docker.com/engine/security/certificates/'
+
+  describe file('/etc/docker') do
+    it { should exist }
+    it { should be_directory }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+  end
+end
+
+control 'cis-docker-3.6' do
+  impact 1.0
+  title 'Verify that /etc/docker directory permissions are set to 755 or more restrictive'
+  desc 'Verify that the /etc/docker directory permissions are correctly set to \'755\' or more restrictive.'
+  ref 'https://docs.docker.com/engine/security/certificates/'
+
+  describe file('/etc/docker') do
+    it { should exist }
+    it { should be_directory }
+    it { should be_readable.by('owner') }
+    it { should be_writable.by('owner') }
+    it { should be_executable.by('owner') }
+    it { should be_readable.by('group') }
+    it { should_not be_writable.by('group') }
+    it { should be_executable.by('group') }
+    it { should be_readable.by('other') }
+    it { should_not be_writable.by('other') }
+    it { should be_executable.by('other') }
+  end
+end
+
+control 'cis-docker-3.7' do
+  impact 1.0
+  title 'Verify that registry certificate file ownership is set to root:root'
+  desc 'Verify that all the registry certificate files (usually found under /etc/docker/certs.d/<registry-name> directory) are owned and group-owned by \'root\'.'
+  ref 'https://docs.docker.com/engine/security/certificates/'
+  ref 'docs.docker.com/reference/commandline/cli/#insecure-registries'
+
+  describe file('/etc/docker/certs.d') do
+    it { should exist }
+    it { should be_directory }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+  end
+
+  describe file('/etc/docker/certs.d/registry_hostname:port') do
+    it { should exist }
+    it { should be_directory }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+  end
+
+  describe file('/etc/docker/certs.d/registry_hostname:port/ca.crt') do
+    it { should exist }
+    it { should be_file }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+  end
+end
+
+control 'cis-docker-3.8' do
+  impact 1.0
+  title 'Verify that registry certificate file permissions are set to 444 or more restrictive'
+  desc 'Verify that all the registry certificate files (usually found under /etc/docker/certs.d/<registry-name> directory) have permissions of \'444\' or more restrictive.'
+  ref 'https://docs.docker.com/engine/security/certificates/'
+  ref 'docs.docker.com/reference/commandline/cli/#insecure-registries'
+
+  describe file('/etc/docker/certs.d/registry_hostname:port/ca.crt') do
+    it { should exist }
+    it { should be_file }
+    it { should be_readable.by('owner') }
+    it { should be_readable.by('group') }
+    it { should be_readable.by('other') }
+    it { should_not be_executable }
+    it { should_not be_writable }
+  end
+end
