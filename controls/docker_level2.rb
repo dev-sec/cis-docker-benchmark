@@ -48,3 +48,62 @@ control 'cis-docker-2.9' do
     its(['cgroup-parent']) { should eq('docker') }
   end
 end
+
+control 'cis-docker-2.10' do
+  impact 1.0
+  title 'Do not change base device size until needed'
+  desc 'In certain circumstances, you might need containers bigger than 10G in size. In these cases, carefully choose the base device size.'
+  ref 'https://docs.docker.com/engine/reference/commandline/daemon/#storage-driver-options'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['storage-opts']) { should eq(['dm.basesize=10G']) }
+  end
+end
+
+control 'cis-docker-2.11' do
+  impact 1.0
+  title 'Use authorization plugin'
+  desc 'Docker’s out-of-the-box authorization model is all or nothing. Any user with permission to access the Docker daemon can run any Docker client command. The same is true for callers using Docker’s remote API to contact the daemon. If you require greater access control, you can create authorization plugins and add them to your Docker daemon configuration. Using an authorization plugin, a Docker administrator can configure granular access policies for managing access to Docker daemon.'
+  ref 'https://docs.docker.com/engine/reference/commandline/daemon/#access-authorization'
+  ref 'https://docs.docker.com/engine/extend/plugins_authorization/'
+  ref 'https://github.com/twistlock/authz'
+  ref 'https://sreeninet.wordpress.com/2016/03/06/docker-security-part-3engine-access/'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['authorization-plugins']) { should_not be_empty }
+  end
+  describe json('/etc/docker/daemon.json') do
+    its(['authorization-plugins']) { should eq(['authz-broker']) }
+  end
+end
+
+control 'cis-docker-2.12' do
+  impact 1.0
+  title 'Configure centralized and remote logging'
+  desc 'Docker now supports various log drivers. A preferable way to store logs is the one that supports centralized and remote logging.'
+  ref 'https://docs.docker.com/engine/admin/logging/overview/'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['log-driver']) { should_not be_empty }
+  end
+  describe json('/etc/docker/daemon.json') do
+    its(['log-driver']) { should eq('syslog') }
+  end
+  describe json('/etc/docker/daemon.json') do
+    its(['log-opts']) { should include(/syslog-address/) }
+  end
+end
+
+control 'cis-docker-2.13' do
+  impact 1.0
+  title 'Disable operations on legacy registry (v1)'
+  desc 'The latest Docker registry is v2. All operations on the legacy registry version (v1) should be restricted.'
+  ref 'https://docs.docker.com/engine/reference/commandline/daemon/'
+  ref 'https://github.com/docker/docker/issues/8093'
+  ref 'https://github.com/docker/docker/issues/9015'
+  ref 'https://github.com/docker/docker-registry/issues/612'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['disable-legacy-registry']) { should eq(true) }
+  end
+end
