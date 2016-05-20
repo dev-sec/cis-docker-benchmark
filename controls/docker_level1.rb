@@ -113,6 +113,7 @@ control 'cis-docker-2.7' do
   impact 1.0
   title 'Set default ulimit as appropriate'
   desc 'ulimit provides control over the resources available to the shell and to processes started by it. Setting system resource limits judiciously saves you from many disasters such as a fork bomb. Sometimes, even friendly users and legitimate processes can overuse system resources and in-turn can make the system unusable.'
+  tag 'Bug: default-ulimits seems broken in daemon.json https://github.com/docker/docker/issues/22309'
   ref 'https://docs.docker.com/engine/reference/commandline/daemon/#default-ulimits'
 
   describe json('/etc/docker/daemon.json') do
@@ -475,5 +476,150 @@ control 'cis-docker-3.20' do
     it { should be_readable.by('other') }
     it { should_not be_writable.by('other') }
     it { should_not be_executable.by('other') }
+  end
+end
+
+control 'cis-docker-4.1' do
+  impact 1.0
+  title 'Create a user for the container'
+  desc 'Create a non-root user for the container in the Dockerfile for the container image.'
+  ref 'https://github.com/docker/docker/issues/2918'
+  ref 'https://github.com/docker/docker/pull/4572'
+  ref 'https://github.com/docker/docker/issues/7906'
+  ref 'https://www.altiscale.com/blog/making-docker-work-yarn/'
+
+  describe parse_config(command('docker ps --quiet | xargs docker inspect --format \'User={{.Config.User}}\'').stdout, { multiple_values: true }) do
+    its('User') { should_not include '' }
+    its('User') { should include 'ubuntu' }
+  end
+
+  # Test user for a certain docker container
+  docker_container = 'ubuntu-test'
+  docker_command = 'docker inspect --format \'User={{.Config.User}}\' ' << docker_container
+  describe parse_config(command(docker_command).stdout) do
+    its('User') { should eq 'ubuntu' }
+  end
+end
+
+control 'cis-docker-4.2' do
+  impact 1.0
+  title 'Use trusted base images for containers'
+  desc 'Ensure that the container image is written either from scratch or is based on another established and trusted base image downloaded over a secure channel.'
+  ref 'https://titanous.com/posts/docker-insecurity'
+  ref 'https://hub.docker.com/'
+  ref 'https://blog.docker.com/2014/10/docker-1-3-signed-images-process-injection-security-options-mac-shared-directories/'
+  ref 'https://github.com/docker/docker/issues/8093'
+  ref 'https://docs.docker.com/engine/reference/commandline/cli/#pull'
+  ref 'https://github.com/docker/docker/pull/11109'
+  ref 'https://blog.docker.com/2015/11/docker-trusted-registry-1-4/'
+end
+
+control 'cis-docker-4.3' do
+  impact 1.0
+  title 'Do not install unnecessary packages in the container'
+  desc 'Containers tend to be minimal and slim down versions of the Operating System. Do not install anything that does not justify the purpose of container.'
+  ref 'https://docs.docker.com/engine/userguide/containers/dockerimages/'
+  ref 'http://www.livewyer.com/blog/2015/02/24/slimming-down-your-docker-containers-alpine-linux'
+  ref 'https://github.com/progrium/busybox'
+end
+
+control 'cis-docker-4.4' do
+  impact 1.0
+  title 'Rebuild the images to include security patches'
+  desc 'Instead of patching your containers and images, rebuild the images from scratch and instantiate new containers from it.'
+  ref 'https://docs.docker.com/engine/userguide/containers/dockerimages/'
+end
+
+control 'cis-docker-5.3' do
+  impact 1.0
+  title 'Restrict Linux Kernel Capabilities within containers'
+  desc 'By default, Docker starts containers with a restricted set of Linux Kernel Capabilities. It means that any process may be granted the required capabilities instead of root access. Using Linux Kernel Capabilities, the processes do not have to run as root for almost all the specific areas where root privileges are usually needed.'
+  ref 'https://docs.docker.com/engine/security/security/'
+  ref 'http://man7.org/linux/man-pages/man7/capabilities.7.html'
+  ref 'https://github.com/docker/docker/blob/master/oci/defaults_linux.go#L64-L79'
+
+  describe parse_config(command('docker ps --quiet | xargs docker inspect --format \'CapDrop={{ .HostConfig.CapDrop }}\'').stdout, { multiple_values: true }) do
+    its('CapDrop') { should contain_match(/all/) }
+    its('CapDrop') { should_not include '[]' }
+  end
+
+  describe parse_config(command('docker ps --quiet | xargs docker inspect --format \'CapAdd={{ .HostConfig.CapAdd }}\'').stdout, { multiple_values: true }) do
+    its('CapAdd') { should include '[]' }
+  end
+
+  # example for adding capabilities
+  #describe parse_config(command('docker ps --quiet | xargs docker inspect --format \'CapAdd={{ .HostConfig.CapAdd }}\'').stdout, { #multiple_values: true }) do
+  #  its('CapAdd') { should eq ['[NET_ADMIN SYS_ADMIN]']}
+  #end
+
+  # Test capabilities for a certain docker container
+  docker_container = 'ubuntu-test'
+  docker_command = 'docker inspect --format \'CapDrop={{ .HostConfig.CapDrop }}\' ' << docker_container
+  describe parse_config(command(docker_command).stdout) do
+    its('CapDrop') { should eq '[all]' }
+  end
+end
+
+control 'cis-docker-5.4' do
+  impact 1.0
+  title 'Do not use privileged containers'
+  desc 'Using the --privileged flag gives all Linux Kernel Capabilities to the container thus overwriting the --cap-add and --cap-drop flags. Ensure that it is not used.'
+  ref 'https://docs.docker.com/engine/reference/commandline/cli/'
+
+  describe parse_config(command('docker ps --quiet | xargs docker inspect --format \'Privileged={{ .HostConfig.Privileged }}\'').stdout, { multiple_values: true }) do
+    its('Privileged') { should include 'false' }
+    its('Privileged') { should_not include 'true' }
+  end
+end
+
+control 'cis-docker-5.5' do
+  impact 1.0
+  title 'Do not mount sensitive host system directories on containers'
+  desc 'Sensitive host system directories such as \'/, /boot, /dev, /etc, /lib, /proc, /sys, /usr\' should not be allowed to be mounted as container volumes especially in read-write mode.'
+  ref 'https://docs.docker.com/engine/userguide/containers/dockervolumes/'
+
+  describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
+    its('stdout') { should_not match(/\[\{\s\/\s\//)}
+  end
+
+  describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
+    its('stdout') { should_not match(/\[\{\s\/boot/)}
+  end
+
+  describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
+    its('stdout') { should_not match(/\[\{\s\/dev/)}
+  end
+
+  describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
+    its('stdout') { should_not match(/\[\{\s\/lib/)}
+  end
+
+  describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
+    its('stdout') { should_not match(/\[\{\s\/proc/)}
+  end
+
+  describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
+    its('stdout') { should_not match(/\[\{\s\/sys/)}
+  end
+
+  describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
+    its('stdout') { should_not match(/\[\{\s\/usr/)}
+  end
+end
+
+control 'cis-docker-5.6' do
+  impact 1.0
+  title 'Do not run ssh within containers'
+  desc 'SSH server should not be running within the container. You should SSH into the Docker host, and use nsenter tool to enter a container from a remote host.'
+  ref 'https://blog.docker.com/2014/06/why-you-dont-need-to-run-sshd-in-docker/'
+
+  docker_container = command('docker ps --quiet').stdout.split()
+
+  docker_container.each do |i|
+    execute_command = 'docker exec ' << i << ' ps -e'
+    p execute_command
+    describe command(execute_command) do
+      its('stdout') { should_not match(/ssh/)}
+    end
   end
 end

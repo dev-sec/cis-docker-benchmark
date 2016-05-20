@@ -81,6 +81,7 @@ control 'cis-docker-2.12' do
   impact 1.0
   title 'Configure centralized and remote logging'
   desc 'Docker now supports various log drivers. A preferable way to store logs is the one that supports centralized and remote logging.'
+  tag 'Bug: logs-opts seems broken in daemon.json https://github.com/docker/docker/issues/22311'
   ref 'https://docs.docker.com/engine/admin/logging/overview/'
 
   describe json('/etc/docker/daemon.json') do
@@ -105,5 +106,70 @@ control 'cis-docker-2.13' do
 
   describe json('/etc/docker/daemon.json') do
     its(['disable-legacy-registry']) { should eq(true) }
+  end
+end
+
+control 'cis-docker-4.5' do
+  impact 1.0
+  title 'Enable Content trust for Docker'
+  desc 'Content trust provides the ability to use digital signatures for data sent to and received from remote Docker registries. These signatures allow client-side verification of the integrity and publisher of specific image tags. This ensures provenance of container images. Content trust is disabled by default. You should enable it.'
+  ref 'https://docs.docker.com/engine/reference/commandline/cli/#notary'
+  ref 'https://docs.docker.com/engine/reference/commandline/cli/#environment-variables'
+  ref 'https://docs.docker.com/engine/security/trust/content_trust/'
+
+  describe os_env('DOCKER_CONTENT_TRUST') do
+    its('content') { should eq '1' }
+  end
+end
+
+control 'cis-docker-5.1' do
+  impact 1.0
+  title 'Verify AppArmor Profile, if applicable'
+  desc 'AppArmor is an effective and easy-to-use Linux application security system. It is available on quite a few Linux distributions by default such as Debian and Ubuntu.'
+  ref 'https://docs.docker.com/engine/security/security/'
+  ref 'https://docs.docker.com/engine/reference/run/#security-configuration'
+  ref 'http://wiki.apparmor.net/index.php/Main_Page'
+
+  only_if { os[:family] == ('ubuntu' || 'debian') }
+  describe parse_config(command('docker ps --quiet | xargs docker inspect --format \'AppArmorProfile={{ .AppArmorProfile }}\'').stdout, { multiple_values: true }) do
+    its('AppArmorProfile') { should_not include '' }
+    its('AppArmorProfile') { should include 'docker-default' }
+  end
+
+  # Test AppArmorProfile for a certain docker container
+  docker_container = 'ubuntu-test'
+  docker_command = 'docker inspect --format \'AppArmorProfile={{ .AppArmorProfile }}\' ' << docker_container
+  apparmor_profile = 'docker-default'
+  describe parse_config(command(docker_command).stdout) do
+    its('AppArmorProfile') { should eq apparmor_profile }
+  end
+end
+
+control 'cis-docker-5.2' do
+  impact 1.0
+  title 'Verify SELinux security options, if applicable'
+  desc 'SELinux is an effective and easy-to-use Linux application security system. It is available on quite a few Linux distributions by default such as Red Hat and Fedora'
+  tag 'Bug: Wrong SELinux label for devmapper device https://github.com/docker/docker/issues/22826'
+  tag 'Bug: selinux break docker user namespace https://bugzilla.redhat.com/show_bug.cgi?id=1312665'
+  ref 'https://docs.docker.com/engine/security/security/'
+  ref 'https://docs.docker.com/engine/reference/run/#security-configuration'
+  ref 'https://docs.fedoraproject.org/en-US/Fedora/13/html/Security-Enhanced_Linux/'
+
+  only_if { os[:family] == ('centos' || 'redhat') }
+  describe json('/etc/docker/daemon.json') do
+    its(['selinux-enabled']) { should eq(true) }
+  end
+
+  describe parse_config(command('docker ps --quiet | xargs docker inspect --format \'SecurityOpt={{ .HostConfig.SecurityOpt }}\'').stdout, { multiple_values: true }) do
+    its('SecurityOpt') { should_not include '[]' }
+    its('SecurityOpt') { should include '[label=level:s0]' }
+  end
+
+  # Test SecurityOpt for a certain docker container, can not test for TopSecret because of the Bug
+  docker_container = 'ubuntu-test'
+  docker_command = 'docker inspect --format \'SecurityOpt={{ .HostConfig.SecurityOpt }}\' ' << docker_container
+  selinux_label = '[label=level:s0]'
+  describe parse_config(command(docker_command).stdout) do
+    its('SecurityOpt') { should eq selinux_label }
   end
 end
