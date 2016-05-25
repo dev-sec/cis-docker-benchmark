@@ -493,8 +493,8 @@ control 'cis-docker-4.1' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['Config', 'User']) { should eq 'ubuntu' }
-      its(['Config', 'User']) { should_not eq nil  }
+      its(%w(Config User)) { should eq 'ubuntu' }
+      its(%w(Config User)) { should_not eq nil  }
     end
   end
 end
@@ -541,8 +541,8 @@ control 'cis-docker-5.3' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'CapDrop']) { should contain_match(/all/) }
-      its(['HostConfig', 'CapDrop']) { should_not eq nil  }
+      its(%w(HostConfig CapDrop)) { should contain_match(/all/) }
+      its(%w(HostConfig CapDrop)) { should_not eq nil  }
     end
   end
 end
@@ -558,8 +558,8 @@ control 'cis-docker-5.4' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'Privileged']) { should eq false }
-      its(['HostConfig', 'Privileged']) { should_not eq true }
+      its(%w(HostConfig Privileged)) { should eq false }
+      its(%w(HostConfig Privileged)) { should_not eq true }
     end
   end
 end
@@ -628,10 +628,8 @@ control 'cis-docker-5.7' do
     ports = info[0]['NetworkSettings']['Ports'].keys
     ports.each do |item|
       info[0]['NetworkSettings']['Ports'][item].each do |hostport|
-        unless hostport['HostPort'].empty?
-          describe hostport['HostPort'].to_i.between?(1, 1024) do
-            it { should eq false }
-          end
+        describe hostport['HostPort'].to_i.between?(1, 1024) do
+          it { should eq false }
         end
       end
     end
@@ -657,7 +655,7 @@ control 'cis-docker-5.9' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'NetworkMode']) { should_not eq 'host' }
+      its(%w(HostConfig NetworkMode)) { should_not eq 'host' }
     end
   end
 end
@@ -675,7 +673,7 @@ control 'cis-docker-5.10' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'Memory']) { should_not eq 0 }
+      its(%w(HostConfig Memory)) { should_not eq 0 }
     end
   end
 end
@@ -693,8 +691,8 @@ control 'cis-docker-5.11' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'CpuShares']) { should_not eq 0 }
-      its(['HostConfig', 'CpuShares']) { should_not eq 1024 }
+      its(%w(HostConfig CpuShares)) { should_not eq 0 }
+      its(%w(HostConfig CpuShares)) { should_not eq 1024 }
     end
   end
 end
@@ -710,7 +708,7 @@ control 'cis-docker-5.12' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'ReadonlyRootfs']) { should eq true }
+      its(%w(HostConfig ReadonlyRootfs)) { should eq true }
     end
   end
 end
@@ -748,10 +746,10 @@ control 'cis-docker-5.14' do
     info = json('').parse(raw)
     only_if { info[0]['HostConfig']['RestartPolicy']['Name'] != 'no' }
     describe info[0] do
-      its(['HostConfig', 'RestartPolicy', 'Name']) { should eq 'on-failure' }
+      its(%w(HostConfig RestartPolicy Name)) { should eq 'on-failure' }
     end
     describe info[0] do
-      its(['HostConfig', 'RestartPolicy', 'MaximumRetryCount']) { should eq 5 }
+      its(%w(HostConfig RestartPolicy MaximumRetryCount)) { should eq 5 }
     end
   end
 end
@@ -768,7 +766,7 @@ control 'cis-docker-5.15' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'PidMode']) { should_not eq 'host' }
+      its(%w(HostConfig PidMode)) { should_not eq 'host' }
     end
   end
 end
@@ -785,7 +783,7 @@ control 'cis-docker-5.16' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'IpcMode']) { should_not eq 'host' }
+      its(%w(HostConfig IpcMode)) { should_not eq 'host' }
     end
   end
 end
@@ -801,7 +799,7 @@ control 'cis-docker-5.17' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'Devices']) { should be_empty }
+      its(%w(HostConfig Devices)) { should be_empty }
     end
   end
 end
@@ -817,7 +815,7 @@ control 'cis-docker-5.18' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'Ulimits']) { should eq nil }
+      its(%w(HostConfig Ulimits)) { should eq nil }
     end
   end
 end
@@ -833,7 +831,7 @@ control 'cis-docker-5.19' do
   ids = command('docker ps --format "{{.ID}}"').stdout.split
   ids.each do |id|
     raw = command("docker inspect --format '{{range $mnt := .Mounts}} {{json $mnt.Propagation}} {{end}}' #{id}").stdout
-    describe raw.delete("\n").delete("\"").delete(" ") do
+    describe raw.delete("\n").delete('\"').delete(' ') do
       it { should_not eq 'shared' }
     end
   end
@@ -851,7 +849,7 @@ control 'cis-docker-5.20' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'UTSMode']) { should_not eq 'host' }
+      its(%w(HostConfig UTSMode)) { should_not eq 'host' }
     end
   end
 end
@@ -872,8 +870,8 @@ control 'cis-docker-5.21' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'SecurityOpt']) { should include /seccomp/ }
-      its(['HostConfig', 'SecurityOpt']) { should_not include /seccomp=unconfined/ }
+      its(%w(HostConfig SecurityOpt)) { should include(/seccomp/) }
+      its(%w(HostConfig SecurityOpt)) { should_not include(/seccomp[=|:]unconfined/) }
     end
   end
 end
@@ -890,7 +888,7 @@ control 'cis-docker-5.24' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'CgroupParent']) { should be_empty }
+      its(%w(HostConfig CgroupParent)) { should be_empty }
     end
   end
 end
@@ -910,7 +908,7 @@ control 'cis-docker-5.25' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'SecurityOpt']) { should include /no-new-privileges/ }
+      its(%w(HostConfig SecurityOpt)) { should include(/no-new-privileges/) }
     end
   end
 end

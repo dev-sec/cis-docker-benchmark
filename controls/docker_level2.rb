@@ -162,8 +162,8 @@ control 'cis-docker-5.2' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['HostConfig', 'SecurityOpt']) { should include /label\:level\:s0-s0\:c1023/ }
-      its(['HostConfig', 'SecurityOpt']) { should_not eq nil }
+      its(%w(HostConfig SecurityOpt)) { should_not eq nil }
+      its(%w(HostConfig SecurityOpt)) { should include(/label\:level\:s0-s0\:c1023/) }
     end
   end
 end
