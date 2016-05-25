@@ -570,32 +570,23 @@ control 'cis-docker-5.5' do
   desc 'Sensitive host system directories such as \'/, /boot, /dev, /etc, /lib, /proc, /sys, /usr\' should not be allowed to be mounted as container volumes especially in read-write mode.'
   ref 'https://docs.docker.com/engine/userguide/containers/dockervolumes/'
 
-  describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
-    its('stdout') { should_not match(%r{\[\{\s\/\s\/}) }
-  end
-
-  describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
-    its('stdout') { should_not match(%r{\[\{\s\/boot}) }
-  end
-
-  describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
-    its('stdout') { should_not match(%r{\[\{\s\/dev}) }
-  end
-
-  describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
-    its('stdout') { should_not match(%r{\[\{\s\/lib}) }
-  end
-
-  describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
-    its('stdout') { should_not match(%r{\[\{\s\/proc}) }
-  end
-
-  describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
-    its('stdout') { should_not match(%r{\[\{\s\/sys}) }
-  end
-
-  describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
-    its('stdout') { should_not match(%r{\[\{\s\/usr}) }
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    info[0]['Mounts'].each do |mounts|
+      describe mounts['Source'] do
+        p mounts['Source']
+        it { should_not eq '/' }
+        it { should_not match(/\/boot/) }
+        it { should_not match(/\/dev/) }
+        it { should_not match(/\/etc/) }
+        it { should_not match(/\/lib/) }
+        it { should_not match(/\/proc/) }
+        it { should_not match(/\/sys/) }
+        it { should_not match(/\/usr/) }
+      end
+    end
   end
 end
 
