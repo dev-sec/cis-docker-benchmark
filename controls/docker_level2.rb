@@ -131,17 +131,14 @@ control 'cis-docker-5.1' do
   ref 'http://wiki.apparmor.net/index.php/Main_Page'
 
   only_if { os[:family] == ('ubuntu' || 'debian') }
-  describe parse_config(command('docker ps --quiet | xargs docker inspect --format \'AppArmorProfile={{ .AppArmorProfile }}\'').stdout, { multiple_values: true }) do
-    its('AppArmorProfile') { should_not include '' }
-    its('AppArmorProfile') { should include 'docker-default' }
-  end
-
-  # Test AppArmorProfile for a certain docker container
-  docker_container = 'ubuntu-test'
-  docker_command = 'docker inspect --format \'AppArmorProfile={{ .AppArmorProfile }}\' ' << docker_container
-  apparmor_profile = 'docker-default'
-  describe parse_config(command(docker_command).stdout) do
-    its('AppArmorProfile') { should eq apparmor_profile }
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['AppArmorProfile']) { should eq 'docker-default' }
+      its(['AppArmorProfile']) { should_not eq nil }
+    end
   end
 end
 

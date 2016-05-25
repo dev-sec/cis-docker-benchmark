@@ -488,16 +488,14 @@ control 'cis-docker-4.1' do
   ref 'https://github.com/docker/docker/issues/7906'
   ref 'https://www.altiscale.com/blog/making-docker-work-yarn/'
 
-  describe parse_config(command('docker ps --quiet | xargs docker inspect --format \'User={{.Config.User}}\'').stdout, { multiple_values: true }) do
-    its('User') { should_not include '' }
-    its('User') { should include 'ubuntu' }
-  end
-
-  # Test user for a certain docker container
-  docker_container = 'ubuntu-test'
-  docker_command = 'docker inspect --format \'User={{.Config.User}}\' ' << docker_container
-  describe parse_config(command(docker_command).stdout) do
-    its('User') { should eq 'ubuntu' }
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['Config', 'User']) { should eq 'ubuntu' }
+      its(['Config', 'User']) { should_not eq nil  }
+    end
   end
 end
 
@@ -538,25 +536,14 @@ control 'cis-docker-5.3' do
   ref 'http://man7.org/linux/man-pages/man7/capabilities.7.html'
   ref 'https://github.com/docker/docker/blob/master/oci/defaults_linux.go#L64-L79'
 
-  describe parse_config(command('docker ps --quiet | xargs docker inspect --format \'CapDrop={{ .HostConfig.CapDrop }}\'').stdout, { multiple_values: true }) do
-    its('CapDrop') { should contain_match(/all/) }
-    its('CapDrop') { should_not include '[]' }
-  end
-
-  describe parse_config(command('docker ps --quiet | xargs docker inspect --format \'CapAdd={{ .HostConfig.CapAdd }}\'').stdout, { multiple_values: true }) do
-    its('CapAdd') { should include '[]' }
-  end
-
-  # example for adding capabilities
-  #describe parse_config(command('docker ps --quiet | xargs docker inspect --format \'CapAdd={{ .HostConfig.CapAdd }}\'').stdout, { #multiple_values: true }) do
-  #  its('CapAdd') { should eq ['[NET_ADMIN SYS_ADMIN]']}
-  #end
-
-  # Test capabilities for a certain docker container
-  docker_container = 'ubuntu-test'
-  docker_command = 'docker inspect --format \'CapDrop={{ .HostConfig.CapDrop }}\' ' << docker_container
-  describe parse_config(command(docker_command).stdout) do
-    its('CapDrop') { should eq '[all]' }
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'CapDrop']) { should contain_match(/all/) }
+      its(['HostConfig', 'CapDrop']) { should_not eq nil  }
+    end
   end
 end
 
@@ -566,9 +553,14 @@ control 'cis-docker-5.4' do
   desc 'Using the --privileged flag gives all Linux Kernel Capabilities to the container thus overwriting the --cap-add and --cap-drop flags. Ensure that it is not used.'
   ref 'https://docs.docker.com/engine/reference/commandline/cli/'
 
-  describe parse_config(command('docker ps --quiet | xargs docker inspect --format \'Privileged={{ .HostConfig.Privileged }}\'').stdout, { multiple_values: true }) do
-    its('Privileged') { should include 'false' }
-    its('Privileged') { should_not include 'true' }
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'Privileged']) { should eq false }
+      its(['HostConfig', 'Privileged']) { should_not eq true }
+    end
   end
 end
 
