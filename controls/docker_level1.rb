@@ -571,31 +571,31 @@ control 'cis-docker-5.5' do
   ref 'https://docs.docker.com/engine/userguide/containers/dockervolumes/'
 
   describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
-    its('stdout') { should_not match(/\[\{\s\/\s\//)}
+    its('stdout') { should_not match(%r{\[\{\s\/\s\/}) }
   end
 
   describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
-    its('stdout') { should_not match(/\[\{\s\/boot/)}
+    its('stdout') { should_not match(%r{\[\{\s\/boot}) }
   end
 
   describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
-    its('stdout') { should_not match(/\[\{\s\/dev/)}
+    its('stdout') { should_not match(%r{\[\{\s\/dev}) }
   end
 
   describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
-    its('stdout') { should_not match(/\[\{\s\/lib/)}
+    its('stdout') { should_not match(%r{\[\{\s\/lib}) }
   end
 
   describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
-    its('stdout') { should_not match(/\[\{\s\/proc/)}
+    its('stdout') { should_not match(%r{\[\{\s\/proc}) }
   end
 
   describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
-    its('stdout') { should_not match(/\[\{\s\/sys/)}
+    its('stdout') { should_not match(%r{\[\{\s\/sys}) }
   end
 
   describe command('docker ps --quiet | xargs docker inspect --format \'{{ .Mounts }}\'') do
-    its('stdout') { should_not match(/\[\{\s\/usr/)}
+    its('stdout') { should_not match(%r{\[\{\s\/usr}) }
   end
 end
 
@@ -605,13 +605,312 @@ control 'cis-docker-5.6' do
   desc 'SSH server should not be running within the container. You should SSH into the Docker host, and use nsenter tool to enter a container from a remote host.'
   ref 'https://blog.docker.com/2014/06/why-you-dont-need-to-run-sshd-in-docker/'
 
-  docker_container = command('docker ps --quiet').stdout.split()
-
-  docker_container.each do |i|
-    execute_command = 'docker exec ' << i << ' ps -e'
-    p execute_command
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    execute_command = 'docker exec ' << id << ' ps -e'
     describe command(execute_command) do
-      its('stdout') { should_not match(/ssh/)}
+      its('stdout') { should_not match(/ssh/) }
+    end
+  end
+end
+
+control 'cis-docker-5.7' do
+  impact 1.0
+  title 'Do not map privileged ports within containers'
+  desc 'The TCP/IP port numbers below 1024 are considered privileged ports. Normal users and processes are not allowed to use them for various security reasons. Docker allows a container port to be mapped to a privileged port.'
+  ref 'https://docs.docker.com/engine/userguide/networking/default_network/binding/'
+  ref 'https://www.adayinthelifeof.nl/2012/03/12/why-putting-ssh-on-another-port-than-22-is-bad-idea/'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    ports = info[0]['NetworkSettings']['Ports'].keys
+    ports.each do |item|
+      info[0]['NetworkSettings']['Ports'][item].each do |hostport|
+        unless hostport['HostPort'].empty?
+          describe hostport['HostPort'].to_i.between?(1, 1024) do
+            it { should eq false }
+          end
+        end
+      end
+    end
+  end
+end
+
+control 'cis-docker-5.8' do
+  impact 1.0
+  title 'Open only needed ports on container'
+  desc 'Dockerfile for a container image defines the ports to be opened by default on a container instance. The list of ports may or may not be relevant to the application you are running within the container.'
+  ref 'https://docs.docker.com/engine/userguide/networking/default_network/binding/'
+end
+
+control 'cis-docker-5.9' do
+  impact 1.0
+  title 'Do not share the host\'s network namespace'
+  desc 'The networking mode on a container when set to \'--net=host\', skips placing the container inside separate network stack. In essence, this choice tells Docker to not containerize the container\'s networking. This would network-wise mean that the container lives "outside" in the main Docker host and has full access to its network interfaces.'
+  ref 'https://docs.docker.com/engine/userguide/networking/dockernetworks/'
+  ref 'https://github.com/docker/docker/issues/6401'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'NetworkMode']) { should_not eq 'host' }
+    end
+  end
+end
+
+control 'cis-docker-5.10' do
+  impact 1.0
+  title 'Limit memory usage for container'
+  desc 'By default, all containers on a Docker host share the resources equally. By using the resource management capabilities of Docker host, such as memory limit, you can control the amount of memory that a container may consume.'
+  ref 'https://goldmann.pl/blog/2014/09/11/resource-management-in-docker/'
+  ref 'https://docs.docker.com/engine/reference/commandline/cli/#run'
+  ref 'https://docs.docker.com/v1.8/articles/runmetrics/'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'Memory']) { should_not eq 0 }
+    end
+  end
+end
+
+control 'cis-docker-5.11' do
+  impact 1.0
+  title 'Set container CPU priority appropriately'
+  desc 'By default, all containers on a Docker host share the resources equally. By using the resource management capabilities of Docker host, such as CPU shares, you can control the host CPU resources that a container may consume.'
+  ref 'https://goldmann.pl/blog/2014/09/11/resource-management-in-docker/'
+  ref 'https://docs.docker.com/engine/reference/commandline/cli/#run'
+  ref 'https://docs.docker.com/v1.8/articles/runmetrics/'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'CpuShares']) { should_not eq 0 }
+      its(['HostConfig', 'CpuShares']) { should_not eq 1024 }
+    end
+  end
+end
+
+control 'cis-docker-5.12' do
+  impact 1.0
+  title 'Mount container\'s root filesystem as read only'
+  desc 'The container\'s root file system should be treated as a \'golden image\' and any writes to the root filesystem should be avoided. You should explicitly define a container volume for writing.'
+  ref 'https://docs.docker.com/engine/reference/commandline/cli/#run'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'ReadonlyRootfs']) { should eq true }
+    end
+  end
+end
+
+control 'cis-docker-5.13' do
+  impact 1.0
+  title 'Bind incoming container traffic to a specific host interface'
+  desc 'By default, Docker containers can make connections to the outside world, but the outside world cannot connect to containers. Each outgoing connection will appear to originate from one of the host machine\'s own IP addresses. Only allow container services to be contacted through a specific external interface on the host machine.'
+  ref 'https://docs.docker.com/engine/userguide/networking/default_network/binding/'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    ports = info[0]['NetworkSettings']['Ports'].keys
+    ports.each do |item|
+      info[0]['NetworkSettings']['Ports'][item].each do |hostip|
+        describe hostip['HostIp'] do
+          it { should_not eq '0.0.0.0' }
+        end
+      end
+    end
+  end
+end
+
+control 'cis-docker-5.14' do
+  impact 1.0
+  title 'Set the \'on-failure\' container restart policy to 5'
+  desc 'Using the \'--restart\' flag in \'docker run\' command you can specify a restart policy for how a container should or should not be restarted on exit. You should choose the \'on-failure\' restart policy and limit the restart attempts to 5.'
+  ref 'https://docs.docker.com/engine/reference/commandline/cli/#restart-policies'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    only_if { info[0]['HostConfig']['RestartPolicy']['Name'] != 'no' }
+    describe info[0] do
+      its(['HostConfig', 'RestartPolicy', 'Name']) { should eq 'on-failure' }
+    end
+    describe info[0] do
+      its(['HostConfig', 'RestartPolicy', 'MaximumRetryCount']) { should eq 5 }
+    end
+  end
+end
+
+control 'cis-docker-5.15' do
+  impact 1.0
+  title 'Do not share the host\'s process namespace'
+  desc 'Process ID (PID) namespaces isolate the process ID number space, meaning that processes in different PID namespaces can have the same PID. This is process level isolation between containers and the host.'
+  ref 'https://docs.docker.com/engine/reference/run/#pid-settings'
+  ref 'http://man7.org/linux/man-pages/man7/pid_namespaces.7.html'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'PidMode']) { should_not eq 'host' }
+    end
+  end
+end
+
+control 'cis-docker-5.16' do
+  impact 1.0
+  title 'Do not share the host\'s IPC namespace'
+  desc 'IPC (POSIX/SysV IPC) namespace provides separation of named shared memory segments, semaphores and message queues. IPC namespace on the host thus should not be shared with the containers and should remain isolated.'
+  ref 'https://docs.docker.com/engine/reference/run/#ipc-settings'
+  ref 'http://man7.org/linux/man-pages/man7/pid_namespaces.7.html'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'IpcMode']) { should_not eq 'host' }
+    end
+  end
+end
+
+control 'cis-docker-5.17' do
+  impact 1.0
+  title 'Do not directly expose host devices to containers'
+  desc 'Host devices can be directly exposed to containers at runtime. Do not directly expose host devices to containers especially for containers that are not trusted.'
+  ref 'https://docs.docker.com/engine/reference/commandline/cli/#run'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'Devices']) { should be_empty }
+    end
+  end
+end
+
+control 'cis-docker-5.18' do
+  impact 1.0
+  title 'Override default ulimit at runtime only if needed'
+  desc 'The default ulimit is set at the Docker daemon level. However, you may override the default ulimit setting, if needed, during container runtime.'
+  ref 'https://docs.docker.com/engine/reference/commandline/cli/#setting-ulimits-in-a-container'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'Ulimits']) { should eq nil }
+    end
+  end
+end
+
+control 'cis-docker-5.19' do
+  impact 1.0
+  title 'Do not set mount propagation mode to shared'
+  desc 'Mount propagation mode allows mounting volumes in shared, slave or private mode on a container. Do not use shared mount propagation mode until needed.'
+  ref 'https://github.com/docker/docker/pull/17034'
+  ref 'https://docs.docker.com/engine/reference/run/'
+  ref 'https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect --format '{{range $mnt := .Mounts}} {{json $mnt.Propagation}} {{end}}' #{id}").stdout
+    describe raw.delete("\n").delete("\"").delete(" ") do
+      it { should_not eq 'shared' }
+    end
+  end
+end
+
+control 'cis-docker-5.20' do
+  impact 1.0
+  title 'Do not share the host\'s UTS namespace'
+  desc 'UTS namespaces provide isolation of two system identifiers: the hostname and the NIS domain name. It is used for setting the hostname and the domain that is visible to running processes in that namespace. Processes running within containers do not typically require to know hostname and domain name. Hence, the namespace should not be shared with the host.'
+  ref 'https://docs.docker.com/engine/reference/run/'
+  ref 'http://man7.org/linux/man-pages/man7/pid_namespaces.7.html'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'UTSMode']) { should_not eq 'host' }
+    end
+  end
+end
+
+control 'cis-docker-5.21' do
+  impact 1.0
+  title 'Do not disable default seccomp profile'
+  desc 'Seccomp filtering provides a means for a process to specify a filter for incoming system calls. The default Docker seccomp profile disables 44 system calls, out of 313. It should not be disabled unless it hinders your container application usage.'
+  ref 'https://docs.docker.com/engine/reference/run/'
+  ref 'http://blog.aquasec.com/new-docker-security-features-and-what-they-mean-seccomp-profiles'
+  ref 'https://github.com/docker/docker/blob/master/profiles/seccomp/default.json'
+  ref 'https://docs.docker.com/engine/security/seccomp/'
+  ref 'https://www.kernel.org/doc/Documentation/prctl/seccomp_filter.txt'
+  ref 'https://github.com/docker/docker/pull/17034'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'SecurityOpt']) { should include /seccomp/ }
+      its(['HostConfig', 'SecurityOpt']) { should_not include /seccomp=unconfined/ }
+    end
+  end
+end
+
+control 'cis-docker-5.24' do
+  impact 1.0
+  title 'Confirm cgroup usage'
+  desc 'It is possible to attach to a particular cgroup on container run. Confirming cgroup usage would ensure that containers are running under defined cgroups.'
+  ref 'https://docs.docker.com/engine/reference/run/#specifying-custom-cgroups'
+  ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Resource_Management_Guide/ch01.html'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'CgroupParent']) { should be_empty }
+    end
+  end
+end
+
+control 'cis-docker-5.25' do
+  impact 1.0
+  title 'Restrict container from acquiring additional privileges'
+  desc 'Restrict the container from acquiring additional privileges via suid or sgid bits.'
+  ref 'https://github.com/projectatomic/atomic-site/issues/269'
+  ref 'https://github.com/docker/docker/pull/20727'
+  ref 'https://www.kernel.org/doc/Documentation/prctl/no_new_privs.txt'
+  ref 'https://lwn.net/Articles/475678/'
+  ref 'https://lwn.net/Articles/475362/'
+
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'SecurityOpt']) { should include /no-new-privileges/ }
     end
   end
 end

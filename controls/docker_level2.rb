@@ -157,16 +157,35 @@ control 'cis-docker-5.2' do
     its(['selinux-enabled']) { should eq(true) }
   end
 
-  describe parse_config(command('docker ps --quiet | xargs docker inspect --format \'SecurityOpt={{ .HostConfig.SecurityOpt }}\'').stdout, { multiple_values: true }) do
-    its('SecurityOpt') { should_not include '[]' }
-    its('SecurityOpt') { should include '[label=level:s0]' }
+  ids = command('docker ps --format "{{.ID}}"').stdout.split
+  ids.each do |id|
+    raw = command("docker inspect #{id}").stdout
+    info = json('').parse(raw)
+    describe info[0] do
+      its(['HostConfig', 'SecurityOpt']) { should include /label\:level\:s0-s0\:c1023/ }
+      its(['HostConfig', 'SecurityOpt']) { should_not eq nil }
+    end
   end
+end
 
-  # Test SecurityOpt for a certain docker container, can not test for TopSecret because of the Bug
-  docker_container = 'ubuntu-test'
-  docker_command = 'docker inspect --format \'SecurityOpt={{ .HostConfig.SecurityOpt }}\' ' << docker_container
-  selinux_label = '[label=level:s0]'
-  describe parse_config(command(docker_command).stdout) do
-    its('SecurityOpt') { should eq selinux_label }
+control 'cis-docker-5.22' do
+  impact 1.0
+  title 'Do not docker exec commands with privileged option'
+  desc 'Do not docker exec with --privileged option.'
+  ref 'https://docs.docker.com/engine/reference/commandline/exec/'
+
+  describe command('ausearch --input-logs -k docker | grep exec | grep privileged').stdout do
+    it { should be_empty }
+  end
+end
+
+control 'cis-docker-5.23' do
+  impact 1.0
+  title 'Do not docker exec commands with user option'
+  desc 'Do not docker exec with --user option.'
+  ref 'https://docs.docker.com/engine/reference/commandline/exec/'
+
+  describe command('ausearch --input-logs -k docker | grep exec | grep user').stdout do
+    it { should be_empty }
   end
 end
