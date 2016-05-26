@@ -903,3 +903,42 @@ control 'cis-docker-5.25' do
     end
   end
 end
+
+control 'cis-docker-6.1' do
+  impact 1.0
+  title 'Perform regular security audits of your host system and containers'
+  desc 'Perform regular security audits of your host system and containers to identify any mis-configurations or vulnerabilities that could expose your system to compromise.'
+  ref 'http://searchsecurity.techtarget.com/IT-security-auditing-Best-practices-for-conducting-audits'
+end
+
+control 'cis-docker-6.2' do
+  impact 1.0
+  title 'Monitor Docker containers usage, performance and metering'
+  desc 'Containers might run services that are critical for your business. Monitoring their usage, performance and metering would be of paramount importance.'
+  ref 'https://docs.docker.com/v1.8/articles/runmetrics/'
+  ref 'https://github.com/google/cadvisor'
+  ref 'https://docs.docker.com/engine/reference/commandline/cli/#stats'
+end
+
+control 'cis-docker-6.3' do
+  impact 1.0
+  title 'Backup container data'
+  desc 'Take regular backups of your container data volumes.'
+  ref 'https://docs.docker.com/engine/userguide/containers/dockervolumes/'
+  ref 'http://stackoverflow.com/questions/26331651/how-can-i-backup-a-docker-container-with-its-data-volumes'
+  ref 'https://docs.docker.com/engine/reference/commandline/cli/#diff'
+end
+
+control 'cis-docker-6.4' do
+  impact 1.0
+  title 'Avoid image sprawl'
+  desc 'Do not keep a large number of container images on the same host. Use only tagged images as appropriate.'
+  ref 'https://docs.docker.com/engine/userguide/containers/dockervolumes/'
+  ref 'http://stackoverflow.com/questions/26331651/how-can-i-backup-a-docker-container-with-its-data-volumes'
+  ref 'https://docs.docker.com/engine/reference/commandline/cli/#diff'
+
+  # docker inspect -f "{{.Image}}" $(docker ps -qa)
+
+  # docker images --quiet | xargs docker inspect --format '{{ .Id }}: Image={{ .Config.Image }}'
+  # docker images --quiet | xargs docker inspect --format '{{ .Id }}: Image={{ .Config.Image }}'
+end
