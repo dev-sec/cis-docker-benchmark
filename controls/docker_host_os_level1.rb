@@ -222,8 +222,11 @@ control 'cis-docker-6.4' do
   ref 'http://stackoverflow.com/questions/26331651/how-can-i-backup-a-docker-container-with-its-data-volumes'
   ref 'https://docs.docker.com/engine/reference/commandline/cli/#diff'
 
-  # docker inspect -f "{{.Image}}" $(docker ps -qa)
+  instantiated_images = command('docker ps -qa | xargs docker inspect -f \'{{.Image}}\'').stdout.split
+  all_images = command('docker images -q --no-trunc').stdout.split
+  diff = all_images - instantiated_images
 
-  # docker images --quiet | xargs docker inspect --format '{{ .Id }}: Image={{ .Config.Image }}'
-  # docker images --quiet | xargs docker inspect --format '{{ .Id }}: Image={{ .Config.Image }}'
+  describe diff do
+    it { should be_empty }
+  end
 end
