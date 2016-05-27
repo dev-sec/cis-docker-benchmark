@@ -24,7 +24,7 @@ only_if do
   command('docker').exist?
 end
 
-control 'cis-docker-1.1' do
+control 'cis-docker-benchmark-1.1' do
   impact 1.0
   title 'Create a separate partition for containers'
   desc 'All Docker containers and their data and metadata is stored under /var/lib/docker directory. By default, /var/lib/docker would be mounted under / or /var partitions based on availability.'
@@ -35,7 +35,7 @@ control 'cis-docker-1.1' do
   end
 end
 
-control 'cis-docker-1.2' do
+control 'cis-docker-benchmark-1.2' do
   impact 1.0
   title 'Use the updated Linux Kernel'
   desc 'Docker in daemon mode has specific kernel requirements. A 3.10 Linux kernel is the minimum requirement for Docker.'
@@ -50,7 +50,7 @@ control 'cis-docker-1.2' do
   end
 end
 
-control 'cis-docker-1.3' do
+control 'cis-docker-benchmark-1.3' do
   impact 1.0
   title 'Harden the container host'
   desc 'Containers run on a Linux host. A container host can run one or more containers. It is of utmost importance to harden the host to mitigate host security misconfiguration'
@@ -58,14 +58,14 @@ control 'cis-docker-1.3' do
   ref 'https://docs.docker.com/engine/security/security/'
 end
 
-control 'cis-docker-1.4' do
+control 'cis-docker-benchmark-1.4' do
   impact 1.0
   title 'Remove all non-essential services from the host'
   desc 'Ensure that the host running the docker daemon is running only the essential services.'
   ref 'https://blog.docker.com/2013/08/containers-docker-how-secure-are-they/'
 end
 
-control 'cis-docker-1.5' do
+control 'cis-docker-benchmark-1.5' do
   impact 1.0
   title 'Keep Docker up to date'
   desc 'The docker container solution is evolving to maturity and stability at a rapid pace. Like any other software, the vendor releases regular updates for Docker software that address security vulnerabilities, product bugs and bring in new functionality.'
@@ -86,7 +86,7 @@ control 'cis-docker-1.5' do
   end
 end
 
-control 'cis-docker-1.6' do
+control 'cis-docker-benchmark-1.6' do
   impact 1.0
   title 'Only allow trusted users to control Docker daemon'
   desc 'The Docker daemon currently requires \'root\' privileges. A user added to the \'docker\' group gives him full \'root\' access rights'
@@ -99,11 +99,11 @@ control 'cis-docker-1.6' do
   end
 
   describe etc_group.where(group_name: 'docker') do
-    its('users') { should include 'vagrant' }
+    its('users') { should include ENV['TRUSTED_USER'] || 'vagrant' }
   end
 end
 
-control 'cis-docker-1.7' do
+control 'cis-docker-benchmark-benchmark-1.7' do
   impact 1.0
   title 'Audit docker daemon'
   desc 'Apart from auditing your regular Linux file system and system calls, audit Docker daemon as well. Docker daemon runs with \'root\' privileges. It is thus necessary to audit its activities and usage.'
@@ -114,7 +114,7 @@ control 'cis-docker-1.7' do
   end
 end
 
-control 'cis-docker-1.8' do
+control 'cis-docker-benchmark-1.8' do
   impact 1.0
   title 'Audit Docker files and directories - /var/lib/docker'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /var/lib/docker is one such directory. It holds all the information about containers. It must be audited.'
@@ -125,7 +125,7 @@ control 'cis-docker-1.8' do
   end
 end
 
-control 'cis-docker-1.9' do
+control 'cis-docker-benchmark-1.9' do
   impact 1.0
   title 'Audit Docker files and directories - /etc/docker'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /etc/docker is one such directory. It holds various certificates and keys used for TLS communication between Docker daemon and Docker client. It must be audited.'
@@ -136,7 +136,7 @@ control 'cis-docker-1.9' do
   end
 end
 
-control 'cis-docker-1.10' do
+control 'cis-docker-benchmark-1.10' do
   impact 1.0
   title 'Audit Docker files and directories - docker.service'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. docker.service is one such file. The docker.service file might be present if the daemon parameters have been changed by an administrator. It holds various parameters for Docker daemon. It must be audited, if applicable.'
@@ -149,7 +149,7 @@ control 'cis-docker-1.10' do
   end
 end
 
-control 'cis-docker-1.11' do
+control 'cis-docker-benchmark-1.11' do
   impact 1.0
   title 'Audit Docker files and directories - docker.service'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. docker.service is one such file. The docker.service file might be present if the daemon parameters have been changed by an administrator. It holds various parameters for Docker daemon. It must be audited, if applicable.'
@@ -162,7 +162,7 @@ control 'cis-docker-1.11' do
   end
 end
 
-control 'cis-docker-1.12' do
+control 'cis-docker-benchmark-1.12' do
   impact 1.0
   title 'Audit Docker files and directories - /etc/default/docker'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /etc/default/docker is one such file. It holds various parameters for Docker daemon. It must be audited, if applicable.'
@@ -175,7 +175,7 @@ control 'cis-docker-1.12' do
   end
 end
 
-control 'cis-docker-1.13' do
+control 'cis-docker-benchmark-1.13' do
   impact 1.0
   title 'Audit Docker files and directories - /etc/docker/daemon.json'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /etc/docker/daemon.json is one such file. It holds various parameters for Docker daemon. It must be audited, if applicable.'
@@ -186,7 +186,7 @@ control 'cis-docker-1.13' do
   end
 end
 
-control 'cis-docker-1.14' do
+control 'cis-docker-benchmark-1.14' do
   impact 1.0
   title 'Audit Docker files and directories - /usr/bin/docker-containerd'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /usr/bin/docker-containerd is one such file. Docker now relies on containerd and runC to spawn containers. It must be audited, if applicable.'
@@ -199,7 +199,7 @@ control 'cis-docker-1.14' do
   end
 end
 
-control 'cis-docker-1.15' do
+control 'cis-docker-benchmark-1.15' do
   impact 1.0
   title 'Audit Docker files and directories - /usr/bin/docker-runc'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /usr/bin/docker-runc is one such file. Docker now relies on containerd and runC to spawn containers. It must be audited, if applicable.'
@@ -213,7 +213,7 @@ control 'cis-docker-1.15' do
   end
 end
 
-control 'cis-docker-6.4' do
+control 'cis-docker-benchmark-6.4' do
   impact 1.0
   title 'Avoid image sprawl'
   desc 'Do not keep a large number of container images on the same host. Use only tagged images as appropriate.'
@@ -233,7 +233,7 @@ control 'cis-docker-6.4' do
   end
 end
 
-control 'cis-docker-6.5' do
+control 'cis-docker-benchmark-6.5' do
   impact 1.0
   title 'Avoid container sprawl'
   desc 'Do not keep a large number of containers on the same host.'
@@ -243,9 +243,8 @@ control 'cis-docker-6.5' do
   total_on_host = command('docker info').stdout.split[1].to_i
   total_running = command('docker ps -q').stdout.split.length
   diff = total_on_host - total_running
-  manageable_number = 25
 
   describe diff do
-    it { should be <= manageable_number }
+    it { should be <= (ENV['MANAGEABLE_CONTAINER_NUMBER'] || 25) }
   end
 end

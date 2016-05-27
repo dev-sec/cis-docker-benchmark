@@ -24,7 +24,7 @@ only_if do
   command('docker').exist?
 end
 
-control 'cis-docker-2.8' do
+control 'cis-docker-benchmark-2.8' do
   impact 1.0
   title 'Enable user namespace support'
   desc 'Enable user namespace support in Docker daemon to utilize container user to host user re-mapping. This recommendation is beneficial where containers you are using do not have an explicit container user defined in the container image. If container images that you are using have a pre-defined non-root user, this recommendation may be skipped since this feature is still in its infancy and might give you unpredictable issues and complexities.'
@@ -38,7 +38,7 @@ control 'cis-docker-2.8' do
   end
 end
 
-control 'cis-docker-2.9' do
+control 'cis-docker-benchmark-2.9' do
   impact 1.0
   title 'Confirm default cgroup usage'
   desc 'The --cgroup-parent option allows you to set the default cgroup parent to use for all the containers. If there is no specific use case, this setting should be left at its default.'
@@ -49,7 +49,7 @@ control 'cis-docker-2.9' do
   end
 end
 
-control 'cis-docker-2.10' do
+control 'cis-docker-benchmark-2.10' do
   impact 1.0
   title 'Do not change base device size until needed'
   desc 'In certain circumstances, you might need containers bigger than 10G in size. In these cases, carefully choose the base device size.'
@@ -60,7 +60,7 @@ control 'cis-docker-2.10' do
   end
 end
 
-control 'cis-docker-2.11' do
+control 'cis-docker-benchmark-2.11' do
   impact 1.0
   title 'Use authorization plugin'
   desc 'Docker’s out-of-the-box authorization model is all or nothing. Any user with permission to access the Docker daemon can run any Docker client command. The same is true for callers using Docker’s remote API to contact the daemon. If you require greater access control, you can create authorization plugins and add them to your Docker daemon configuration. Using an authorization plugin, a Docker administrator can configure granular access policies for managing access to Docker daemon.'
@@ -73,11 +73,11 @@ control 'cis-docker-2.11' do
     its(['authorization-plugins']) { should_not be_empty }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['authorization-plugins']) { should eq(['authz-broker']) }
+    its(['authorization-plugins']) { should eq([ENV['AUTHORIZATION_PLUGIN'] || 'authz-broker']) }
   end
 end
 
-control 'cis-docker-2.12' do
+control 'cis-docker-benchmark-2.12' do
   impact 1.0
   title 'Configure centralized and remote logging'
   desc 'Docker now supports various log drivers. A preferable way to store logs is the one that supports centralized and remote logging.'
@@ -88,14 +88,14 @@ control 'cis-docker-2.12' do
     its(['log-driver']) { should_not be_empty }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['log-driver']) { should eq('syslog') }
+    its(['log-driver']) { should eq(ENV['LOG_DRIVER'] || 'syslog') }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['log-opts']) { should include(/syslog-address/) }
+    its(['log-opts']) { should include(ENV['LOG_OPTS'] || /syslog-address/) }
   end
 end
 
-control 'cis-docker-2.13' do
+control 'cis-docker-benchmark-2.13' do
   impact 1.0
   title 'Disable operations on legacy registry (v1)'
   desc 'The latest Docker registry is v2. All operations on the legacy registry version (v1) should be restricted.'
@@ -109,7 +109,7 @@ control 'cis-docker-2.13' do
   end
 end
 
-control 'cis-docker-4.5' do
+control 'cis-docker-benchmark-4.5' do
   impact 1.0
   title 'Enable Content trust for Docker'
   desc 'Content trust provides the ability to use digital signatures for data sent to and received from remote Docker registries. These signatures allow client-side verification of the integrity and publisher of specific image tags. This ensures provenance of container images. Content trust is disabled by default. You should enable it.'
@@ -122,7 +122,7 @@ control 'cis-docker-4.5' do
   end
 end
 
-control 'cis-docker-5.1' do
+control 'cis-docker-benchmark-5.1' do
   impact 1.0
   title 'Verify AppArmor Profile, if applicable'
   desc 'AppArmor is an effective and easy-to-use Linux application security system. It is available on quite a few Linux distributions by default such as Debian and Ubuntu.'
@@ -136,13 +136,13 @@ control 'cis-docker-5.1' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['AppArmorProfile']) { should eq 'docker-default' }
+      its(['AppArmorProfile']) { should include(ENV['APP_ARMOR_PROFILE'] || 'docker-default') }
       its(['AppArmorProfile']) { should_not eq nil }
     end
   end
 end
 
-control 'cis-docker-5.2' do
+control 'cis-docker-benchmark-5.2' do
   impact 1.0
   title 'Verify SELinux security options, if applicable'
   desc 'SELinux is an effective and easy-to-use Linux application security system. It is available on quite a few Linux distributions by default such as Red Hat and Fedora'
@@ -163,12 +163,12 @@ control 'cis-docker-5.2' do
     info = json('').parse(raw)
     describe info[0] do
       its(%w(HostConfig SecurityOpt)) { should_not eq nil }
-      its(%w(HostConfig SecurityOpt)) { should include(/label\:level\:s0-s0\:c1023/) }
+      its(%w(HostConfig SecurityOpt)) { should include(ENV['SELINUX_PROFILE'] || /label\:level\:s0-s0\:c1023/) }
     end
   end
 end
 
-control 'cis-docker-5.22' do
+control 'cis-docker-benchmark-5.22' do
   impact 1.0
   title 'Do not docker exec commands with privileged option'
   desc 'Do not docker exec with --privileged option.'
@@ -179,7 +179,7 @@ control 'cis-docker-5.22' do
   end
 end
 
-control 'cis-docker-5.23' do
+control 'cis-docker-benchmark-5.23' do
   impact 1.0
   title 'Do not docker exec commands with user option'
   desc 'Do not docker exec with --user option.'
