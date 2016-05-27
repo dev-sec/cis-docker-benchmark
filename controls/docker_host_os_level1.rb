@@ -213,7 +213,6 @@ control 'cis-docker-1.15' do
   end
 end
 
-
 control 'cis-docker-6.4' do
   impact 1.0
   title 'Avoid image sprawl'
@@ -231,5 +230,22 @@ control 'cis-docker-6.4' do
 
   describe diff do
     it { should be_empty }
+  end
+end
+
+control 'cis-docker-6.5' do
+  impact 1.0
+  title 'Avoid container sprawl'
+  desc 'Do not keep a large number of containers on the same host.'
+  ref 'https://zeltser.com/security-risks-and-benefits-of-docker-application/'
+  ref 'http://searchsdn.techtarget.com/feature/Docker-networking-How-Linux-containers-will-change-your-network'
+
+  total_on_host = command('docker info').stdout.split[1].to_i
+  total_running = command('docker ps -q').stdout.split.length
+  diff = total_on_host - total_running
+  manageable_number = 25
+
+  describe diff do
+    it { should be <= manageable_number }
   end
 end
