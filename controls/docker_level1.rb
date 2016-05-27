@@ -928,17 +928,3 @@ control 'cis-docker-6.3' do
   ref 'http://stackoverflow.com/questions/26331651/how-can-i-backup-a-docker-container-with-its-data-volumes'
   ref 'https://docs.docker.com/engine/reference/commandline/cli/#diff'
 end
-
-control 'cis-docker-6.4' do
-  impact 1.0
-  title 'Avoid image sprawl'
-  desc 'Do not keep a large number of container images on the same host. Use only tagged images as appropriate.'
-  ref 'https://docs.docker.com/engine/userguide/containers/dockervolumes/'
-  ref 'http://stackoverflow.com/questions/26331651/how-can-i-backup-a-docker-container-with-its-data-volumes'
-  ref 'https://docs.docker.com/engine/reference/commandline/cli/#diff'
-
-  # docker inspect -f "{{.Image}}" $(docker ps -qa)
-
-  # docker images --quiet | xargs docker inspect --format '{{ .Id }}: Image={{ .Config.Image }}'
-  # docker images --quiet | xargs docker inspect --format '{{ .Id }}: Image={{ .Config.Image }}'
-end
