@@ -541,7 +541,7 @@ control 'cis-docker-benchmark-5.3' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(%w(HostConfig CapDrop)) { should contain_match(/all/) }
+      its(%w(HostConfig CapDrop)) { should include(/all/) }
       its(%w(HostConfig CapDrop)) { should_not eq nil }
       # its(%w(HostConfig CapAdd)) { should eq ENV['CONTAINER_CAPADD']&.split(',') }
       its(%w(HostConfig CapAdd)) { should eq ENV['CONTAINER_CAPADD'].nil? ? ENV['CONTAINER_CAPADD'] : ENV['CONTAINER_CAPADD'].split(',') }
