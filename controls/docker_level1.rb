@@ -578,7 +578,6 @@ control 'cis-docker-benchmark-5.5' do
     info = json('').parse(raw)
     info[0]['Mounts'].each do |mounts|
       describe mounts['Source'] do
-        p mounts['Source']
         it { should_not eq '/' }
         it { should_not match(/\/boot/) }
         it { should_not match(/\/dev/) }
