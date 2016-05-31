@@ -20,6 +20,14 @@
 
 title 'CIS Docker Benchmark - Level 1 - Linux Host OS'
 
+# attributes
+attrs = {}
+# define trusted user to control Docker daemon. cis-docker-benchmark-1.6
+attrs['TRUSTED_USER'] = ENV['TRUSTED_USER'] || 'vagrant'
+# keep number of containers on a host to a manageable total. cis-docker-benchmark-6.5
+attrs['MANAGEABLE_CONTAINER_NUMBER'] = ENV['MANAGEABLE_CONTAINER_NUMBER'] || 25
+
+# check if docker exists
 only_if do
   command('docker').exist?
 end
@@ -99,7 +107,7 @@ control 'cis-docker-benchmark-1.6' do
   end
 
   describe etc_group.where(group_name: 'docker') do
-    its('users') { should include ENV['TRUSTED_USER'] || 'vagrant' }
+    its('users') { should include attrs['TRUSTED_USER'] }
   end
 end
 
@@ -245,6 +253,6 @@ control 'cis-docker-benchmark-6.5' do
   diff = total_on_host - total_running
 
   describe diff do
-    it { should be <= (ENV['MANAGEABLE_CONTAINER_NUMBER'] || 25) }
+    it { should be <= (attrs['MANAGEABLE_CONTAINER_NUMBER']) }
   end
 end

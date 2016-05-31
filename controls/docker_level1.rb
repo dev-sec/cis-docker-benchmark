@@ -20,6 +20,20 @@
 
 title 'CIS Docker Benchmark - Level 1 - Docker'
 
+# attributes
+attrs = {}
+# directory contains various Docker registry directories. cis-docker-benchmark-3.7
+attrs['REGISTRY_CERT_PATH'] = ENV['REGISTRY_CERT_PATH'] || '/etc/docker/certs.d'
+# directory contain certificate certain Docker registry. cis-docker-benchmark-3.7
+attrs['REGISTRY_NAME'] = ENV['REGISTRY_NAME'] || '/etc/docker/certs.d/registry_hostname:port'
+# certificate file for a certain Docker registry certificate files. cis-docker-benchmark-3.7 and cis-docker-benchmark-3.8
+attrs['REGISTRY_CA_FILE'] = ENV['REGISTRY_CA_FILE'] || '/etc/docker/certs.d/registry_hostname:port/ca.crt'
+# define user within containers. cis-docker-benchmark-4.1
+attrs['CONTAINER_USER'] = ENV['CONTAINER_USER'] || 'ubuntu'
+# define needed capabilities for containers. example: `CONTAINER_CAPADD="NET_ADMIN,SYS_ADMIN"` cis-docker-benchmark-5.3
+attrs['CONTAINER_CAPADD'] = ENV['CONTAINER_CAPADD'].nil? ? ENV['CONTAINER_CAPADD'] : ENV['CONTAINER_CAPADD'].split(',')
+
+# check if docker exists
 only_if do
   command('docker').exist?
 end
@@ -236,21 +250,21 @@ control 'cis-docker-benchmark-3.7' do
   ref 'https://docs.docker.com/engine/security/certificates/'
   ref 'docs.docker.com/reference/commandline/cli/#insecure-registries'
 
-  describe file(ENV['REGISTRY_CERT_PATH'] || '/etc/docker/certs.d') do
+  describe file(attrs['REGISTRY_CERT_PATH']) do
     it { should exist }
     it { should be_directory }
     it { should be_owned_by 'root' }
     it { should be_grouped_into 'root' }
   end
 
-  describe file(ENV['REGISTRY_NAME'] || '/etc/docker/certs.d/registry_hostname:port') do
+  describe file(attrs['REGISTRY_NAME']) do
     it { should exist }
     it { should be_directory }
     it { should be_owned_by 'root' }
     it { should be_grouped_into 'root' }
   end
 
-  describe file(ENV['REGISTRY_CA_FILE'] || '/etc/docker/certs.d/registry_hostname:port/ca.crt') do
+  describe file(attrs['REGISTRY_CA_FILE']) do
     it { should exist }
     it { should be_file }
     it { should be_owned_by 'root' }
@@ -265,7 +279,7 @@ control 'cis-docker-benchmark-3.8' do
   ref 'https://docs.docker.com/engine/security/certificates/'
   ref 'docs.docker.com/reference/commandline/cli/#insecure-registries'
 
-  describe file(ENV['REGISTRY_CA_FILE'] || '/etc/docker/certs.d/registry_hostname:port/ca.crt') do
+  describe file(attrs['REGISTRY_CA_FILE']) do
     it { should exist }
     it { should be_file }
     it { should be_readable }
@@ -493,7 +507,7 @@ control 'cis-docker-benchmark-4.1' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(%w(Config User)) { should eq ENV['CONTAINER_USER'] || 'ubuntu' }
+      its(%w(Config User)) { should eq attrs['CONTAINER_USER'] }
       its(%w(Config User)) { should_not eq nil }
     end
   end
@@ -543,8 +557,7 @@ control 'cis-docker-benchmark-5.3' do
     describe info[0] do
       its(%w(HostConfig CapDrop)) { should include(/all/) }
       its(%w(HostConfig CapDrop)) { should_not eq nil }
-      # its(%w(HostConfig CapAdd)) { should eq ENV['CONTAINER_CAPADD']&.split(',') }
-      its(%w(HostConfig CapAdd)) { should eq ENV['CONTAINER_CAPADD'].nil? ? ENV['CONTAINER_CAPADD'] : ENV['CONTAINER_CAPADD'].split(',') }
+      its(%w(HostConfig CapAdd)) { should eq attrs['CONTAINER_CAPADD'] }
     end
   end
 end

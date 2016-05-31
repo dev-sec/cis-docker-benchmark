@@ -20,6 +20,20 @@
 
 title 'CIS Docker Benchmark - Level 2 - Docker'
 
+# attributes
+attrs = {}
+# define authorization plugin to manage access to Docker daemon. cis-docker-benchmark-2.11
+attrs['AUTHORIZATION_PLUGIN'] = [ENV['AUTHORIZATION_PLUGIN'] || 'authz-broker']
+# define preferable way to store logs. cis-docker-benchmark-2.12
+attrs['LOG_DRIVER'] = ENV['LOG_DRIVER'] || 'syslog'
+# define Docker daemon log-opts. cis-docker-benchmark-2.12
+attrs['LOG_OPTS'] = ENV['LOG_OPTS'] || /syslog-address/
+# define apparmor profile for Docker containers. cis-docker-benchmark-5.1
+attrs['APP_ARMOR_PROFILE'] = ENV['APP_ARMOR_PROFILE'] || 'docker-default'
+# define SELinux profile for Docker containers. cis-docker-benchmark-5.2
+attrs['SELINUX_PROFILE'] = ENV['SELINUX_PROFILE'] || /label\:level\:s0-s0\:c1023/
+
+# check if docker exists
 only_if do
   command('docker').exist?
 end
@@ -73,7 +87,7 @@ control 'cis-docker-benchmark-2.11' do
     its(['authorization-plugins']) { should_not be_empty }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['authorization-plugins']) { should eq([ENV['AUTHORIZATION_PLUGIN'] || 'authz-broker']) }
+    its(['authorization-plugins']) { should eq(attrs['AUTHORIZATION_PLUGIN']) }
   end
 end
 
@@ -88,10 +102,10 @@ control 'cis-docker-benchmark-2.12' do
     its(['log-driver']) { should_not be_empty }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['log-driver']) { should eq(ENV['LOG_DRIVER'] || 'syslog') }
+    its(['log-driver']) { should eq(attrs['LOG_DRIVER']) }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['log-opts']) { should include(ENV['LOG_OPTS'] || /syslog-address/) }
+    its(['log-opts']) { should include(attrs['LOG_OPTS']) }
   end
 end
 
@@ -136,7 +150,7 @@ control 'cis-docker-benchmark-5.1' do
     raw = command("docker inspect #{id}").stdout
     info = json('').parse(raw)
     describe info[0] do
-      its(['AppArmorProfile']) { should include(ENV['APP_ARMOR_PROFILE'] || 'docker-default') }
+      its(['AppArmorProfile']) { should include(attrs['APP_ARMOR_PROFILE']) }
       its(['AppArmorProfile']) { should_not eq nil }
     end
   end
@@ -163,7 +177,7 @@ control 'cis-docker-benchmark-5.2' do
     info = json('').parse(raw)
     describe info[0] do
       its(%w(HostConfig SecurityOpt)) { should_not eq nil }
-      its(%w(HostConfig SecurityOpt)) { should include(ENV['SELINUX_PROFILE'] || /label\:level\:s0-s0\:c1023/) }
+      its(%w(HostConfig SecurityOpt)) { should include(attrs['SELINUX_PROFILE']) }
     end
   end
 end
