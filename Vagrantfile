@@ -9,7 +9,7 @@ Vagrant.configure(2) do |config|
     # install docker
     ubuntu1604.vm.provision :shell, inline: 'curl -fsSL https://get.docker.com/ | sh'
     # add vagrant user to docker group
-    ubuntu1604.vm.provision :shell, inline: 'usermod -aG docker vagrant'
+    ubuntu1604.vm.provision :shell, inline: 'usermod -aG docker ubuntu'
     # reload and restart docker daemon
     ubuntu1604.vm.provision :shell, inline: 'systemctl daemon-reload'
     ubuntu1604.vm.provision :shell, inline: 'systemctl restart docker.service'
