@@ -5,7 +5,7 @@
 Vagrant.configure(2) do |config|
 
   config.vm.define :ubuntu1604 do |ubuntu1604|
-    ubuntu1604.vm.box = 'ffuenf/ubuntu-16.04-server-amd64' # https://atlas.hashicorp.com/ffuenf/boxes/ubuntu-16.04-server-amd64/
+    ubuntu1604.vm.box = 'ubuntu/xenial64' # https://atlas.hashicorp.com/ubuntu/boxes/xenial64
     # install docker
     ubuntu1604.vm.provision :shell, inline: 'curl -fsSL https://get.docker.com/ | sh'
     # add vagrant user to docker group
