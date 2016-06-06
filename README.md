@@ -2,7 +2,7 @@
 
 ## Description
 
-This [InSpec](https://github.com/chef/inspec) compliance profile implement the [CIS Docker 1.11.0 Benchmark](https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.11.0_Benchmark_v1.0.0.pdf) in an automated way to provide security best-practice tests around Docker daemon and containers in a production environment.
+This [InSpec](https://github.com/chef/inspec) compliance profile implement the [CIS Docker 1.11.0 Benchmark](https://benchmarks.cisecurity.org/downloads/show-single/index.cfm?file=docker16.110) in an automated way to provide security best-practice tests around Docker daemon and containers in a production environment.
 
 InSpec is an open-source run-time framework and rule language used to specify compliance, security, and policy requirements for testing any node in your infrastructure.
 
