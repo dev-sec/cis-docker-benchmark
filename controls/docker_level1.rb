@@ -144,7 +144,7 @@ control 'cis-docker-benchmark-3.1' do
   desc 'Verify that the \'docker.service\' file ownership and group-ownership are correctly set to \'root\''
   ref 'https://docs.docker.com/engine/admin/systemd/'
 
-  describe file(command('systemctl show -p FragmentPath docker.service').stdout.split('=')[1].delete("\n")) do
+  describe file(docker.path) do
     it { should exist }
     it { should be_file }
     it { should be_owned_by 'root' }
@@ -158,7 +158,7 @@ control 'cis-docker-benchmark-3.2' do
   desc 'Verify that the \'docker.service\' file permissions are correctly set to \'644\' or more restrictive'
   ref 'https://docs.docker.com/engine/admin/systemd/'
 
-  describe file(command('systemctl show -p FragmentPath docker.service').stdout.split('=')[1].delete("\n")) do
+  describe file(docker.path) do
     it { should exist }
     it { should be_file }
     it { should be_readable.by('owner') }
@@ -179,7 +179,7 @@ control 'cis-docker-benchmark-3.3' do
   ref 'https://github.com/YungSang/fedora-atomic-packer/blob/master/oem/docker.socket'
   ref 'https://daviddaeschler.com/2014/12/14/centos-7rhel-7-and-docker-containers-on-boot/'
 
-  describe file(command('systemctl show -p FragmentPath docker.socket').stdout.split('=')[1].delete("\n")) do
+  describe file(docker.socket) do
     it { should exist }
     it { should be_file }
     it { should be_owned_by 'root' }
@@ -195,7 +195,7 @@ control 'cis-docker-benchmark-3.4' do
   ref 'https://github.com/YungSang/fedora-atomic-packer/blob/master/oem/docker.socket'
   ref 'https://daviddaeschler.com/2014/12/14/centos-7rhel-7-and-docker-containers-on-boot/'
 
-  describe file(command('systemctl show -p FragmentPath docker.service').stdout.split('=')[1].delete("\n")) do
+  describe file(docker.path) do
     it { should exist }
     it { should be_file }
     it { should be_readable.by('owner') }
@@ -502,11 +502,8 @@ control 'cis-docker-benchmark-4.1' do
   ref 'https://github.com/docker/docker/issues/7906'
   ref 'https://www.altiscale.com/blog/making-docker-work-yarn/'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(Config User)) { should eq attrs['CONTAINER_USER'] }
       its(%w(Config User)) { should_not eq nil }
     end
@@ -550,11 +547,8 @@ control 'cis-docker-benchmark-5.3' do
   ref 'http://man7.org/linux/man-pages/man7/capabilities.7.html'
   ref 'https://github.com/docker/docker/blob/master/oci/defaults_linux.go#L64-L79'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig CapDrop)) { should include(/all/) }
       its(%w(HostConfig CapDrop)) { should_not eq nil }
       its(%w(HostConfig CapAdd)) { should eq attrs['CONTAINER_CAPADD'] }
@@ -568,11 +562,8 @@ control 'cis-docker-benchmark-5.4' do
   desc 'Using the --privileged flag gives all Linux Kernel Capabilities to the container thus overwriting the --cap-add and --cap-drop flags. Ensure that it is not used.'
   ref 'https://docs.docker.com/engine/reference/commandline/cli/'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig Privileged)) { should eq false }
       its(%w(HostConfig Privileged)) { should_not eq true }
     end
@@ -585,11 +576,9 @@ control 'cis-docker-benchmark-5.5' do
   desc 'Sensitive host system directories such as \'/, /boot, /dev, /etc, /lib, /proc, /sys, /usr\' should not be allowed to be mounted as container volumes especially in read-write mode.'
   ref 'https://docs.docker.com/engine/userguide/containers/dockervolumes/'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    info[0]['Mounts'].each do |mounts|
+  docker.ps.each do |id|
+    info = docker.inspect(id)
+    info['Mounts'].each do |mounts|
       describe mounts['Source'] do
         it { should_not eq '/' }
         it { should_not match(/\/boot/) }
@@ -610,8 +599,7 @@ control 'cis-docker-benchmark-5.6' do
   desc 'SSH server should not be running within the container. You should SSH into the Docker host, and use nsenter tool to enter a container from a remote host.'
   ref 'https://blog.docker.com/2014/06/why-you-dont-need-to-run-sshd-in-docker/'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
+  docker.ps.each do |id|
     execute_command = 'docker exec ' << id << ' ps -e'
     describe command(execute_command) do
       its('stdout') { should_not match(/ssh/) }
@@ -626,13 +614,11 @@ control 'cis-docker-benchmark-5.7' do
   ref 'https://docs.docker.com/engine/userguide/networking/default_network/binding/'
   ref 'https://www.adayinthelifeof.nl/2012/03/12/why-putting-ssh-on-another-port-than-22-is-bad-idea/'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    ports = info[0]['NetworkSettings']['Ports'].keys
+  docker.ps.each do |id|
+    info = docker.inspect(id)
+    ports = info['NetworkSettings']['Ports'].keys
     ports.each do |item|
-      info[0]['NetworkSettings']['Ports'][item].each do |hostport|
+      info['NetworkSettings']['Ports'][item].each do |hostport|
         describe hostport['HostPort'].to_i.between?(1, 1024) do
           it { should eq false }
         end
@@ -655,11 +641,8 @@ control 'cis-docker-benchmark-5.9' do
   ref 'https://docs.docker.com/engine/userguide/networking/dockernetworks/'
   ref 'https://github.com/docker/docker/issues/6401'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig NetworkMode)) { should_not eq 'host' }
     end
   end
@@ -673,11 +656,8 @@ control 'cis-docker-benchmark-5.10' do
   ref 'https://docs.docker.com/engine/reference/commandline/cli/#run'
   ref 'https://docs.docker.com/v1.8/articles/runmetrics/'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig Memory)) { should_not eq 0 }
     end
   end
@@ -691,11 +671,8 @@ control 'cis-docker-benchmark-5.11' do
   ref 'https://docs.docker.com/engine/reference/commandline/cli/#run'
   ref 'https://docs.docker.com/v1.8/articles/runmetrics/'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig CpuShares)) { should_not eq 0 }
       its(%w(HostConfig CpuShares)) { should_not eq 1024 }
     end
@@ -708,11 +685,8 @@ control 'cis-docker-benchmark-5.12' do
   desc 'The container\'s root file system should be treated as a \'golden image\' and any writes to the root filesystem should be avoided. You should explicitly define a container volume for writing.'
   ref 'https://docs.docker.com/engine/reference/commandline/cli/#run'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig ReadonlyRootfs)) { should eq true }
     end
   end
@@ -724,13 +698,11 @@ control 'cis-docker-benchmark-5.13' do
   desc 'By default, Docker containers can make connections to the outside world, but the outside world cannot connect to containers. Each outgoing connection will appear to originate from one of the host machine\'s own IP addresses. Only allow container services to be contacted through a specific external interface on the host machine.'
   ref 'https://docs.docker.com/engine/userguide/networking/default_network/binding/'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    ports = info[0]['NetworkSettings']['Ports'].keys
+  docker.ps.each do |id|
+    info = docker.inspect(id)
+    ports = info['NetworkSettings']['Ports'].keys
     ports.each do |item|
-      info[0]['NetworkSettings']['Ports'][item].each do |hostip|
+      info['NetworkSettings']['Ports'][item].each do |hostip|
         describe hostip['HostIp'] do
           it { should_not eq '0.0.0.0' }
         end
@@ -745,15 +717,13 @@ control 'cis-docker-benchmark-5.14' do
   desc 'Using the \'--restart\' flag in \'docker run\' command you can specify a restart policy for how a container should or should not be restarted on exit. You should choose the \'on-failure\' restart policy and limit the restart attempts to 5.'
   ref 'https://docs.docker.com/engine/reference/commandline/cli/#restart-policies'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    only_if { info[0]['HostConfig']['RestartPolicy']['Name'] != 'no' }
-    describe info[0] do
+  docker.ps.each do |id|
+    info = docker.inspect(id)
+    only_if { info['HostConfig']['RestartPolicy']['Name'] != 'no' }
+    describe info do
       its(%w(HostConfig RestartPolicy Name)) { should eq 'on-failure' }
     end
-    describe info[0] do
+    describe info do
       its(%w(HostConfig RestartPolicy MaximumRetryCount)) { should eq 5 }
     end
   end
@@ -766,11 +736,8 @@ control 'cis-docker-benchmark-5.15' do
   ref 'https://docs.docker.com/engine/reference/run/#pid-settings'
   ref 'http://man7.org/linux/man-pages/man7/pid_namespaces.7.html'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig PidMode)) { should_not eq 'host' }
     end
   end
@@ -783,11 +750,8 @@ control 'cis-docker-benchmark-5.16' do
   ref 'https://docs.docker.com/engine/reference/run/#ipc-settings'
   ref 'http://man7.org/linux/man-pages/man7/pid_namespaces.7.html'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig IpcMode)) { should_not eq 'host' }
     end
   end
@@ -799,11 +763,8 @@ control 'cis-docker-benchmark-5.17' do
   desc 'Host devices can be directly exposed to containers at runtime. Do not directly expose host devices to containers especially for containers that are not trusted.'
   ref 'https://docs.docker.com/engine/reference/commandline/cli/#run'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig Devices)) { should be_empty }
     end
   end
@@ -815,11 +776,8 @@ control 'cis-docker-benchmark-5.18' do
   desc 'The default ulimit is set at the Docker daemon level. However, you may override the default ulimit setting, if needed, during container runtime.'
   ref 'https://docs.docker.com/engine/reference/commandline/cli/#setting-ulimits-in-a-container'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig Ulimits)) { should eq nil }
     end
   end
@@ -833,8 +791,7 @@ control 'cis-docker-benchmark-5.19' do
   ref 'https://docs.docker.com/engine/reference/run/'
   ref 'https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
+  docker.ps.each do |id|
     raw = command("docker inspect --format '{{range $mnt := .Mounts}} {{json $mnt.Propagation}} {{end}}' #{id}").stdout
     describe raw.delete("\n").delete('\"').delete(' ') do
       it { should_not eq 'shared' }
@@ -849,11 +806,8 @@ control 'cis-docker-benchmark-5.20' do
   ref 'https://docs.docker.com/engine/reference/run/'
   ref 'http://man7.org/linux/man-pages/man7/pid_namespaces.7.html'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig UTSMode)) { should_not eq 'host' }
     end
   end
@@ -870,11 +824,8 @@ control 'cis-docker-benchmark-5.21' do
   ref 'https://www.kernel.org/doc/Documentation/prctl/seccomp_filter.txt'
   ref 'https://github.com/docker/docker/pull/17034'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig SecurityOpt)) { should include(/seccomp/) }
       its(%w(HostConfig SecurityOpt)) { should_not include(/seccomp[=|:]unconfined/) }
     end
@@ -888,11 +839,8 @@ control 'cis-docker-benchmark-5.24' do
   ref 'https://docs.docker.com/engine/reference/run/#specifying-custom-cgroups'
   ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Resource_Management_Guide/ch01.html'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig CgroupParent)) { should be_empty }
     end
   end
@@ -908,11 +856,8 @@ control 'cis-docker-benchmark-5.25' do
   ref 'https://lwn.net/Articles/475678/'
   ref 'https://lwn.net/Articles/475362/'
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig SecurityOpt)) { should include(/no-new-privileges/) }
     end
   end

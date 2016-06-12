@@ -150,8 +150,7 @@ control 'cis-docker-benchmark-1.10' do
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. docker.service is one such file. The docker.service file might be present if the daemon parameters have been changed by an administrator. It holds various parameters for Docker daemon. It must be audited, if applicable.'
   ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
-  rule = '-w ' << command('systemctl show -p FragmentPath docker.service').stdout.split('=')[1].delete("\n") << ' -p rwxa -k docker'
-
+  rule = '-w ' << docker.path << ' -p rwxa -k docker'
   describe auditd_rules do
     its(:lines) { should include(rule) }
   end
@@ -163,8 +162,7 @@ control 'cis-docker-benchmark-1.11' do
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. docker.service is one such file. The docker.service file might be present if the daemon parameters have been changed by an administrator. It holds various parameters for Docker daemon. It must be audited, if applicable.'
   ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
-  rule = '-w ' << command('systemctl show -p FragmentPath docker.socket').stdout.split('=')[1].delete("\n") << ' -p rwxa -k docker'
-
+  rule = '-w ' << docker.socket << ' -p rwxa -k docker'
   describe auditd_rules do
     its(:lines) { should include(rule) }
   end
