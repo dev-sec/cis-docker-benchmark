@@ -145,11 +145,8 @@ control 'cis-docker-benchmark-5.1' do
   ref 'http://wiki.apparmor.net/index.php/Main_Page'
 
   only_if { os[:family] == ('ubuntu' || 'debian') }
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(['AppArmorProfile']) { should include(attrs['APP_ARMOR_PROFILE']) }
       its(['AppArmorProfile']) { should_not eq nil }
     end
@@ -171,11 +168,8 @@ control 'cis-docker-benchmark-5.2' do
     its(['selinux-enabled']) { should eq(true) }
   end
 
-  ids = command('docker ps --format "{{.ID}}"').stdout.split
-  ids.each do |id|
-    raw = command("docker inspect #{id}").stdout
-    info = json('').parse(raw)
-    describe info[0] do
+  docker.ps.each do |id|
+    describe docker.inspect(id) do
       its(%w(HostConfig SecurityOpt)) { should_not eq nil }
       its(%w(HostConfig SecurityOpt)) { should include(attrs['SELINUX_PROFILE']) }
     end
