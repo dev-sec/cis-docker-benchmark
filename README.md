@@ -1,6 +1,7 @@
 # CIS Docker Benchmark - InSpec Profile
 
 [![Build Status](http://img.shields.io/travis/dev-sec/cis-docker-benchmark.svg)][1]
+[![Supermarket](https://img.shields.io/badge/CIS%20Docker%20Benchmark-InSpec%20Profile-brightgreen.svg)](https://supermarket.chef.io/tools/cis-docker-benchmark)
 [![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)][2]
 
 ## Description
