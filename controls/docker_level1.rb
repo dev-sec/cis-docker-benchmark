@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 #
 # Copyright 2016, Patrick Muench
 #
@@ -581,13 +582,13 @@ control 'cis-docker-benchmark-5.5' do
     info['Mounts'].each do |mounts|
       describe mounts['Source'] do
         it { should_not eq '/' }
-        it { should_not match(/\/boot/) }
-        it { should_not match(/\/dev/) }
-        it { should_not match(/\/etc/) }
-        it { should_not match(/\/lib/) }
-        it { should_not match(/\/proc/) }
-        it { should_not match(/\/sys/) }
-        it { should_not match(/\/usr/) }
+        it { should_not match(%r{\/boot}) }
+        it { should_not match(%r{\/dev}) }
+        it { should_not match(%r{\/etc}) }
+        it { should_not match(%r{\/lib}) }
+        it { should_not match(%r{\/proc}) }
+        it { should_not match(%r{\/sys}) }
+        it { should_not match(%r{\/usr}) }
       end
     end
   end

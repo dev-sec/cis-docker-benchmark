@@ -1,5 +1,9 @@
 # CIS Docker Benchmark - InSpec Profile
 
+[![Build Status](http://img.shields.io/travis/dev-sec/cis-docker-benchmark.svg)][1]
+[![Supermarket](https://img.shields.io/badge/CIS%20Docker%20Benchmark-InSpec%20Profile-brightgreen.svg)](https://supermarket.chef.io/tools/cis-docker-benchmark)
+[![Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)][2]
+
 ## Description
 
 This [InSpec](https://github.com/chef/inspec) compliance profile implement the [CIS Docker 1.11.0 Benchmark](https://benchmarks.cisecurity.org/downloads/show-single/index.cfm?file=docker16.110) in an automated way to provide security best-practice tests around Docker daemon and containers in a production environment.
@@ -102,4 +106,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-[1]: https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.11.0_Benchmark_v1.0.0.pdf
+[1]: http://travis-ci.org/dev-sec/cis-docker-benchmark
+[2]: https://gitter.im/dev-sec/general
+[3]: https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.11.0_Benchmark_v1.0.0.pdf
