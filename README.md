@@ -22,40 +22,42 @@ InSpec is an open-source run-time framework and rule language used to specify co
 
 ## Attributes
 
-  * `TRUSTED_USER = vagrant`
+We use a yml attribute file to steer the configuration, the following options are available:
+
+  * `trusted_user: vagrant`
     define trusted user to control Docker daemon. cis-docker-benchmark-1.6
 
-  * `AUTHORIZATION_PLUGIN = authz-broker`
+  * `authorization_plugin: authz-broker`
     define authorization plugin to manage access to Docker daemon. cis-docker-benchmark-2.11
 
-  * `LOG_DRIVER = syslog`
+  * `log_driver: syslog`
     define preferable way to store logs. cis-docker-benchmark-2.12
 
-  * `LOG_OPTS = syslog-address`
+  * `log_opts: /syslog-address/`
     define Docker daemon log-opts. cis-docker-benchmark-2.12
 
-  * `REGISTRY_CERT_PATH = '/etc/docker/certs.d/'`
+  * `registry_cert_path: /etc/docker/certs.d`
     directory contains various Docker registry directories. cis-docker-benchmark-3.7
 
-  * `REGISTRY_NAME = '/etc/docker/certs.d/registry_hostname:port'`
+  * `registry_name: /etc/docker/certs.d/registry_hostname:port`
     directory contain certificate certain Docker registry. cis-docker-benchmark-3.7
 
-  * `REGISTRY_CA_FILE = '/etc/docker/certs.d/registry_hostname:port/ca.crt'`
+  * `registry_ca_file: /etc/docker/certs.d/registry_hostname:port/ca.crt`
     certificate file for a certain Docker registry certificate files. cis-docker-benchmark-3.7 and cis-docker-benchmark-3.8
 
-  * `CONTAINER_USER = 'ubuntu'`
+  * `container_user: vagrant`
     define user within containers. cis-docker-benchmark-4.1
 
-  * `APP_ARMOR_PROFILE = 'docker-default'`
+  * `app_armor_profile: docker-default`
     define apparmor profile for Docker containers. cis-docker-benchmark-5.1
 
-  * `SELINUX_PROFILE = 'label\:level\:s0-s0\:c1023'`
+  * `selinux_profile: /label\:level\:s0-s0\:c1023/`
     define SELinux profile for Docker containers. cis-docker-benchmark-5.2
 
-  * `CONTAINER_CAPADD = nil`
-    define needed capabilities for containers. example: `CONTAINER_CAPADD="NET_ADMIN,SYS_ADMIN"` cis-docker-benchmark-5.3
+  * `container_capadd: null`
+    define needed capabilities for containers. example: `container_capadd: NET_ADMIN,SYS_ADMIN` cis-docker-benchmark-5.3
 
-  * `MANAGEABLE_CONTAINER_NUMBER = 25`
+  * `managable_container_number: 25`
     keep number of containers on a host to a manageable total. cis-docker-benchmark-6.5
 
 ## Usage
@@ -77,7 +79,7 @@ inspec exec cis-docker-benchmark -t ssh://user@hostname -i /path/to/key
 inspec exec cis-docker-benchmark -t ssh://user@hostname -i /path/to/key --sudo
 
 # run profile on remote host via SSH with sudo and define attribute value
-TRUSTED_USER=test inspec exec cis-docker-benchmark -t ssh://user@hostname --port 2222 --key-files --sudo
+inspec exec cis-docker-benchmark --attrs sample_attributes.yml
 
 # run profile direct from inspec supermarket
 inspec supermarket exec dev-sec/cis-docker-benchmark -t ssh://user@hostname --key-files private_key --sudo
