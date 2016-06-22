@@ -15,6 +15,7 @@ Vagrant.configure(2) do |config|
     ubuntu1604.vm.provision :shell, inline: 'systemctl restart docker.service'
     # start one docker container
     ubuntu1604.vm.provision :shell, inline: 'docker run -d ubuntu /bin/bash -c "while true; do echo hello world; sleep 1; done"'
+    ubuntu1604.vm.network 'private_network', ip: '192.168.34.101'
   end
 
   config.vm.define :centos7 do |centos7|
@@ -28,6 +29,7 @@ Vagrant.configure(2) do |config|
     centos7.vm.provision :shell, inline: 'systemctl restart docker.service'
     # start one docker container
     centos7.vm.provision :shell, inline: 'docker run -d ubuntu /bin/bash -c "while true; do echo hello world; sleep 1; done"'
+    centos7.vm.network 'private_network', ip: '192.168.34.102'
   end
 
   config.vm.define :debian8 do |debian8|
@@ -44,5 +46,6 @@ Vagrant.configure(2) do |config|
     debian8.vm.provision :shell, inline: 'systemctl restart docker.service'
     # start one docker container
     debian8.vm.provision :shell, inline: 'docker run -d ubuntu /bin/bash -c "while true; do echo hello world; sleep 1; done"'
+    debian8.vm.network 'private_network', ip: '192.168.34.103'
   end
 end
