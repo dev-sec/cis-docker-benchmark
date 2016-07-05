@@ -21,12 +21,17 @@
 
 title 'CIS Docker Benchmark - Level 1 - Linux Host OS'
 
-# attributes
-attrs = {}
-# define trusted user to control Docker daemon. cis-docker-benchmark-1.6
-attrs['TRUSTED_USER'] = ENV['TRUSTED_USER'] || 'vagrant'
-# keep number of containers on a host to a manageable total. cis-docker-benchmark-6.5
-attrs['MANAGEABLE_CONTAINER_NUMBER'] = ENV['MANAGEABLE_CONTAINER_NUMBER'] || 25
+TRUSTED_USER = attribute(
+  'trusted_user',
+  description: 'define trusted user to control Docker daemon. cis-docker-benchmark-1.6',
+  default: 'vagrant'
+)
+
+MANAGEABLE_CONTAINER_NUMBER = attribute(
+  'managable_container_number',
+  description: 'keep number of containers on a host to a manageable total. cis-docker-benchmark-6.5',
+  default: 25
+)
 
 # check if docker exists
 only_if do
@@ -108,7 +113,7 @@ control 'cis-docker-benchmark-1.6' do
   end
 
   describe etc_group.where(group_name: 'docker') do
-    its('users') { should include attrs['TRUSTED_USER'] }
+    its('users') { should include TRUSTED_USER }
   end
 end
 
@@ -152,7 +157,7 @@ control 'cis-docker-benchmark-1.10' do
   ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   if docker.path
-    rule = '-w ' << docker.path << ' -p rwxa -k docker'
+    rule = '-w ' + docker.path + ' -p rwxa -k docker'
     describe auditd_rules do
       its(:lines) { should include(rule) }
     end
@@ -170,7 +175,7 @@ control 'cis-docker-benchmark-1.11' do
   ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   if docker.path
-    rule = '-w ' << docker.socket << ' -p rwxa -k docker'
+    rule = '-w ' + docker.socket + ' -p rwxa -k docker'
     describe auditd_rules do
       its(:lines) { should include(rule) }
     end
@@ -264,6 +269,6 @@ control 'cis-docker-benchmark-6.5' do
   diff = total_on_host - total_running
 
   describe diff do
-    it { should be <= (attrs['MANAGEABLE_CONTAINER_NUMBER']) }
+    it { should be <= MANAGEABLE_CONTAINER_NUMBER }
   end
 end

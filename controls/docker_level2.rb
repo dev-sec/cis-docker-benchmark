@@ -22,17 +22,35 @@
 title 'CIS Docker Benchmark - Level 2 - Docker'
 
 # attributes
-attrs = {}
-# define authorization plugin to manage access to Docker daemon. cis-docker-benchmark-2.11
-attrs['AUTHORIZATION_PLUGIN'] = [ENV['AUTHORIZATION_PLUGIN'] || 'authz-broker']
-# define preferable way to store logs. cis-docker-benchmark-2.12
-attrs['LOG_DRIVER'] = ENV['LOG_DRIVER'] || 'syslog'
-# define Docker daemon log-opts. cis-docker-benchmark-2.12
-attrs['LOG_OPTS'] = ENV['LOG_OPTS'] || /syslog-address/
-# define apparmor profile for Docker containers. cis-docker-benchmark-5.1
-attrs['APP_ARMOR_PROFILE'] = ENV['APP_ARMOR_PROFILE'] || 'docker-default'
-# define SELinux profile for Docker containers. cis-docker-benchmark-5.2
-attrs['SELINUX_PROFILE'] = ENV['SELINUX_PROFILE'] || /label\:level\:s0-s0\:c1023/
+AUTHORIZATION_PLUGIN = attribute(
+  'authorization_plugin',
+  description: 'define authorization plugin to manage access to Docker daemon. cis-docker-benchmark-2.11',
+  default: 'authz-broker'
+)
+
+LOG_DRIVER = attribute(
+  'log_driver',
+  description: 'define preferable way to store logs. cis-docker-benchmark-2.12',
+  default: 'syslog'
+)
+
+LOG_OPTS = attribute(
+  'log_opts',
+  description: 'define Docker daemon log-opts. cis-docker-benchmark-2.12',
+  default: /syslog-address/
+)
+
+APP_ARMOR_PROFILE = attribute(
+  'app_armor_profile',
+  description: 'define apparmor profile for Docker containers. cis-docker-benchmark-5.1',
+  default: 'docker-default'
+)
+
+SELINUX_PROFILE = attribute(
+  'selinux_profile',
+  description: 'define SELinux profile for Docker containers. cis-docker-benchmark-5.2',
+  default:  /label\:level\:s0-s0\:c1023/
+)
 
 # check if docker exists
 only_if do
@@ -88,7 +106,7 @@ control 'cis-docker-benchmark-2.11' do
     its(['authorization-plugins']) { should_not be_empty }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['authorization-plugins']) { should eq(attrs['AUTHORIZATION_PLUGIN']) }
+    its(['authorization-plugins']) { should eq([AUTHORIZATION_PLUGIN]) }
   end
 end
 
@@ -103,10 +121,10 @@ control 'cis-docker-benchmark-2.12' do
     its(['log-driver']) { should_not be_empty }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['log-driver']) { should eq(attrs['LOG_DRIVER']) }
+    its(['log-driver']) { should eq(LOG_DRIVER) }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['log-opts']) { should include(attrs['LOG_OPTS']) }
+    its(['log-opts']) { should include(LOG_OPTS) }
   end
 end
 
@@ -148,7 +166,7 @@ control 'cis-docker-benchmark-5.1' do
   only_if { os[:family] == ('ubuntu' || 'debian') }
   docker.ps.each do |id|
     describe docker.inspect(id) do
-      its(['AppArmorProfile']) { should include(attrs['APP_ARMOR_PROFILE']) }
+      its(['AppArmorProfile']) { should include(APP_ARMOR_PROFILE) }
       its(['AppArmorProfile']) { should_not eq nil }
     end
   end
@@ -172,7 +190,7 @@ control 'cis-docker-benchmark-5.2' do
   docker.ps.each do |id|
     describe docker.inspect(id) do
       its(%w(HostConfig SecurityOpt)) { should_not eq nil }
-      its(%w(HostConfig SecurityOpt)) { should include(attrs['SELINUX_PROFILE']) }
+      its(%w(HostConfig SecurityOpt)) { should include(SELINUX_PROFILE) }
     end
   end
 end

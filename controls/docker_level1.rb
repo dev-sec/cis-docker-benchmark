@@ -22,17 +22,34 @@
 title 'CIS Docker Benchmark - Level 1 - Docker'
 
 # attributes
-attrs = {}
-# directory contains various Docker registry directories. cis-docker-benchmark-3.7
-attrs['REGISTRY_CERT_PATH'] = ENV['REGISTRY_CERT_PATH'] || '/etc/docker/certs.d'
-# directory contain certificate certain Docker registry. cis-docker-benchmark-3.7
-attrs['REGISTRY_NAME'] = ENV['REGISTRY_NAME'] || '/etc/docker/certs.d/registry_hostname:port'
-# certificate file for a certain Docker registry certificate files. cis-docker-benchmark-3.7 and cis-docker-benchmark-3.8
-attrs['REGISTRY_CA_FILE'] = ENV['REGISTRY_CA_FILE'] || '/etc/docker/certs.d/registry_hostname:port/ca.crt'
-# define user within containers. cis-docker-benchmark-4.1
-attrs['CONTAINER_USER'] = ENV['CONTAINER_USER'] || 'ubuntu'
-# define needed capabilities for containers. example: `CONTAINER_CAPADD="NET_ADMIN,SYS_ADMIN"` cis-docker-benchmark-5.3
-attrs['CONTAINER_CAPADD'] = ENV['CONTAINER_CAPADD'].nil? ? ENV['CONTAINER_CAPADD'] : ENV['CONTAINER_CAPADD'].split(',')
+REGISTRY_CERT_PATH = attribute(
+  'registry_cert_path',
+  description: 'directory contains various Docker registry directories. cis-docker-benchmark-3.7',
+  default: '/etc/docker/certs.d'
+)
+
+REGISTRY_NAME = attribute(
+  'registry_name',
+  description: 'directory contain certificate certain Docker registry. cis-docker-benchmark-3.7',
+  default: '/etc/docker/certs.d/registry_hostname:port'
+)
+
+REGISTRY_CA_FILE = attribute(
+  'registry_ca_file',
+  description: 'certificate file for a certain Docker registry certificate files. cis-docker-benchmark-3.7 and cis-docker-benchmark-3.8',
+  default: '/etc/docker/certs.d/registry_hostname:port/ca.crt'
+)
+
+CONTAINER_USER = attribute(
+  'container_user',
+  description: 'define user within containers. cis-docker-benchmark-4.1',
+  default: 'ubuntu'
+)
+
+CONTAINER_CAPADD = attribute(
+  'container_capadd',
+  description: 'define needed capabilities for containers.'
+)
 
 # check if docker exists
 only_if do
@@ -251,21 +268,21 @@ control 'cis-docker-benchmark-3.7' do
   ref 'https://docs.docker.com/engine/security/certificates/'
   ref 'docs.docker.com/reference/commandline/cli/#insecure-registries'
 
-  describe file(attrs['REGISTRY_CERT_PATH']) do
+  describe file(REGISTRY_CERT_PATH) do
     it { should exist }
     it { should be_directory }
     it { should be_owned_by 'root' }
     it { should be_grouped_into 'root' }
   end
 
-  describe file(attrs['REGISTRY_NAME']) do
+  describe file(REGISTRY_NAME) do
     it { should exist }
     it { should be_directory }
     it { should be_owned_by 'root' }
     it { should be_grouped_into 'root' }
   end
 
-  describe file(attrs['REGISTRY_CA_FILE']) do
+  describe file(REGISTRY_CA_FILE) do
     it { should exist }
     it { should be_file }
     it { should be_owned_by 'root' }
@@ -280,7 +297,7 @@ control 'cis-docker-benchmark-3.8' do
   ref 'https://docs.docker.com/engine/security/certificates/'
   ref 'docs.docker.com/reference/commandline/cli/#insecure-registries'
 
-  describe file(attrs['REGISTRY_CA_FILE']) do
+  describe file(REGISTRY_CA_FILE) do
     it { should exist }
     it { should be_file }
     it { should be_readable }
@@ -505,7 +522,7 @@ control 'cis-docker-benchmark-4.1' do
 
   docker.ps.each do |id|
     describe docker.inspect(id) do
-      its(%w(Config User)) { should eq attrs['CONTAINER_USER'] }
+      its(%w(Config User)) { should eq CONTAINER_USER }
       its(%w(Config User)) { should_not eq nil }
     end
   end
@@ -552,7 +569,7 @@ control 'cis-docker-benchmark-5.3' do
     describe docker.inspect(id) do
       its(%w(HostConfig CapDrop)) { should include(/all/) }
       its(%w(HostConfig CapDrop)) { should_not eq nil }
-      its(%w(HostConfig CapAdd)) { should eq attrs['CONTAINER_CAPADD'] }
+      its(%w(HostConfig CapAdd)) { should eq CONTAINER_CAPADD }
     end
   end
 end
@@ -601,7 +618,7 @@ control 'cis-docker-benchmark-5.6' do
   ref 'https://blog.docker.com/2014/06/why-you-dont-need-to-run-sshd-in-docker/'
 
   docker.ps.each do |id|
-    execute_command = 'docker exec ' << id << ' ps -e'
+    execute_command = 'docker exec ' + id + ' ps -e'
     describe command(execute_command) do
       its('stdout') { should_not match(/ssh/) }
     end

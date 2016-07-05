@@ -1,0 +1,12 @@
+trusted_user: vagrant
+managable_container_number: 25
+registry_cert_path: /etc/docker/certs.d
+registry_name: /etc/docker/certs.d/registry_hostname:port
+registry_ca_file: /etc/docker/certs.d/registry_hostname:port/ca.crt
+container_user: vagrant
+container_capadd: null
+authorization_plugin: authz-broker
+log_driver: syslog
+log_opts: /syslog-address/
+app_armor_profile: docker-default
+selinux_profile: /label\:level\:s0-s0\:c1023/
