@@ -66,11 +66,11 @@ InSpec makes it easy to run your tests wherever you need. More options listed he
 
 ```
 # run profile locally
-$ git clone https://github.com/dev-sec/cis-docker
+$ git clone https://github.com/dev-sec/cis-docker-benchmark
 $ inspec exec cis-docker-benchmark
 
 # run profile locally and directly from Github
-$ inspec exec https://github.com/dev-sec/cis-docker
+$ inspec exec https://github.com/dev-sec/cis-docker-benchmark
 
 # run profile on remote host via SSH
 inspec exec cis-docker-benchmark -t ssh://user@hostname -i /path/to/key
