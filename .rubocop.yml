@@ -2,14 +2,12 @@
 AllCops:
   Exclude:
   - vendor/**/*
-  - "*/puppet/Puppetfile"
-  - "*/puppet/.tmp/**/*"
 Documentation:
   Enabled: false
 AlignParameters:
   Enabled: true
 Encoding:
-  Enabled: true
+  Enabled: false
 HashSyntax:
   Enabled: true
 LineLength:
@@ -25,4 +23,6 @@ Metrics/CyclomaticComplexity:
 Metrics/PerceivedComplexity:
   Max: 10
 Metrics/AbcSize:
+  Max: 29
+Metrics/BlockLength:
   Max: 29
