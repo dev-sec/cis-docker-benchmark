@@ -213,7 +213,7 @@ control 'cis-docker-benchmark-3.4' do
   ref 'https://github.com/YungSang/fedora-atomic-packer/blob/master/oem/docker.socket'
   ref 'https://daviddaeschler.com/2014/12/14/centos-7rhel-7-and-docker-containers-on-boot/'
 
-  describe file(docker.path) do
+  describe file(docker.socket) do
     it { should exist }
     it { should be_file }
     it { should be_readable.by('owner') }
