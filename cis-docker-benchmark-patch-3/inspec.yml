@@ -1,0 +1,8 @@
+name: cis-docker-benchmark
+title: InSpec CIS Docker Benchmark Profile
+maintainer: Patrick Muench
+copyright: The Authors
+copyright_email: patrick.muench111@gmail.com
+license: Apache 2.0 License
+summary: An InSpec Compliance Profile for the CIS Docker Benchmark
+version: 0.2.0
