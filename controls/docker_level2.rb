@@ -163,7 +163,7 @@ control 'cis-docker-benchmark-5.1' do
   ref 'https://docs.docker.com/engine/reference/run/#security-configuration'
   ref 'http://wiki.apparmor.net/index.php/Main_Page'
 
-  only_if { os[:family] == ('ubuntu' || 'debian') }
+  only_if { %w(ubuntu debian).include? os[:name] }
   docker.ps.each do |id|
     describe docker.inspect(id) do
       its(['AppArmorProfile']) { should include(APP_ARMOR_PROFILE) }
@@ -182,7 +182,7 @@ control 'cis-docker-benchmark-5.2' do
   ref 'https://docs.docker.com/engine/reference/run/#security-configuration'
   ref 'https://docs.fedoraproject.org/en-US/Fedora/13/html/Security-Enhanced_Linux/'
 
-  only_if { os[:family] == ('centos' || 'redhat') }
+  only_if { %w(centos redhat).include? os[:name] }
   describe json('/etc/docker/daemon.json') do
     its(['selinux-enabled']) { should eq(true) }
   end
