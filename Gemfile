@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 gem 'rake'
 gem 'inspec', '~> 1'
-gem 'rubocop', '~> 0.44.0'
+gem 'rubocop', '~> 0.46.0'
 gem 'highline', '~> 1.6.0'
 
 group :tools do
