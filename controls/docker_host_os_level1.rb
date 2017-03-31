@@ -42,6 +42,7 @@ control 'cis-docker-benchmark-1.1' do
   impact 1.0
   title 'Create a separate partition for containers'
   desc 'All Docker containers and their data and metadata is stored under /var/lib/docker directory. By default, /var/lib/docker would be mounted under / or /var partitions based on availability.'
+  tag 'host'
   ref 'http://www.projectatomic.io/docs/docker-storage-recommendation/'
 
   describe mount('/var/lib/docker') do
@@ -53,6 +54,7 @@ control 'cis-docker-benchmark-1.2' do
   impact 1.0
   title 'Use the updated Linux Kernel'
   desc 'Docker in daemon mode has specific kernel requirements. A 3.10 Linux kernel is the minimum requirement for Docker.'
+  tag 'host'
   ref 'https://docs.docker.com/engine/installation/binaries/#check-kernel-dependencies'
   ref 'https://docs.docker.com/engine/installation/#installation-list'
 
@@ -84,6 +86,7 @@ control 'cis-docker-benchmark-1.4' do
   impact 1.0
   title 'Remove all non-essential services from the host'
   desc 'Ensure that the host running the docker daemon is running only the essential services.'
+  tag 'host'
   ref 'https://blog.docker.com/2013/08/containers-docker-how-secure-are-they/'
 end
 
