@@ -68,8 +68,16 @@ control 'cis-docker-benchmark-1.3' do
   impact 1.0
   title 'Harden the container host'
   desc 'Containers run on a Linux host. A container host can run one or more containers. It is of utmost importance to harden the host to mitigate host security misconfiguration'
+  tag 'host'
   ref 'http://dev-sec.io'
+  ref 'https://docs.docker.com/articles/security/'
   ref 'https://docs.docker.com/engine/security/security/'
+  ref 'https://benchmarks.cisecurity.org/downloads/multiform/index.cfm'
+  ref 'http://docs.docker.com/articles/security/#other-kernel-security-features'
+  ref 'https://grsecurity.net/'
+  ref 'https://en.wikibooks.org/wiki/Grsecurity'
+  ref 'https://pax.grsecurity.net/'
+  ref 'http://en.wikipedia.org/wiki/PaX'
 end
 
 control 'cis-docker-benchmark-1.4' do
