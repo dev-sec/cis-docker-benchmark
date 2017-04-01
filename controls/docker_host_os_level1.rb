@@ -94,13 +94,15 @@ control 'cis-docker-benchmark-1.5' do
   impact 1.0
   title 'Keep Docker up to date'
   desc 'The docker container solution is evolving to maturity and stability at a rapid pace. Like any other software, the vendor releases regular updates for Docker software that address security vulnerabilities, product bugs and bring in new functionality.'
+  tag 'host'
+  ref 'https://docs.docker.com/installation/'
   ref 'https://github.com/docker/docker/releases/latest'
 
   docker_server_version = command('docker version --format \'{{.Server.Version}}\'').stdout
-  docker_server_compare = Gem::Version.new('1.11.1') <= Gem::Version.new(docker_server_version)
+  docker_server_compare = Gem::Version.new('1.13.1') <= Gem::Version.new(docker_server_version)
 
   docker_client_version = command('docker version --format \'{{.Client.Version}}\'').stdout
-  docker_client_compare = Gem::Version.new('1.11.1') <= Gem::Version.new(docker_client_version)
+  docker_client_compare = Gem::Version.new('1.13.1') <= Gem::Version.new(docker_client_version)
 
   describe docker_server_compare do
     it { should eq true }
@@ -115,7 +117,8 @@ control 'cis-docker-benchmark-1.6' do
   impact 1.0
   title 'Only allow trusted users to control Docker daemon'
   desc 'The Docker daemon currently requires \'root\' privileges. A user added to the \'docker\' group gives him full \'root\' access rights'
-  ref 'https://docs.docker.com/engine/security/security/'
+  tag 'host'
+  ref 'https://docs.docker.com/articles/security/#docker-daemon-attack-surface'
   ref 'https://www.andreas-jung.com/contents/on-docker-security-docker-group-considered-harmful'
   ref 'http://www.projectatomic.io/blog/2015/08/why-we-dont-let-non-root-users-run-docker-in-centos-fedora-or-rhel/'
 
@@ -132,10 +135,16 @@ control 'cis-docker-benchmark-benchmark-1.7' do
   impact 1.0
   title 'Audit docker daemon'
   desc 'Apart from auditing your regular Linux file system and system calls, audit Docker daemon as well. Docker daemon runs with \'root\' privileges. It is thus necessary to audit its activities and usage.'
+  tag 'host'
   ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   describe auditd_rules do
     its(:lines) { should include('-w /usr/bin/docker -p rwxa -k docker') }
+  end
+    describe service('auditd') do
+    it { should be_installed }
+    it { should be_enabled }
+    it { should be_running }
   end
 end
 
