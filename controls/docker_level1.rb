@@ -51,6 +51,24 @@ CONTAINER_CAPADD = attribute(
   description: 'define needed capabilities for containers.'
 )
 
+DAEMON_TLSCACERT = attribute(
+  'daemon_tlscacert',
+  description: 'Trust certs signed only by this CA',
+  default: '/etc/docker/ssl/ca.pem'
+)
+
+DAEMON_TLSCERT = attribute(
+  'daemon_tlscert',
+  description: 'Path to TLS certificate file',
+  default: '/etc/docker/ssl/server_cert.pem'
+)
+
+DAEMON_TLSKEY = attribute(
+  'daemon_tlskey',
+  description: 'Path to TLS key file',
+  default: '/etc/docker/ssl/server_key.pem'
+)
+
 # check if docker exists
 only_if do
   command('docker').exist?
@@ -133,13 +151,13 @@ control 'cis-docker-benchmark-2.6' do
     its(['tlsverify']) { should eq(true) }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['tlscacert']) { should eq('/etc/docker/ssl/ca.pem') }
+    its(['tlscacert']) { should eq(DAEMON_TLSCACERT) }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['tlscert']) { should eq('/etc/docker/ssl/server_cert.pem') }
+    its(['tlscert']) { should eq(DAEMON_TLSCERT) }
   end
   describe json('/etc/docker/daemon.json') do
-    its(['tlskey']) { should eq('/etc/docker/ssl/server_key.pem') }
+    its(['tlskey']) { should eq(DAEMON_TLSKEY) }
   end
 end
 

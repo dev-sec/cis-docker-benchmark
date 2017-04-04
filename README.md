@@ -6,13 +6,13 @@
 
 ## Description
 
-This [InSpec](https://github.com/chef/inspec) compliance profile implement the [CIS Docker 1.11.0 Benchmark](https://benchmarks.cisecurity.org/downloads/show-single/index.cfm?file=docker16.110) in an automated way to provide security best-practice tests around Docker daemon and containers in a production environment.
+This [InSpec](https://github.com/chef/inspec) compliance profile implement the [CIS Docker 1.12.0 Benchmark](https://benchmarks.cisecurity.org/downloads/show-single/index.cfm?file=docker16.120) in an automated way to provide security best-practice tests around Docker daemon and containers in a production environment.
 
 InSpec is an open-source run-time framework and rule language used to specify compliance, security, and policy requirements for testing any node in your infrastructure.
 
 ## Requirements
 
-* [InSpec](https://github.com/chef/inspec)
+* [InSpec](http://inspec.io/)
 
 ### Platform
 
@@ -60,9 +60,18 @@ We use a yml attribute file to steer the configuration, the following options ar
   * `managable_container_number: 25`
     keep number of containers on a host to a manageable total. cis-docker-benchmark-6.5
 
+  * `daemon_tlscacert : /etc/docker/ssl/ca.pem`
+    configure the Trust certs. cis-docker-benchmark-2.6
+
+  * `daemon_tlscert: /etc/docker/ssl/server_cert.pem`
+    configure the server certificate. cis-docker-benchmark-2.6
+
+  * `daemon_tlskey: /etc/docker/ssl/server_key.pem`
+    configure the server key. cis-docker-benchmark-2.6
+
 ## Usage
 
-InSpec makes it easy to run your tests wherever you need. More options listed here: https://github.com/chef/inspec/blob/master/docs/ctl_inspec.rst
+InSpec makes it easy to run your tests wherever you need. More options listed here: [InSpec cli](http://inspec.io/docs/reference/cli/)
 
 ```
 # run profile locally
@@ -110,4 +119,4 @@ limitations under the License.
 
 [1]: http://travis-ci.org/dev-sec/cis-docker-benchmark
 [2]: https://gitter.im/dev-sec/general
-[3]: https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.11.0_Benchmark_v1.0.0.pdf
+[3]: https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.12.0_Benchmark_v1.0.0.pdf
