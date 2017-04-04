@@ -192,7 +192,8 @@ control 'cis-docker-benchmark-1.11' do
   impact 1.0
   title 'Audit Docker files and directories - docker.socket'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. docker.socket is one such file. It holds various parameters for Docker daemon socket. It must be audited, if applicable.'
-  ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
+  tag 'host'
+  ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   if docker.socket
     rule = '-w ' + docker.socket + ' -p rwxa -k docker'
@@ -210,8 +211,8 @@ control 'cis-docker-benchmark-1.12' do
   impact 1.0
   title 'Audit Docker files and directories - /etc/default/docker'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /etc/default/docker is one such file. It holds various parameters for Docker daemon. It must be audited, if applicable.'
-  ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
-  ref 'https://docs.docker.com/engine/reference/commandline/daemon/#daemon-configuration-file'
+  tag 'host'
+  ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   only_if { os[:family] != 'centos' }
   describe auditd_rules do
@@ -223,7 +224,9 @@ control 'cis-docker-benchmark-1.13' do
   impact 1.0
   title 'Audit Docker files and directories - /etc/docker/daemon.json'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /etc/docker/daemon.json is one such file. It holds various parameters for Docker daemon. It must be audited, if applicable.'
-  ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
+  tag 'host'
+  ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
+  ref 'Daemon configuration', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#daemon-configuration-file'
 
   describe auditd_rules do
     its(:lines) { should include('-w /etc/docker/daemon.json -p rwxa -k docker') }
@@ -234,9 +237,10 @@ control 'cis-docker-benchmark-1.14' do
   impact 1.0
   title 'Audit Docker files and directories - /usr/bin/docker-containerd'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /usr/bin/docker-containerd is one such file. Docker now relies on containerd and runC to spawn containers. It must be audited, if applicable.'
-  ref 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
-  ref 'https://github.com/docker/docker/pull/20662'
-  ref 'https://containerd.tools/'
+  tag 'host'
+  ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
+  ref 'Containerd integration', url: 'https://github.com/docker/docker/pull/20662'
+  ref 'Containerd tools', url: 'https://containerd.tools/'
 
   describe auditd_rules do
     its(:lines) { should include('-w /usr/bin/docker-containerd -p rwxa -k docker') }
