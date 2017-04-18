@@ -84,7 +84,8 @@ control 'cis-docker-benchmark-2.9' do
   impact 1.0
   title 'Confirm default cgroup usage'
   desc 'The --cgroup-parent option allows you to set the default cgroup parent to use for all the containers. If there is no specific use case, this setting should be left at its default.'
-  ref 'https://docs.docker.com/engine/reference/commandline/daemon/'
+  tag 'daemon'
+  ref 'Docker daemon configuration', url: 'https://docs.docker.com/engine/reference/commandline/daemon/'
 
   describe json('/etc/docker/daemon.json') do
     its(['cgroup-parent']) { should eq('docker') }
@@ -95,7 +96,8 @@ control 'cis-docker-benchmark-2.10' do
   impact 1.0
   title 'Do not change base device size until needed'
   desc 'In certain circumstances, you might need containers bigger than 10G in size. In these cases, carefully choose the base device size.'
-  ref 'https://docs.docker.com/engine/reference/commandline/daemon/#storage-driver-options'
+  tag 'daemon'
+  ref 'Docker daemon storage driver options', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#storage-driver-options'
 
   describe json('/etc/docker/daemon.json') do
     its(['storage-opts']) { should eq(['dm.basesize=10G']) }
@@ -106,10 +108,10 @@ control 'cis-docker-benchmark-2.11' do
   impact 1.0
   title 'Use authorization plugin'
   desc 'Docker’s out-of-the-box authorization model is all or nothing. Any user with permission to access the Docker daemon can run any Docker client command. The same is true for callers using Docker’s remote API to contact the daemon. If you require greater access control, you can create authorization plugins and add them to your Docker daemon configuration. Using an authorization plugin, a Docker administrator can configure granular access policies for managing access to Docker daemon.'
-  ref 'https://docs.docker.com/engine/reference/commandline/daemon/#access-authorization'
-  ref 'https://docs.docker.com/engine/extend/plugins_authorization/'
-  ref 'https://github.com/twistlock/authz'
-  ref 'https://sreeninet.wordpress.com/2016/03/06/docker-security-part-3engine-access/'
+  tag 'daemon'
+  ref 'Access authorization', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#access-authorization'
+  ref 'Auhtorization plugins', url: 'https://docs.docker.com/engine/extend/plugins_authorization/'
+  ref 'Twistlock authorization plugin', url: 'https://github.com/twistlock/authz'
 
   describe json('/etc/docker/daemon.json') do
     its(['authorization-plugins']) { should_not be_empty }
@@ -123,8 +125,8 @@ control 'cis-docker-benchmark-2.12' do
   impact 1.0
   title 'Configure centralized and remote logging'
   desc 'Docker now supports various log drivers. A preferable way to store logs is the one that supports centralized and remote logging.'
-  tag 'Bug: logs-opts seems broken in daemon.json https://github.com/docker/docker/issues/22311'
-  ref 'https://docs.docker.com/engine/admin/logging/overview/'
+  tag 'daemon'
+  ref 'Logging overview', url: 'https://docs.docker.com/engine/admin/logging/overview/'
 
   describe json('/etc/docker/daemon.json') do
     its(['log-driver']) { should_not be_empty }
@@ -141,13 +143,42 @@ control 'cis-docker-benchmark-2.13' do
   impact 1.0
   title 'Disable operations on legacy registry (v1)'
   desc 'The latest Docker registry is v2. All operations on the legacy registry version (v1) should be restricted.'
-  ref 'https://docs.docker.com/engine/reference/commandline/daemon/'
-  ref 'https://github.com/docker/docker/issues/8093'
-  ref 'https://github.com/docker/docker/issues/9015'
-  ref 'https://github.com/docker/docker-registry/issues/612'
+  tag 'daemon'
+  ref 'Docker daemon storage driver options', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#storage-driver-options'
+  ref 'Proposal: Provenance step 1 - Transform images for validation and verification', url: 'https://github.com/docker/docker/issues/8093'
+  ref 'Proposal: JSON Registry API V2.1', url: 'https://github.com/docker/docker/issues/9015'
+  ref 'Registry next generation', url: 'https://github.com/docker/docker-registry/issues/612'
+  ref 'Docker Registry HTTP API V2', url: 'https://docs.docker.com/registry/spec/api/'
+  ref 'Creating Private Docker Registry 2.0 with Token Authentication Service', url: 'https://the.binbashtheory.com/creating-private-docker-registry-2-0-with-token-authentication-service/'
+  ref 'New Tool to Migrate From V1 Registry to Docker Trusted Registry or V2 Open Source Registry', url: 'https://blog.docker.com/2015/07/new-tool-v1-registry-docker-trusted-registry-v2-open-source/'
+  ref 'Docker Registry V2', url: 'https://www.slideshare.net/Docker/docker-registry-v2'
 
   describe json('/etc/docker/daemon.json') do
     its(['disable-legacy-registry']) { should eq(true) }
+  end
+end
+
+control 'cis-docker-benchmark-2.14' do
+  impact 1.0
+  title 'Enable live restore'
+  desc 'The \'--live-restore\' enables full support of daemon-less containers in docker. It ensures that docker does not stop containers on shutdown or restore and properly reconnects to the container when restarted.'
+  tag 'daemon'
+  ref 'Add --live-restore flag', url: 'https://github.com/docker/docker/pull/23213'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['live-restore']) { should eq(true) }
+  end
+end
+
+control 'cis-docker-benchmark-2.15' do
+  impact 1.0
+  title 'Do not enable swarm mode, if not needed'
+  desc 'Do not enable swarm mode on a docker engine instance unless needed.'
+  tag 'daemon'
+  ref 'docker swarm init', url: 'https://docs.docker.com/engine/reference/commandline/swarm_init/'
+
+  describe command('docker info') do
+    its('stdout') { should include 'Swarm: inactive' }
   end
 end
 
