@@ -43,6 +43,7 @@ control 'cis-docker-benchmark-1.1' do
   title 'Create a separate partition for containers'
   desc 'All Docker containers and their data and metadata is stored under /var/lib/docker directory. By default, /var/lib/docker would be mounted under / or /var partitions based on availability.'
   tag 'host'
+  tag cis: '1.1'
   ref 'Docker storage recommendation', url: 'http://www.projectatomic.io/docs/docker-storage-recommendation/'
 
   describe mount('/var/lib/docker') do
@@ -55,6 +56,7 @@ control 'cis-docker-benchmark-1.2' do
   title 'Use the updated Linux Kernel'
   desc 'Docker in daemon mode has specific kernel requirements. A 3.10 Linux kernel is the minimum requirement for Docker.'
   tag 'host'
+  tag cis: '1.2'
   ref 'Check kernel dependencies', url: 'https://docs.docker.com/engine/installation/binaries/#check-kernel-dependencies'
   ref 'Installation list', url: 'https://docs.docker.com/engine/installation/#installation-list'
 
@@ -71,6 +73,7 @@ control 'cis-docker-benchmark-1.3' do
   title 'Harden the container host'
   desc 'Containers run on a Linux host. A container host can run one or more containers. It is of utmost importance to harden the host to mitigate host security misconfiguration'
   tag 'host'
+  tag cis: '1.3'
   ref 'Hardening Framework dev-sec.io', url: 'http://dev-sec.io'
   ref 'Docker security article', url: 'https://docs.docker.com/engine/security/security/'
   ref 'CIS Benchmarks', url: 'https://benchmarks.cisecurity.org/downloads/multiform/index.cfm'
@@ -85,6 +88,7 @@ control 'cis-docker-benchmark-1.4' do
   title 'Remove all non-essential services from the host'
   desc 'Ensure that the host running the docker daemon is running only the essential services.'
   tag 'host'
+  tag cis: '1.4'
   ref 'Containers & Docker: How Secure Are They?', url: 'https://blog.docker.com/2013/08/containers-docker-how-secure-are-they/'
 end
 
@@ -93,6 +97,7 @@ control 'cis-docker-benchmark-1.5' do
   title 'Keep Docker up to date'
   desc 'The docker container solution is evolving to maturity and stability at a rapid pace. Like any other software, the vendor releases regular updates for Docker software that address security vulnerabilities, product bugs and bring in new functionality.'
   tag 'host'
+  tag cis: '1.5'
   ref 'Docker installation', url: 'https://docs.docker.com/installation/'
   ref 'Docker releases', url: 'https://github.com/docker/docker/releases/latest'
 
@@ -116,6 +121,7 @@ control 'cis-docker-benchmark-1.6' do
   title 'Only allow trusted users to control Docker daemon'
   desc 'The Docker daemon currently requires \'root\' privileges. A user added to the \'docker\' group gives him full \'root\' access rights'
   tag 'host'
+  tag cis: '1.6'
   ref 'On Docker security: docker group considered harmful', url: 'https://www.andreas-jung.com/contents/on-docker-security-docker-group-considered-harmful'
   ref 'Why we do not let non-root users run Docker in CentOS, Fedora, or RHEL', url: 'http://www.projectatomic.io/blog/2015/08/why-we-dont-let-non-root-users-run-docker-in-centos-fedora-or-rhel/'
 
@@ -133,6 +139,7 @@ control 'cis-docker-benchmark-benchmark-1.7' do
   title 'Audit docker daemon'
   desc 'Apart from auditing your regular Linux file system and system calls, audit Docker daemon as well. Docker daemon runs with \'root\' privileges. It is thus necessary to audit its activities and usage.'
   tag 'host'
+  tag cis: '1.7'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   describe auditd_rules do
@@ -150,6 +157,7 @@ control 'cis-docker-benchmark-1.8' do
   title 'Audit Docker files and directories - /var/lib/docker'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /var/lib/docker is one such directory. It holds all the information about containers. It must be audited.'
   tag 'host'
+  tag cis: '1.8'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   describe auditd_rules do
@@ -162,6 +170,7 @@ control 'cis-docker-benchmark-1.9' do
   title 'Audit Docker files and directories - /etc/docker'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /etc/docker is one such directory. It holds various certificates and keys used for TLS communication between Docker daemon and Docker client. It must be audited.'
   tag 'host'
+  tag cis: '1.9'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   describe auditd_rules do
@@ -174,6 +183,7 @@ control 'cis-docker-benchmark-1.10' do
   title 'Audit Docker files and directories - docker.service'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. docker.service is one such file. The docker.service file might be present if the daemon parameters have been changed by an administrator. It holds various parameters for Docker daemon. It must be audited, if applicable.'
   tag 'host'
+  tag cis: '1.10'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   if docker.path
@@ -193,6 +203,7 @@ control 'cis-docker-benchmark-1.11' do
   title 'Audit Docker files and directories - docker.socket'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. docker.socket is one such file. It holds various parameters for Docker daemon socket. It must be audited, if applicable.'
   tag 'host'
+  tag cis: '1.11'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   if docker.socket
@@ -212,6 +223,7 @@ control 'cis-docker-benchmark-1.12' do
   title 'Audit Docker files and directories - /etc/default/docker'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /etc/default/docker is one such file. It holds various parameters for Docker daemon. It must be audited, if applicable.'
   tag 'host'
+  tag cis: '1.12'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   only_if { os[:family] != 'centos' }
@@ -225,6 +237,7 @@ control 'cis-docker-benchmark-1.13' do
   title 'Audit Docker files and directories - /etc/docker/daemon.json'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /etc/docker/daemon.json is one such file. It holds various parameters for Docker daemon. It must be audited, if applicable.'
   tag 'host'
+  tag cis: '1.13'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
   ref 'Daemon configuration', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#daemon-configuration-file'
 
@@ -238,6 +251,7 @@ control 'cis-docker-benchmark-1.14' do
   title 'Audit Docker files and directories - /usr/bin/docker-containerd'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /usr/bin/docker-containerd is one such file. Docker now relies on containerd and runC to spawn containers. It must be audited, if applicable.'
   tag 'host'
+  tag cis: '1.14'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
   ref 'Containerd integration', url: 'https://github.com/docker/docker/pull/20662'
   ref 'Containerd tools', url: 'https://containerd.tools/'
@@ -252,6 +266,7 @@ control 'cis-docker-benchmark-1.15' do
   title 'Audit Docker files and directories - /usr/bin/docker-runc'
   desc 'Apart from auditing your regular Linux file system and system calls, audit all Docker related files and directories. Docker daemon runs with \'root\' privileges. Its behavior depends on some key files and directories. /usr/bin/docker-runc is one such file. Docker now relies on containerd and runC to spawn containers. It must be audited, if applicable.'
   tag 'host'
+  tag cis: '1.15'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
   ref 'Containerd integration', url: 'https://github.com/docker/docker/pull/20662'
   ref 'Containerd tools', url: 'https://containerd.tools/'

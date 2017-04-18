@@ -62,6 +62,7 @@ control 'cis-docker-benchmark-2.8' do
   title 'Enable user namespace support'
   desc 'Enable user namespace support in Docker daemon to utilize container user to host user re-mapping. This recommendation is beneficial where containers you are using do not have an explicit container user defined in the container image. If container images that you are using have a pre-defined non-root user, this recommendation may be skipped since this feature is still in its infancy and might give you unpredictable issues and complexities.'
   tag 'daemon'
+  tag cis: '2.8'
   ref 'User namespeces', url: 'http://man7.org/linux/man-pages/man7/user_namespaces.7.html'
   ref 'Docker daemon configuration', url: 'https://docs.docker.com/engine/reference/commandline/daemon/'
   ref 'Routing out root: user namespaces in docker', url: 'http://events.linuxfoundation.org/sites/events/files/slides/User%20Namespaces%20-%20ContainerCon%202015%20-%2016-9-final_0.pdf'
@@ -85,6 +86,7 @@ control 'cis-docker-benchmark-2.9' do
   title 'Confirm default cgroup usage'
   desc 'The --cgroup-parent option allows you to set the default cgroup parent to use for all the containers. If there is no specific use case, this setting should be left at its default.'
   tag 'daemon'
+  tag cis: '2.9'
   ref 'Docker daemon configuration', url: 'https://docs.docker.com/engine/reference/commandline/daemon/'
 
   describe json('/etc/docker/daemon.json') do
@@ -97,6 +99,7 @@ control 'cis-docker-benchmark-2.10' do
   title 'Do not change base device size until needed'
   desc 'In certain circumstances, you might need containers bigger than 10G in size. In these cases, carefully choose the base device size.'
   tag 'daemon'
+  tag cis: '2.10'
   ref 'Docker daemon storage driver options', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#storage-driver-options'
 
   describe json('/etc/docker/daemon.json') do
@@ -109,6 +112,7 @@ control 'cis-docker-benchmark-2.11' do
   title 'Use authorization plugin'
   desc 'Docker’s out-of-the-box authorization model is all or nothing. Any user with permission to access the Docker daemon can run any Docker client command. The same is true for callers using Docker’s remote API to contact the daemon. If you require greater access control, you can create authorization plugins and add them to your Docker daemon configuration. Using an authorization plugin, a Docker administrator can configure granular access policies for managing access to Docker daemon.'
   tag 'daemon'
+  tag cis: '2.11'
   ref 'Access authorization', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#access-authorization'
   ref 'Auhtorization plugins', url: 'https://docs.docker.com/engine/extend/plugins_authorization/'
   ref 'Twistlock authorization plugin', url: 'https://github.com/twistlock/authz'
@@ -126,6 +130,7 @@ control 'cis-docker-benchmark-2.12' do
   title 'Configure centralized and remote logging'
   desc 'Docker now supports various log drivers. A preferable way to store logs is the one that supports centralized and remote logging.'
   tag 'daemon'
+  tag cis: '2.12'
   ref 'Logging overview', url: 'https://docs.docker.com/engine/admin/logging/overview/'
 
   describe json('/etc/docker/daemon.json') do
@@ -144,6 +149,7 @@ control 'cis-docker-benchmark-2.13' do
   title 'Disable operations on legacy registry (v1)'
   desc 'The latest Docker registry is v2. All operations on the legacy registry version (v1) should be restricted.'
   tag 'daemon'
+  tag cis: '2.13'
   ref 'Docker daemon storage driver options', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#storage-driver-options'
   ref 'Proposal: Provenance step 1 - Transform images for validation and verification', url: 'https://github.com/docker/docker/issues/8093'
   ref 'Proposal: JSON Registry API V2.1', url: 'https://github.com/docker/docker/issues/9015'
@@ -163,6 +169,7 @@ control 'cis-docker-benchmark-2.14' do
   title 'Enable live restore'
   desc 'The \'--live-restore\' enables full support of daemon-less containers in docker. It ensures that docker does not stop containers on shutdown or restore and properly reconnects to the container when restarted.'
   tag 'daemon'
+  tag cis: '2.14'
   ref 'Add --live-restore flag', url: 'https://github.com/docker/docker/pull/23213'
 
   describe json('/etc/docker/daemon.json') do
@@ -175,6 +182,20 @@ control 'cis-docker-benchmark-2.15' do
   title 'Do not enable swarm mode, if not needed'
   desc 'Do not enable swarm mode on a docker engine instance unless needed.'
   tag 'daemon'
+  tag cis: '2.15'
+  ref 'docker swarm init', url: 'https://docs.docker.com/engine/reference/commandline/swarm_init/'
+
+  describe command('docker info') do
+    its('stdout') { should include 'Swarm: inactive' }
+  end
+end
+
+control 'cis-docker-benchmark-2.16' do
+  impact 1.0
+  title 'Control the number of manager nodes in a swarm'
+  desc 'Ensure that the minimum number of required manager nodes is created in a swarm.'
+  tag 'daemon'
+  tag cis: '2.16'
   ref 'docker swarm init', url: 'https://docs.docker.com/engine/reference/commandline/swarm_init/'
 
   describe command('docker info') do
