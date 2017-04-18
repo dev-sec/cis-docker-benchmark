@@ -1,6 +1,31 @@
 # Change Log
 
+## [1.2.0](https://github.com/dev-sec/cis-docker-benchmark/tree/1.2.0) (2017-04-18)
+[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.1.1...1.2.0)
+
+**Merged pull requests:**
+
+- update to CIS Benchmark 1.12, controls 1.1 to 2.16 [\#19](https://github.com/dev-sec/cis-docker-benchmark/pull/19) ([atomic111](https://github.com/atomic111))
+
 ## [1.1.1](https://github.com/dev-sec/cis-docker-benchmark/tree/1.1.1) (2017-03-01)
+[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.1.0...1.1.1)
+
+**Merged pull requests:**
+
+- Fix 'or' in controls 5.1 and 5.2 [\#18](https://github.com/dev-sec/cis-docker-benchmark/pull/18) ([emilyh315](https://github.com/emilyh315))
+- add changelog [\#16](https://github.com/dev-sec/cis-docker-benchmark/pull/16) ([chris-rock](https://github.com/chris-rock))
+
+## [1.1.0](https://github.com/dev-sec/cis-docker-benchmark/tree/1.1.0) (2016-12-13)
+[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.0.0...1.1.0)
+
+**Merged pull requests:**
+
+- update Gemfile and fix rubocop issues [\#15](https://github.com/dev-sec/cis-docker-benchmark/pull/15) ([atomic111](https://github.com/atomic111))
+- Edit control "cis-docker-benchmark-3.4" [\#14](https://github.com/dev-sec/cis-docker-benchmark/pull/14) ([emilyh315](https://github.com/emilyh315))
+- Edit control "cis-docker-benchmark-1.11" [\#13](https://github.com/dev-sec/cis-docker-benchmark/pull/13) ([emilyh315](https://github.com/emilyh315))
+- Fix README.md [\#12](https://github.com/dev-sec/cis-docker-benchmark/pull/12) ([netflash](https://github.com/netflash))
+
+## [1.0.0](https://github.com/dev-sec/cis-docker-benchmark/tree/1.0.0) (2016-07-05)
 **Implemented enhancements:**
 
 - use new InSpec attributes [\#10](https://github.com/dev-sec/cis-docker-benchmark/pull/10) ([chris-rock](https://github.com/chris-rock))
@@ -10,12 +35,6 @@
 
 **Merged pull requests:**
 
-- Fix 'or' in controls 5.1 and 5.2 [\#18](https://github.com/dev-sec/cis-docker-benchmark/pull/18) ([emilyh315](https://github.com/emilyh315))
-- add changelog [\#16](https://github.com/dev-sec/cis-docker-benchmark/pull/16) ([chris-rock](https://github.com/chris-rock))
-- update Gemfile and fix rubocop issues [\#15](https://github.com/dev-sec/cis-docker-benchmark/pull/15) ([atomic111](https://github.com/atomic111))
-- Edit control "cis-docker-benchmark-3.4" [\#14](https://github.com/dev-sec/cis-docker-benchmark/pull/14) ([emilyh315](https://github.com/emilyh315))
-- Edit control "cis-docker-benchmark-1.11" [\#13](https://github.com/dev-sec/cis-docker-benchmark/pull/13) ([emilyh315](https://github.com/emilyh315))
-- Fix README.md [\#12](https://github.com/dev-sec/cis-docker-benchmark/pull/12) ([netflash](https://github.com/netflash))
 - fix ips for vagrant machines [\#9](https://github.com/dev-sec/cis-docker-benchmark/pull/9) ([chris-rock](https://github.com/chris-rock))
 - change order of InSpec img shield in README.md [\#7](https://github.com/dev-sec/cis-docker-benchmark/pull/7) ([atomic111](https://github.com/atomic111))
 - add ruby 2.3.1 to travis.yml [\#5](https://github.com/dev-sec/cis-docker-benchmark/pull/5) ([atomic111](https://github.com/atomic111))

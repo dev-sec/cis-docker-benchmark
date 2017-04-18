@@ -26,10 +26,13 @@ namespace :test do
 end
 
 # Automatically generate a changelog for this project. Only loaded if
-# the necessary gem is installed.
-# use `rake changelog to=1.2.0`
+# the necessary gem is installed. By default its picking up the version from
+# inspec.yml. You can override that behavior with `rake changelog to=1.2.0`
 begin
-  v = ENV['to']
+  require 'yaml'
+  metadata = YAML.load_file('inspec.yml')
+  v = ENV['to'] || metadata['version']
+  puts "Generate changelog for version #{v}"
   require 'github_changelog_generator/task'
   GitHubChangelogGenerator::RakeTask.new :changelog do |config|
     config.future_release = v
