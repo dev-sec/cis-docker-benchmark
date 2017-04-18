@@ -52,6 +52,12 @@ SELINUX_PROFILE = attribute(
   default:  /label\:level\:s0-s0\:c1023/
 )
 
+SWARM_MODE = attribute(
+  'SWARM_MODE',
+  description: 'define the swarm mode, active or inactive',
+  default:  'Swarm: inactive'
+)
+
 # check if docker exists
 only_if do
   command('docker').exist?
@@ -186,20 +192,7 @@ control 'cis-docker-benchmark-2.15' do
   ref 'docker swarm init', url: 'https://docs.docker.com/engine/reference/commandline/swarm_init/'
 
   describe command('docker info') do
-    its('stdout') { should include 'Swarm: inactive' }
-  end
-end
-
-control 'cis-docker-benchmark-2.16' do
-  impact 1.0
-  title 'Control the number of manager nodes in a swarm'
-  desc 'Ensure that the minimum number of required manager nodes is created in a swarm.'
-  tag 'daemon'
-  tag cis: '2.16'
-  ref 'docker swarm init', url: 'https://docs.docker.com/engine/reference/commandline/swarm_init/'
-
-  describe command('docker info') do
-    its('stdout') { should include 'Swarm: inactive' }
+    its('stdout') { should include SWARM_MODE }
   end
 end
 

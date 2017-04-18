@@ -69,6 +69,9 @@ We use a yml attribute file to steer the configuration, the following options ar
   * `daemon_tlskey: /etc/docker/ssl/server_key.pem`
     configure the server key. cis-docker-benchmark-2.6
 
+  * `swarm_mode: Swarm: inactive`
+    configure the swarm mode. cis-docker-benchmark-2.15
+
 ## Usage
 
 InSpec makes it easy to run your tests wherever you need. More options listed here: [InSpec cli](http://inspec.io/docs/reference/cli/)
