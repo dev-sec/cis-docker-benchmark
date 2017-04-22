@@ -55,7 +55,7 @@ control 'cis-docker-benchmark-3.1' do
   tag level: 1
   ref url: 'https://docs.docker.com/engine/admin/systemd/'
 
-  describe file(docker.path) do
+  describe file(docker_helper.path) do
     it { should exist }
     it { should be_file }
     it { should be_owned_by 'root' }
@@ -73,7 +73,7 @@ control 'cis-docker-benchmark-3.2' do
   tag level: 1
   ref url: 'https://docs.docker.com/engine/admin/systemd/'
 
-  describe file(docker.path) do
+  describe file(docker_helper.path) do
     it { should exist }
     it { should be_file }
     it { should be_readable.by('owner') }
@@ -98,7 +98,7 @@ control 'cis-docker-benchmark-3.3' do
   ref url: 'https://github.com/YungSang/fedora-atomic-packer/blob/master/oem/docker.socket'
   ref url: 'https://daviddaeschler.com/2014/12/14/centos-7rhel-7-and-docker-containers-on-boot/'
 
-  describe file(docker.socket) do
+  describe file(docker_helper.socket) do
     it { should exist }
     it { should be_file }
     it { should be_owned_by 'root' }
@@ -118,7 +118,7 @@ control 'cis-docker-benchmark-3.4' do
   ref url: 'https://github.com/YungSang/fedora-atomic-packer/blob/master/oem/docker.socket'
   ref url: 'https://daviddaeschler.com/2014/12/14/centos-7rhel-7-and-docker-containers-on-boot/'
 
-  describe file(docker.socket) do
+  describe file(docker_helper.socket) do
     it { should exist }
     it { should be_file }
     it { should be_readable.by('owner') }

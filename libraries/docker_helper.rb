@@ -18,25 +18,12 @@
 # author: Dominik Richter
 # author: Patrick Muench
 
-require 'yaml'
-
-class Docker < Inspec.resource(1)
-  name 'docker'
+class DockerHelper < Inspec.resource(1)
+  name 'docker_helper'
 
   desc "
     A resource to retrieve information about docker
   "
-
-  # return a list on container ids
-  def ps
-    inspec.command('docker ps --format "{{.ID}}"').stdout.split
-  end
-
-  def inspect(id)
-    raw = inspec.command("docker inspect #{id}").stdout
-    info = inspec.json('').parse(raw)
-    info[0]
-  end
 
   def path
     cmd = inspec.command('systemctl show -p FragmentPath docker.service')

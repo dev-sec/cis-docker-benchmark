@@ -46,10 +46,10 @@ control 'cis-docker-benchmark-4.1' do
   ref url: 'https://github.com/docker/docker/issues/7906'
   ref url: 'https://www.altiscale.com/blog/making-docker-work-yarn/'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
-      its(%w(Config User)) { should eq CONTAINER_USER }
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(Config User)) { should_not eq nil }
+      its(%w(Config User)) { should eq CONTAINER_USER }
     end
   end
 end
