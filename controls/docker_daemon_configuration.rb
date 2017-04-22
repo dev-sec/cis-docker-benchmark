@@ -19,9 +19,27 @@
 # author: Dominik Richter
 # author: Patrick Muench
 
-title 'CIS Docker Benchmark - Level 2 - Docker'
+title 'Docker Daemon Configuration'
 
 # attributes
+DAEMON_TLSCACERT = attribute(
+  'daemon_tlscacert',
+  description: 'Trust certs signed only by this CA',
+  default: '/etc/docker/ssl/ca.pem'
+)
+
+DAEMON_TLSCERT = attribute(
+  'daemon_tlscert',
+  description: 'Path to TLS certificate file',
+  default: '/etc/docker/ssl/server_cert.pem'
+)
+
+DAEMON_TLSKEY = attribute(
+  'daemon_tlskey',
+  description: 'Path to TLS key file',
+  default: '/etc/docker/ssl/server_key.pem'
+)
+
 AUTHORIZATION_PLUGIN = attribute(
   'authorization_plugin',
   description: 'define authorization plugin to manage access to Docker daemon. cis-docker-benchmark-2.11',
@@ -40,18 +58,6 @@ LOG_OPTS = attribute(
   default: /syslog-address/
 )
 
-APP_ARMOR_PROFILE = attribute(
-  'app_armor_profile',
-  description: 'define apparmor profile for Docker containers. cis-docker-benchmark-5.1',
-  default: 'docker-default'
-)
-
-SELINUX_PROFILE = attribute(
-  'selinux_profile',
-  description: 'define SELinux profile for Docker containers. cis-docker-benchmark-5.2',
-  default:  /label\:level\:s0-s0\:c1023/
-)
-
 SWARM_MODE = attribute(
   'SWARM_MODE',
   description: 'define the swarm mode, active or inactive',
@@ -61,6 +67,119 @@ SWARM_MODE = attribute(
 # check if docker exists
 only_if do
   command('docker').exist?
+end
+
+control 'cis-docker-benchmark-2.1' do
+  impact 1.0
+  title 'Restrict network traffic between containers'
+  desc 'By default, all network traffic is allowed between containers on the same host. If not desired, restrict all the intercontainer communication. Link specific containers together that require inter communication.'
+
+  tag 'daemon'
+  tag cis: 'docker:2.1'
+  tag level: 1
+  ref 'Docker container networking', url: 'https://docs.docker.com/engine/userguide/networking/'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['icc']) { should eq(false) }
+  end
+end
+
+control 'cis-docker-benchmark-2.2' do
+  impact 1.0
+  title 'Set the logging level'
+  desc 'Setting up an appropriate log level, configures the Docker daemon to log events that you would want to review later. A ase log level of \'info\' and above would capture all logs except debug logs. Until and unless required, you should not run docker daemon at \'debug\' log level.'
+
+  tag 'daemon'
+  tag cis: 'docker:2.2'
+  tag level: 1
+  ref 'Docker daemon', url: 'https://docs.docker.com/engine/reference/commandline/daemon/'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['log-level']) { should eq('info') }
+  end
+end
+
+control 'cis-docker-benchmark-2.3' do
+  impact 1.0
+  title 'Allow Docker to make changes to iptables'
+  desc 'Iptables are used to set up, maintain, and inspect the tables of IP packet filter rules in the Linux kernel. Allow the Docker daemon to make changes to the iptables.'
+
+  tag 'daemon'
+  tag cis: 'docker:2.3'
+  tag level: 1
+  ref 'https://docs.docker.com/v1.8/articles/networking/'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['iptables']) { should eq(true) }
+  end
+end
+
+control 'cis-docker-benchmark-2.4' do
+  impact 1.0
+  title 'Do not use insecure registries'
+  desc 'Docker considers a private registry either secure or insecure. By default, registries are considered secure.'
+
+  tag 'daemon'
+  tag cis: 'docker:2.4'
+  tag level: 1
+  ref 'Insecure registry', url: 'https://docs.docker.com/registry/insecure/'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['insecure-registries']) { should be_empty }
+  end
+end
+
+control 'cis-docker-benchmark-2.5' do
+  impact 1.0
+  title 'Do not use the aufs storage driver'
+  desc 'The \'aufs\' storage driver is the oldest storage driver. It is based on a Linux kernel patch-set that is unlikely to be merged into the main Linux kernel. \'aufs\' driver is also known to cause some serious kernel crashes. \'aufs\' just has legacy support from Docker. Most importantly, \'aufs\' is not a supported driver in many Linux distributions using latest Linux kernels.'
+
+  tag 'daemon'
+  tag cis: 'docker:2.5'
+  tag level: 1
+  ref 'Docker daemon storage driver options', url: 'https://docs.docker.com/engine/reference/commandline/cli/#daemon-storage-driver-option'
+  ref 'permission denied if chown after chmod', url: 'https://github.com/docker/docker/issues/6047'
+  ref 'Switch from aufs to devicemapper', url: 'http://muehe.org/posts/switching-docker-from-aufs-to-devicemapper/'
+  ref 'Deep dive into docker storage drivers', url: 'http://jpetazzo.github.io/assets/2015-03-05-deep-dive-into-docker-storage-drivers.html#1'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['storage-driver']) { should_not eq('aufs') }
+  end
+end
+
+control 'cis-docker-benchmark-2.6' do
+  impact 1.0
+  title 'Configure TLS authentication for Docker daemon'
+  desc 'It is possible to make the Docker daemon to listen on a specific IP and port and any other Unix socket other than default Unix socket. Configure TLS authentication to restrict access to Docker daemon via IP and port.'
+
+  tag 'daemon'
+  tag cis: 'docker:2.6'
+  tag level: 1
+  ref 'Protect Docker deamon socket', url: 'https://docs.docker.com/engine/security/https/'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['tls']) { should eq(true) }
+    its(['tlsverify']) { should eq(true) }
+    its(['tlscacert']) { should eq(DAEMON_TLSCACERT) }
+    its(['tlscert']) { should eq(DAEMON_TLSCERT) }
+    its(['tlskey']) { should eq(DAEMON_TLSKEY) }
+  end
+end
+
+control 'cis-docker-benchmark-2.7' do
+  impact 1.0
+  title 'Set default ulimit as appropriate'
+  desc 'ulimit provides control over the resources available to the shell and to processes started by it. Setting system resource limits judiciously saves you from many disasters such as a fork bomb. Sometimes, even friendly users and legitimate processes can overuse system resources and in-turn can make the system unusable.'
+
+  tag 'daemon'
+  tag cis: 'docker:2.7'
+  tag level: 1
+  ref 'Docker daemon deafult ulimits', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#default-ulimits'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['default-ulimits', 'nproc']) { should eq('1024:2408') }
+    its(['default-ulimits', 'nofile']) { should eq('100:200') }
+  end
 end
 
 control 'cis-docker-benchmark-2.8' do
@@ -203,100 +322,5 @@ control 'cis-docker-benchmark-2.15' do
 
   describe command('docker info') do
     its('stdout') { should include SWARM_MODE }
-  end
-end
-
-control 'cis-docker-benchmark-4.5' do
-  impact 1.0
-  title 'Enable Content trust for Docker'
-  desc 'Content trust provides the ability to use digital signatures for data sent to and received from remote Docker registries. These signatures allow client-side verification of the integrity and publisher of specific image tags. This ensures provenance of container images. Content trust is disabled by default. You should enable it.'
-
-  tag 'daemon'
-  tag cis: 'docker:4.5'
-  tag level: 2
-  ref 'https://docs.docker.com/engine/reference/commandline/cli/#notary'
-  ref 'https://docs.docker.com/engine/reference/commandline/cli/#environment-variables'
-  ref 'https://docs.docker.com/engine/security/trust/content_trust/'
-
-  describe os_env('DOCKER_CONTENT_TRUST') do
-    its('content') { should eq '1' }
-  end
-end
-
-control 'cis-docker-benchmark-5.1' do
-  impact 1.0
-  title 'Verify AppArmor Profile, if applicable'
-  desc 'AppArmor is an effective and easy-to-use Linux application security system. It is available on quite a few Linux distributions by default such as Debian and Ubuntu.'
-
-  tag 'daemon'
-  tag cis: 'docker:5.1'
-  tag level: 2
-  ref 'https://docs.docker.com/engine/security/security/'
-  ref 'https://docs.docker.com/engine/reference/run/#security-configuration'
-  ref 'http://wiki.apparmor.net/index.php/Main_Page'
-
-  only_if { %w(ubuntu debian).include? os[:name] }
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
-      its(['AppArmorProfile']) { should include(APP_ARMOR_PROFILE) }
-      its(['AppArmorProfile']) { should_not eq nil }
-    end
-  end
-end
-
-control 'cis-docker-benchmark-5.2' do
-  impact 1.0
-  title 'Verify SELinux security options, if applicable'
-  desc 'SELinux is an effective and easy-to-use Linux application security system. It is available on quite a few Linux distributions by default such as Red Hat and Fedora'
-
-  tag 'daemon'
-  tag cis: 'docker:5.2'
-  tag level: 2
-  ref 'Bug: Wrong SELinux label for devmapper device', url: 'https://github.com/docker/docker/issues/22826'
-  ref 'Bug: selinux break docker user namespace', url: 'https://bugzilla.redhat.com/show_bug.cgi?id=1312665'
-  ref url: 'https://docs.docker.com/engine/security/security/'
-  ref url: 'https://docs.docker.com/engine/reference/run/#security-configuration'
-  ref url: 'https://docs.fedoraproject.org/en-US/Fedora/13/html/Security-Enhanced_Linux/'
-
-  only_if { %w(centos redhat).include? os[:name] }
-  describe json('/etc/docker/daemon.json') do
-    its(['selinux-enabled']) { should eq(true) }
-  end
-
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
-      its(%w(HostConfig SecurityOpt)) { should_not eq nil }
-      its(%w(HostConfig SecurityOpt)) { should include(SELINUX_PROFILE) }
-    end
-  end
-end
-
-control 'cis-docker-benchmark-5.22' do
-  impact 1.0
-  title 'Do not docker exec commands with privileged option'
-  desc 'Do not docker exec with --privileged option.'
-
-  tag 'daemon'
-  tag cis: 'docker:5.22'
-  tag level: 2
-  ref url: 'https://docs.docker.com/engine/reference/commandline/exec/'
-
-  describe command('ausearch --input-logs -k docker | grep exec | grep privileged').stdout do
-    it { should be_empty }
-  end
-end
-
-control 'cis-docker-benchmark-5.23' do
-  impact 1.0
-  title 'Do not docker exec commands with user option'
-  desc 'Do not docker exec with --user option.'
-
-  tag 'daemon'
-  tag cis: 'docker:5.23'
-  tag level: 2
-  ref url: 'https://docs.docker.com/engine/reference/commandline/exec/'
-
-  describe command('ausearch --input-logs -k docker | grep exec | grep user').stdout do
-    it { should be_empty }
   end
 end
