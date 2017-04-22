@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 #
 # Copyright 2016, Patrick Muench
+# Copyright 2017, Christoph Hartmann
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -527,6 +528,95 @@ control 'cis-docker-benchmark-5.25' do
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
       its(%w(HostConfig SecurityOpt)) { should include(/no-new-privileges/) }
+    end
+  end
+end
+
+control 'cis-docker-benchmark-5.26' do
+  impact 1.0
+  title 'Check container health at runtime'
+
+  tag 'daemon'
+  tag cis: 'docker:5.26'
+  tag level: 1
+
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
+      its('State.Health.Status') { should eq 'healthy' }
+    end
+  end
+end
+
+control 'cis-docker-benchmark-5.27' do
+  impact 0.0
+  title 'Ensure docker commands always get the latest version of the image'
+
+  tag 'daemon'
+  tag cis: 'docker:5.27'
+  tag level: 1
+
+  describe 'docker-test' do
+    skip 'Not implemented yet'
+  end
+end
+
+control 'cis-docker-benchmark-5.28' do
+  impact 1.0
+  title 'Use PIDs cgroup limit'
+
+  tag 'daemon'
+  tag cis: 'docker:5.28'
+  tag level: 1
+
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
+      its('HostConfig.PidsLimit') { should_not cmp 0 }
+      its('HostConfig.PidsLimit') { should_not cmp(-1) }
+    end
+  end
+end
+
+control 'cis-docker-benchmark-5.29' do
+  impact 0.0
+  title "Do not use Docker's default bridge docker0"
+
+  tag 'daemon'
+  tag cis: 'docker:5.29'
+  tag level: 2
+
+  describe 'docker-test' do
+    skip 'Not implemented yet'
+  end
+end
+
+control 'cis-docker-benchmark-5.30' do
+  impact 1.0
+  title "Do not share the host's user namespaces"
+
+  tag 'daemon'
+  tag cis: 'docker:5.30'
+  tag level: 1
+
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
+      its('HostConfig.UsernsMode') { should eq '' }
+    end
+  end
+end
+
+control 'cis-docker-benchmark-5.31' do
+  impact 1.0
+  title 'Do not mount the Docker socket inside any containers'
+
+  tag 'daemon'
+  tag cis: 'docker:5.31'
+  tag level: 1
+
+  docker.containers.running?.ids.each do |id|
+    docker.object(id).Mounts.each do |mount|
+      describe mount do
+        its('Source') { should_not include 'docker.sock' }
+      end
     end
   end
 end

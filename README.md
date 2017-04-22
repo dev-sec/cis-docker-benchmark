@@ -69,8 +69,15 @@ We use a yml attribute file to steer the configuration, the following options ar
   * `daemon_tlskey: /etc/docker/ssl/server_key.pem`
     configure the server key. cis-docker-benchmark-2.6
 
-  * `swarm_mode: Swarm: inactive`
+  * `swarm_mode: inactive`
     configure the swarm mode. cis-docker-benchmark-2.15
+
+  * `swarm_max_manager_nodes: 3`
+    configure the maximum number of swarm leaders. cis-docker-benchmark-2.16
+
+  * `swarm_port: 2377`
+    configure the swarm port. cis-docker-benchmark-2.17
+
 
 ## Usage
 
@@ -95,6 +102,14 @@ inspec exec cis-docker-benchmark --attrs sample_attributes.yml
 
 # run profile direct from inspec supermarket
 inspec supermarket exec dev-sec/cis-docker-benchmark -t ssh://user@hostname --key-files private_key --sudo
+```
+
+### Run individual controls
+
+In order to verify individual controls, just provide the control ids to InSpec:
+
+```
+inspec exec cis-docker-benchmark --controls 'cis-docker-benchmark-1.4 cis-docker-benchmark-1.5'
 ```
 
 ## Contributors + Kudos

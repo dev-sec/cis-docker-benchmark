@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 #
 # Copyright 2016, Patrick Muench
+# Copyright 2017, Christoph Hartmann
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -109,5 +110,77 @@ control 'cis-docker-benchmark-4.5' do
 
   describe os_env('DOCKER_CONTENT_TRUST') do
     its('content') { should eq '1' }
+  end
+end
+
+control 'cis-docker-benchmark-4.6' do
+  impact 0.0
+  title 'Add HEALTHCHECK instruction to the container image'
+
+  tag 'daemon'
+  tag cis: 'docker:4.6'
+  tag level: 1
+
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
+      its(%w(Config Healthcheck)) { should_not eq nil }
+    end
+  end
+end
+
+control 'cis-docker-benchmark-4.7' do
+  impact 0.0
+  title 'Do not use update instructions alone in the Dockerfile'
+
+  tag 'daemon'
+  tag cis: 'docker:4.6'
+  tag level: 1
+
+  docker.images.ids.each do |id|
+    describe command("docker history #{id}| grep -e 'update'") do
+      its('stdout') { should eq '' }
+    end
+  end
+end
+
+control 'cis-docker-benchmark-4.8' do
+  impact 0.0
+  title 'Remove setuid and setgid permissions in the images'
+
+  tag 'daemon'
+  tag cis: 'docker:4.8'
+  tag level: 2
+  ref url: 'https://github.com/dev-sec/linux-baseline'
+
+  describe 'docker-test' do
+    skip 'Use DevSec Linux Baseline in Container'
+  end
+end
+
+control 'cis-docker-benchmark-4.9' do
+  impact 0.3
+  title 'Use COPY instead of ADD in Dockerfile'
+
+  tag 'daemon'
+  tag cis: 'docker:4.9'
+  tag level: 1
+
+  docker.images.ids.each do |id|
+    describe command("docker history #{id}| grep 'ADD'") do
+      its('stdout') { should eq '' }
+    end
+  end
+end
+
+control 'cis-docker-benchmark-4.10' do
+  impact 0.0
+  title 'Do not store secrets in Dockerfiles'
+
+  tag 'daemon'
+  tag cis: 'docker:4.10'
+  tag level: 1
+
+  describe 'docker-test' do
+    skip 'Manually verify that you have not used secrets in images'
   end
 end
