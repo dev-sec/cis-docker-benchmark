@@ -67,8 +67,10 @@ control 'cis-docker-benchmark-2.8' do
   impact 1.0
   title 'Enable user namespace support'
   desc 'Enable user namespace support in Docker daemon to utilize container user to host user re-mapping. This recommendation is beneficial where containers you are using do not have an explicit container user defined in the container image. If container images that you are using have a pre-defined non-root user, this recommendation may be skipped since this feature is still in its infancy and might give you unpredictable issues and complexities.'
+
   tag 'daemon'
-  tag cis: '2.8'
+  tag cis: 'docker:2.8'
+  tag level: 2
   ref 'User namespeces', url: 'http://man7.org/linux/man-pages/man7/user_namespaces.7.html'
   ref 'Docker daemon configuration', url: 'https://docs.docker.com/engine/reference/commandline/daemon/'
   ref 'Routing out root: user namespaces in docker', url: 'http://events.linuxfoundation.org/sites/events/files/slides/User%20Namespaces%20-%20ContainerCon%202015%20-%2016-9-final_0.pdf'
@@ -91,8 +93,10 @@ control 'cis-docker-benchmark-2.9' do
   impact 1.0
   title 'Confirm default cgroup usage'
   desc 'The --cgroup-parent option allows you to set the default cgroup parent to use for all the containers. If there is no specific use case, this setting should be left at its default.'
+
   tag 'daemon'
-  tag cis: '2.9'
+  tag cis: 'docker:2.9'
+  tag level: 2
   ref 'Docker daemon configuration', url: 'https://docs.docker.com/engine/reference/commandline/daemon/'
 
   describe json('/etc/docker/daemon.json') do
@@ -104,8 +108,10 @@ control 'cis-docker-benchmark-2.10' do
   impact 1.0
   title 'Do not change base device size until needed'
   desc 'In certain circumstances, you might need containers bigger than 10G in size. In these cases, carefully choose the base device size.'
+
   tag 'daemon'
-  tag cis: '2.10'
+  tag cis: 'docker:2.10'
+  tag level: 2
   ref 'Docker daemon storage driver options', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#storage-driver-options'
 
   describe json('/etc/docker/daemon.json') do
@@ -117,8 +123,10 @@ control 'cis-docker-benchmark-2.11' do
   impact 1.0
   title 'Use authorization plugin'
   desc 'Docker’s out-of-the-box authorization model is all or nothing. Any user with permission to access the Docker daemon can run any Docker client command. The same is true for callers using Docker’s remote API to contact the daemon. If you require greater access control, you can create authorization plugins and add them to your Docker daemon configuration. Using an authorization plugin, a Docker administrator can configure granular access policies for managing access to Docker daemon.'
+
   tag 'daemon'
-  tag cis: '2.11'
+  tag cis: 'docker:2.11'
+  tag level: 2
   ref 'Access authorization', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#access-authorization'
   ref 'Auhtorization plugins', url: 'https://docs.docker.com/engine/extend/plugins_authorization/'
   ref 'Twistlock authorization plugin', url: 'https://github.com/twistlock/authz'
@@ -135,8 +143,10 @@ control 'cis-docker-benchmark-2.12' do
   impact 1.0
   title 'Configure centralized and remote logging'
   desc 'Docker now supports various log drivers. A preferable way to store logs is the one that supports centralized and remote logging.'
+
   tag 'daemon'
-  tag cis: '2.12'
+  tag cis: 'docker:2.12'
+  tag level: 2
   ref 'Logging overview', url: 'https://docs.docker.com/engine/admin/logging/overview/'
 
   describe json('/etc/docker/daemon.json') do
@@ -154,8 +164,10 @@ control 'cis-docker-benchmark-2.13' do
   impact 1.0
   title 'Disable operations on legacy registry (v1)'
   desc 'The latest Docker registry is v2. All operations on the legacy registry version (v1) should be restricted.'
+
   tag 'daemon'
-  tag cis: '2.13'
+  tag cis: 'docker:2.13'
+  tag level: 2
   ref 'Docker daemon storage driver options', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#storage-driver-options'
   ref 'Proposal: Provenance step 1 - Transform images for validation and verification', url: 'https://github.com/docker/docker/issues/8093'
   ref 'Proposal: JSON Registry API V2.1', url: 'https://github.com/docker/docker/issues/9015'
@@ -174,8 +186,10 @@ control 'cis-docker-benchmark-2.14' do
   impact 1.0
   title 'Enable live restore'
   desc 'The \'--live-restore\' enables full support of daemon-less containers in docker. It ensures that docker does not stop containers on shutdown or restore and properly reconnects to the container when restarted.'
+
   tag 'daemon'
-  tag cis: '2.14'
+  tag cis: 'docker:2.14'
+  tag level: 2
   ref 'Add --live-restore flag', url: 'https://github.com/docker/docker/pull/23213'
 
   describe json('/etc/docker/daemon.json') do
@@ -187,8 +201,10 @@ control 'cis-docker-benchmark-2.15' do
   impact 1.0
   title 'Do not enable swarm mode, if not needed'
   desc 'Do not enable swarm mode on a docker engine instance unless needed.'
+
   tag 'daemon'
-  tag cis: '2.15'
+  tag cis: 'docker:2.15'
+  tag level: 2
   ref 'docker swarm init', url: 'https://docs.docker.com/engine/reference/commandline/swarm_init/'
 
   describe command('docker info') do
@@ -200,6 +216,10 @@ control 'cis-docker-benchmark-4.5' do
   impact 1.0
   title 'Enable Content trust for Docker'
   desc 'Content trust provides the ability to use digital signatures for data sent to and received from remote Docker registries. These signatures allow client-side verification of the integrity and publisher of specific image tags. This ensures provenance of container images. Content trust is disabled by default. You should enable it.'
+
+  tag 'daemon'
+  tag cis: 'docker:4.5'
+  tag level: 2
   ref 'https://docs.docker.com/engine/reference/commandline/cli/#notary'
   ref 'https://docs.docker.com/engine/reference/commandline/cli/#environment-variables'
   ref 'https://docs.docker.com/engine/security/trust/content_trust/'
@@ -213,6 +233,10 @@ control 'cis-docker-benchmark-5.1' do
   impact 1.0
   title 'Verify AppArmor Profile, if applicable'
   desc 'AppArmor is an effective and easy-to-use Linux application security system. It is available on quite a few Linux distributions by default such as Debian and Ubuntu.'
+
+  tag 'daemon'
+  tag cis: 'docker:5.1'
+  tag level: 2
   ref 'https://docs.docker.com/engine/security/security/'
   ref 'https://docs.docker.com/engine/reference/run/#security-configuration'
   ref 'http://wiki.apparmor.net/index.php/Main_Page'
@@ -230,11 +254,15 @@ control 'cis-docker-benchmark-5.2' do
   impact 1.0
   title 'Verify SELinux security options, if applicable'
   desc 'SELinux is an effective and easy-to-use Linux application security system. It is available on quite a few Linux distributions by default such as Red Hat and Fedora'
-  tag 'Bug: Wrong SELinux label for devmapper device https://github.com/docker/docker/issues/22826'
-  tag 'Bug: selinux break docker user namespace https://bugzilla.redhat.com/show_bug.cgi?id=1312665'
-  ref 'https://docs.docker.com/engine/security/security/'
-  ref 'https://docs.docker.com/engine/reference/run/#security-configuration'
-  ref 'https://docs.fedoraproject.org/en-US/Fedora/13/html/Security-Enhanced_Linux/'
+
+  tag 'daemon'
+  tag cis: 'docker:5.2'
+  tag level: 2
+  ref 'Bug: Wrong SELinux label for devmapper device', url: 'https://github.com/docker/docker/issues/22826'
+  ref 'Bug: selinux break docker user namespace', url: 'https://bugzilla.redhat.com/show_bug.cgi?id=1312665'
+  ref url: 'https://docs.docker.com/engine/security/security/'
+  ref url: 'https://docs.docker.com/engine/reference/run/#security-configuration'
+  ref url: 'https://docs.fedoraproject.org/en-US/Fedora/13/html/Security-Enhanced_Linux/'
 
   only_if { %w(centos redhat).include? os[:name] }
   describe json('/etc/docker/daemon.json') do
@@ -253,7 +281,11 @@ control 'cis-docker-benchmark-5.22' do
   impact 1.0
   title 'Do not docker exec commands with privileged option'
   desc 'Do not docker exec with --privileged option.'
-  ref 'https://docs.docker.com/engine/reference/commandline/exec/'
+
+  tag 'daemon'
+  tag cis: 'docker:5.22'
+  tag level: 2
+  ref url: 'https://docs.docker.com/engine/reference/commandline/exec/'
 
   describe command('ausearch --input-logs -k docker | grep exec | grep privileged').stdout do
     it { should be_empty }
@@ -264,7 +296,11 @@ control 'cis-docker-benchmark-5.23' do
   impact 1.0
   title 'Do not docker exec commands with user option'
   desc 'Do not docker exec with --user option.'
-  ref 'https://docs.docker.com/engine/reference/commandline/exec/'
+
+  tag 'daemon'
+  tag cis: 'docker:5.23'
+  tag level: 2
+  ref url: 'https://docs.docker.com/engine/reference/commandline/exec/'
 
   describe command('ausearch --input-logs -k docker | grep exec | grep user').stdout do
     it { should be_empty }
