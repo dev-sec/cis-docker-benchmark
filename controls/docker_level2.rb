@@ -133,8 +133,6 @@ control 'cis-docker-benchmark-2.11' do
 
   describe json('/etc/docker/daemon.json') do
     its(['authorization-plugins']) { should_not be_empty }
-  end
-  describe json('/etc/docker/daemon.json') do
     its(['authorization-plugins']) { should eq([AUTHORIZATION_PLUGIN]) }
   end
 end
@@ -151,11 +149,7 @@ control 'cis-docker-benchmark-2.12' do
 
   describe json('/etc/docker/daemon.json') do
     its(['log-driver']) { should_not be_empty }
-  end
-  describe json('/etc/docker/daemon.json') do
     its(['log-driver']) { should eq(LOG_DRIVER) }
-  end
-  describe json('/etc/docker/daemon.json') do
     its(['log-opts']) { should include(LOG_OPTS) }
   end
 end

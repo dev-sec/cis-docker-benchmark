@@ -164,17 +164,9 @@ control 'cis-docker-benchmark-2.6' do
 
   describe json('/etc/docker/daemon.json') do
     its(['tls']) { should eq(true) }
-  end
-  describe json('/etc/docker/daemon.json') do
     its(['tlsverify']) { should eq(true) }
-  end
-  describe json('/etc/docker/daemon.json') do
     its(['tlscacert']) { should eq(DAEMON_TLSCACERT) }
-  end
-  describe json('/etc/docker/daemon.json') do
     its(['tlscert']) { should eq(DAEMON_TLSCERT) }
-  end
-  describe json('/etc/docker/daemon.json') do
     its(['tlskey']) { should eq(DAEMON_TLSKEY) }
   end
 end
@@ -191,8 +183,6 @@ control 'cis-docker-benchmark-2.7' do
 
   describe json('/etc/docker/daemon.json') do
     its(['default-ulimits', 'nproc']) { should eq('1024:2408') }
-  end
-  describe json('/etc/docker/daemon.json') do
     its(['default-ulimits', 'nofile']) { should eq('100:200') }
   end
 end
