@@ -12,7 +12,7 @@ InSpec is an open-source run-time framework and rule language used to specify co
 
 ## Requirements
 
-* [InSpec](http://inspec.io/)
+* at least [InSpec](http://inspec.io/) version 1.21.0
 
 ### Platform
 
@@ -107,6 +107,7 @@ inspec supermarket exec dev-sec/cis-docker-benchmark -t ssh://user@hostname --ke
 ## License and Author
 
 * Author:: Patrick Muench <patrick.muench1111@gmail.com>
+* Author:: Christoph Hartmann <chris@lollyrock.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

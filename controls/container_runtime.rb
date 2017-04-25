@@ -57,8 +57,8 @@ control 'cis-docker-benchmark-5.1' do
   ref 'http://wiki.apparmor.net/index.php/Main_Page'
 
   only_if { %w(ubuntu debian).include? os[:name] }
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(['AppArmorProfile']) { should include(APP_ARMOR_PROFILE) }
       its(['AppArmorProfile']) { should_not eq nil }
     end
@@ -84,8 +84,8 @@ control 'cis-docker-benchmark-5.2' do
     its(['selinux-enabled']) { should eq(true) }
   end
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig SecurityOpt)) { should_not eq nil }
       its(%w(HostConfig SecurityOpt)) { should include(SELINUX_PROFILE) }
     end
@@ -104,8 +104,8 @@ control 'cis-docker-benchmark-5.3' do
   ref url: 'http://man7.org/linux/man-pages/man7/capabilities.7.html'
   ref url: 'https://github.com/docker/docker/blob/master/oci/defaults_linux.go#L64-L79'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig CapDrop)) { should include(/all/) }
       its(%w(HostConfig CapDrop)) { should_not eq nil }
       its(%w(HostConfig CapAdd)) { should eq CONTAINER_CAPADD }
@@ -123,8 +123,8 @@ control 'cis-docker-benchmark-5.4' do
   tag level: 1
   ref url: 'https://docs.docker.com/engine/reference/commandline/cli/'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig Privileged)) { should eq false }
       its(%w(HostConfig Privileged)) { should_not eq true }
     end
@@ -141,8 +141,8 @@ control 'cis-docker-benchmark-5.5' do
   tag level: 1
   ref url: 'https://docs.docker.com/engine/userguide/containers/dockervolumes/'
 
-  docker.ps.each do |id|
-    info = docker.inspect(id)
+  docker.containers.running?.ids.each do |id|
+    info = docker.object(id)
     info['Mounts'].each do |mounts|
       describe mounts['Source'] do
         it { should_not eq '/' }
@@ -168,7 +168,7 @@ control 'cis-docker-benchmark-5.6' do
   tag level: 1
   ref url: 'https://blog.docker.com/2014/06/why-you-dont-need-to-run-sshd-in-docker/'
 
-  docker.ps.each do |id|
+  docker.containers.running?.ids.each do |id|
     execute_command = 'docker exec ' + id + ' ps -e'
     describe command(execute_command) do
       its('stdout') { should_not match(/ssh/) }
@@ -187,12 +187,12 @@ control 'cis-docker-benchmark-5.7' do
   ref url: 'https://docs.docker.com/engine/userguide/networking/default_network/binding/'
   ref url: 'https://www.adayinthelifeof.nl/2012/03/12/why-putting-ssh-on-another-port-than-22-is-bad-idea/'
 
-  docker.ps.each do |id|
-    info = docker.inspect(id)
-    ports = info['NetworkSettings']['Ports'].keys
-    ports.each do |item|
-      info['NetworkSettings']['Ports'][item].each do |hostport|
-        describe hostport['HostPort'].to_i.between?(1, 1024) do
+  docker.containers.running?.ids.each do |id|
+    container_info = docker.object(id)
+    next unless container_info['NetworkSettings']['Ports'].nil?
+    container_info['NetworkSettings']['Ports'].each do |_, hosts|
+      hosts.each do |host|
+        describe host['HostPort'].to_i.between?(1, 1024) do
           it { should eq false }
         end
       end
@@ -222,8 +222,8 @@ control 'cis-docker-benchmark-5.9' do
   ref url: 'https://docs.docker.com/engine/userguide/networking/dockernetworks/'
   ref url: 'https://github.com/docker/docker/issues/6401'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig NetworkMode)) { should_not eq 'host' }
     end
   end
@@ -241,8 +241,8 @@ control 'cis-docker-benchmark-5.10' do
   ref url: 'https://docs.docker.com/engine/reference/commandline/cli/#run'
   ref url: 'https://docs.docker.com/v1.8/articles/runmetrics/'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig Memory)) { should_not eq 0 }
     end
   end
@@ -260,8 +260,8 @@ control 'cis-docker-benchmark-5.11' do
   ref url: 'https://docs.docker.com/engine/reference/commandline/cli/#run'
   ref url: 'https://docs.docker.com/v1.8/articles/runmetrics/'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig CpuShares)) { should_not eq 0 }
       its(%w(HostConfig CpuShares)) { should_not eq 1024 }
     end
@@ -278,8 +278,8 @@ control 'cis-docker-benchmark-5.12' do
   tag level: 1
   ref url: 'https://docs.docker.com/engine/reference/commandline/cli/#run'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig ReadonlyRootfs)) { should eq true }
     end
   end
@@ -295,12 +295,12 @@ control 'cis-docker-benchmark-5.13' do
   tag level: 1
   ref url: 'https://docs.docker.com/engine/userguide/networking/default_network/binding/'
 
-  docker.ps.each do |id|
-    info = docker.inspect(id)
-    ports = info['NetworkSettings']['Ports'].keys
-    ports.each do |item|
-      info['NetworkSettings']['Ports'][item].each do |hostip|
-        describe hostip['HostIp'] do
+  docker.containers.running?.ids.each do |id|
+    container_info = docker.object(id)
+    next unless container_info['NetworkSettings']['Ports'].nil?
+    container_info['NetworkSettings']['Ports'].each do |_, hosts|
+      hosts.each do |host|
+        describe host['HostIp'].to_i.between?(1, 1024) do
           it { should_not eq '0.0.0.0' }
         end
       end
@@ -318,14 +318,15 @@ control 'cis-docker-benchmark-5.14' do
   tag level: 1
   ref url: 'https://docs.docker.com/engine/reference/commandline/cli/#restart-policies'
 
-  docker.ps.each do |id|
-    info = docker.inspect(id)
-    only_if { info['HostConfig']['RestartPolicy']['Name'] != 'no' }
-    describe info do
-      its(%w(HostConfig RestartPolicy Name)) { should eq 'on-failure' }
-    end
-    describe info do
-      its(%w(HostConfig RestartPolicy MaximumRetryCount)) { should eq 5 }
+  docker.containers.running?.ids.each do |id|
+    describe.one do
+      describe docker.object(id) do
+        its(%w(HostConfig RestartPolicy Name)) { should eq 'no' }
+      end
+      describe docker.object(id) do
+        its(%w(HostConfig RestartPolicy Name)) { should eq 'on-failure' }
+        its(%w(HostConfig RestartPolicy MaximumRetryCount)) { should eq 5 }
+      end
     end
   end
 end
@@ -341,8 +342,8 @@ control 'cis-docker-benchmark-5.15' do
   ref url: 'https://docs.docker.com/engine/reference/run/#pid-settings'
   ref url: 'http://man7.org/linux/man-pages/man7/pid_namespaces.7.html'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig PidMode)) { should_not eq 'host' }
     end
   end
@@ -359,8 +360,8 @@ control 'cis-docker-benchmark-5.16' do
   ref url: 'https://docs.docker.com/engine/reference/run/#ipc-settings'
   ref url: 'http://man7.org/linux/man-pages/man7/pid_namespaces.7.html'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig IpcMode)) { should_not eq 'host' }
     end
   end
@@ -376,8 +377,8 @@ control 'cis-docker-benchmark-5.17' do
   tag level: 1
   ref url: 'https://docs.docker.com/engine/reference/commandline/cli/#run'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig Devices)) { should be_empty }
     end
   end
@@ -393,8 +394,8 @@ control 'cis-docker-benchmark-5.18' do
   tag level: 1
   ref url: 'https://docs.docker.com/engine/reference/commandline/cli/#setting-ulimits-in-a-container'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig Ulimits)) { should eq nil }
     end
   end
@@ -412,7 +413,7 @@ control 'cis-docker-benchmark-5.19' do
   ref url: 'https://docs.docker.com/engine/reference/run/'
   ref url: 'https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt'
 
-  docker.ps.each do |id|
+  docker.containers.running?.ids.each do |id|
     raw = command("docker inspect --format '{{range $mnt := .Mounts}} {{json $mnt.Propagation}} {{end}}' #{id}").stdout
     describe raw.delete("\n").delete('\"').delete(' ') do
       it { should_not eq 'shared' }
@@ -431,8 +432,8 @@ control 'cis-docker-benchmark-5.20' do
   ref url: 'https://docs.docker.com/engine/reference/run/'
   ref url: 'http://man7.org/linux/man-pages/man7/pid_namespaces.7.html'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig UTSMode)) { should_not eq 'host' }
     end
   end
@@ -453,8 +454,8 @@ control 'cis-docker-benchmark-5.21' do
   ref url: 'https://www.kernel.org/doc/Documentation/prctl/seccomp_filter.txt'
   ref url: 'https://github.com/docker/docker/pull/17034'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig SecurityOpt)) { should include(/seccomp/) }
       its(%w(HostConfig SecurityOpt)) { should_not include(/seccomp[=|:]unconfined/) }
     end
@@ -502,8 +503,8 @@ control 'cis-docker-benchmark-5.24' do
   ref url: 'https://docs.docker.com/engine/reference/run/#specifying-custom-cgroups'
   ref url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Resource_Management_Guide/ch01.html'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig CgroupParent)) { should be_empty }
     end
   end
@@ -523,8 +524,8 @@ control 'cis-docker-benchmark-5.25' do
   ref url: 'https://lwn.net/Articles/475678/'
   ref url: 'https://lwn.net/Articles/475362/'
 
-  docker.ps.each do |id|
-    describe docker.inspect(id) do
+  docker.containers.running?.ids.each do |id|
+    describe docker.object(id) do
       its(%w(HostConfig SecurityOpt)) { should include(/no-new-privileges/) }
     end
   end

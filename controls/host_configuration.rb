@@ -64,9 +64,9 @@ control 'cis-docker-benchmark-1.2' do
   ref 'Check kernel dependencies', url: 'https://docs.docker.com/engine/installation/binaries/#check-kernel-dependencies'
   ref 'Installation list', url: 'https://docs.docker.com/engine/installation/#installation-list'
 
+  only_if { os.linux? }
   kernel_version = command('uname -r | grep -o \'^\w\.\w*\.\w*\'').stdout
   kernel_compare = Gem::Version.new('3.10') <= Gem::Version.new(kernel_version)
-
   describe kernel_compare do
     it { should eq true }
   end
@@ -111,18 +111,9 @@ control 'cis-docker-benchmark-1.5' do
   ref 'Docker installation', url: 'https://docs.docker.com/installation/'
   ref 'Docker releases', url: 'https://github.com/docker/docker/releases/latest'
 
-  docker_server_version = command('docker version --format \'{{.Server.Version}}\'').stdout
-  docker_server_compare = Gem::Version.new('17.03') <= Gem::Version.new(docker_server_version)
-
-  docker_client_version = command('docker version --format \'{{.Client.Version}}\'').stdout
-  docker_client_compare = Gem::Version.new('17.03') <= Gem::Version.new(docker_client_version)
-
-  describe docker_server_compare do
-    it { should eq true }
-  end
-
-  describe docker_client_compare do
-    it { should eq true }
+  describe docker do
+    its('version.Client.Version') { should cmp >= '17.03' }
+    its('version.Server.Version') { should cmp >= '17.03' }
   end
 end
 
@@ -156,6 +147,7 @@ control 'cis-docker-benchmark-benchmark-1.7' do
   tag level: 1
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
+  only_if { os.linux? }
   describe auditd_rules do
     its(:lines) { should include('-w /usr/bin/docker -p rwxa -k docker') }
   end
@@ -176,6 +168,7 @@ control 'cis-docker-benchmark-1.8' do
   tag level: 1
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
+  only_if { os.linux? }
   describe auditd_rules do
     its(:lines) { should include('-w /var/lib/docker/ -p rwxa -k docker') }
   end
@@ -191,6 +184,7 @@ control 'cis-docker-benchmark-1.9' do
   tag level: 1
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
+  only_if { os.linux? }
   describe auditd_rules do
     its(:lines) { should include('-w /etc/docker/ -p rwxa -k docker') }
   end
@@ -206,8 +200,9 @@ control 'cis-docker-benchmark-1.10' do
   tag level: 1
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
-  if docker.path
-    rule = '-w ' + docker.path + ' -p rwxa -k docker'
+  only_if { os.linux? }
+  if docker_helper.path
+    rule = '-w ' + docker_helper.path + ' -p rwxa -k docker'
     describe auditd_rules do
       its(:lines) { should include(rule) }
     end
@@ -228,8 +223,9 @@ control 'cis-docker-benchmark-1.11' do
   tag level: 1
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
-  if docker.socket
-    rule = '-w ' + docker.socket + ' -p rwxa -k docker'
+  only_if { os.linux? }
+  if docker_helper.socket
+    rule = '-w ' + docker_helper.socket + ' -p rwxa -k docker'
     describe auditd_rules do
       its(:lines) { should include(rule) }
     end
@@ -250,7 +246,7 @@ control 'cis-docker-benchmark-1.12' do
   tag level: 1
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
-  only_if { os[:family] != 'centos' }
+  only_if { os.linux? }
   describe auditd_rules do
     its(:lines) { should include('-w /etc/default/docker -p rwxa -k docker') }
   end
@@ -267,6 +263,7 @@ control 'cis-docker-benchmark-1.13' do
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
   ref 'Daemon configuration', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#daemon-configuration-file'
 
+  only_if { os.linux? }
   describe auditd_rules do
     its(:lines) { should include('-w /etc/docker/daemon.json -p rwxa -k docker') }
   end
@@ -284,6 +281,7 @@ control 'cis-docker-benchmark-1.14' do
   ref 'Containerd integration', url: 'https://github.com/docker/docker/pull/20662'
   ref 'Containerd tools', url: 'https://containerd.tools/'
 
+  only_if { os.linux? }
   describe auditd_rules do
     its(:lines) { should include('-w /usr/bin/docker-containerd -p rwxa -k docker') }
   end
@@ -302,6 +300,7 @@ control 'cis-docker-benchmark-1.15' do
   ref 'Containerd tools', url: 'https://containerd.tools/'
   ref 'Opencontainers runc repository', url: 'https://github.com/opencontainers/runc'
 
+  only_if { os.linux? }
   describe auditd_rules do
     its(:lines) { should include('-w /usr/bin/docker-runc -p rwxa -k docker') }
   end
