@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 #
 # Copyright 2016, Patrick Muench
+# Copyright 2017, Christoph Hartmann
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -59,9 +60,21 @@ LOG_OPTS = attribute(
 )
 
 SWARM_MODE = attribute(
-  'SWARM_MODE',
-  description: 'define the swarm mode, active or inactive',
-  default:  'Swarm: inactive'
+  'swarm_mode',
+  description: 'define the swarm mode, `active` or `inactive`',
+  default: 'inactive'
+)
+
+SWARM_MAX_MANAGER_NODES = attribute(
+  'swarm_max_manager_nodes',
+  description: 'number of manager nodes in a swarm',
+  default: 3
+)
+
+SWARM_PORT = attribute(
+  'swarm_port',
+  description: 'port of the swarm node',
+  default: 2377
 )
 
 # check if docker exists
@@ -319,8 +332,53 @@ control 'cis-docker-benchmark-2.15' do
   tag cis: 'docker:2.15'
   tag level: 2
   ref 'docker swarm init', url: 'https://docs.docker.com/engine/reference/commandline/swarm_init/'
+  describe docker.info do
+    its('Swarm.LocalNodeState') { should eq SWARM_MODE }
+  end
+end
 
-  describe command('docker info') do
-    its('stdout') { should include SWARM_MODE }
+control 'cis-docker-benchmark-2.16' do
+  impact 1.0
+  title 'Control the number of manager nodes in a swarm'
+  desc 'Ensure that the minimum number of required manager nodes is created in a swarm.'
+
+  tag 'daemon'
+  tag cis: 'docker:2.16'
+  tag level: 2
+
+  only_if { SWARM_MODE == 'active' }
+  describe docker.info do
+    its('Swarm.Managers') { should cmp <= SWARM_MAX_MANAGER_NODES }
+  end
+end
+
+control 'cis-docker-benchmark-2.17' do
+  impact 1.0
+  title 'Bind swarm services to a specific host interface'
+
+  tag 'daemon'
+  tag cis: 'docker:2.17'
+  tag level: 2
+
+  only_if { SWARM_MODE == 'active' }
+  describe port(SWARM_PORT) do
+    its('addresses') { should_not include '0.0.0.0' }
+    its('addresses') { should_not include '::' }
+  end
+end
+
+control 'cis-docker-benchmark-2.18' do
+  impact 1.0
+  title 'Disable Userland Proxy'
+
+  tag 'daemon'
+  tag cis: 'docker:2.18'
+  tag level: 2
+
+  describe json('/etc/docker/daemon.json') do
+    its(['userland-proxy']) { should eq(false) }
+  end
+  describe processes('dockerd').commands do
+    it { should include 'userland-proxy=false' }
   end
 end
