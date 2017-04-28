@@ -1,10 +1,22 @@
 # Change Log
 
-## [1.2.0](https://github.com/dev-sec/cis-docker-benchmark/tree/1.2.0) (2017-04-18)
-[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.1.1...1.2.0)
+## [1.3.0](https://github.com/dev-sec/cis-docker-benchmark/tree/1.3.0) (2017-04-28)
+[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.1.1...1.3.0)
+
+**Closed issues:**
+
+- rename control titles [\#22](https://github.com/dev-sec/cis-docker-benchmark/issues/22)
+- splitt controls in components [\#21](https://github.com/dev-sec/cis-docker-benchmark/issues/21)
+- include the inspec docker resource [\#20](https://github.com/dev-sec/cis-docker-benchmark/issues/20)
+- Update to CIS Docker 1.12.0 Benchmark [\#11](https://github.com/dev-sec/cis-docker-benchmark/issues/11)
+- tag the tests which belongs to a host and to a container [\#8](https://github.com/dev-sec/cis-docker-benchmark/issues/8)
 
 **Merged pull requests:**
 
+- fix \#11 implement missing 1.12 controls [\#30](https://github.com/dev-sec/cis-docker-benchmark/pull/30) ([chris-rock](https://github.com/chris-rock))
+- use new inspec docker resource [\#29](https://github.com/dev-sec/cis-docker-benchmark/pull/29) ([chris-rock](https://github.com/chris-rock))
+- split up control files into components [\#26](https://github.com/dev-sec/cis-docker-benchmark/pull/26) ([chris-rock](https://github.com/chris-rock))
+- update tags and refs [\#23](https://github.com/dev-sec/cis-docker-benchmark/pull/23) ([chris-rock](https://github.com/chris-rock))
 - update to CIS Benchmark 1.12, controls 1.1 to 2.16 [\#19](https://github.com/dev-sec/cis-docker-benchmark/pull/19) ([atomic111](https://github.com/atomic111))
 
 ## [1.1.1](https://github.com/dev-sec/cis-docker-benchmark/tree/1.1.1) (2017-03-01)
