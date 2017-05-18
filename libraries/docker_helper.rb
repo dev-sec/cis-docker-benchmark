@@ -53,7 +53,7 @@ class DockerHelper < Inspec.resource(1)
   def parse_systemd_values(stdout)
     SimpleConfig.new(
       stdout,
-      assignment_re: /^\s*([^=]*?)\s*=\s*(.*?)\s*$/,
+      assignment_regex: /^\s*([^=]*?)\s*=\s*(.*?)\s*$/,
       multiple_values: false
     ).params
   end
