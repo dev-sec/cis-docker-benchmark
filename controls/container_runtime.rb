@@ -190,7 +190,7 @@ control 'cis-docker-benchmark-5.7' do
 
   docker.containers.running?.ids.each do |id|
     container_info = docker.object(id)
-    next unless container_info['NetworkSettings']['Ports'].nil?
+    next if container_info['NetworkSettings']['Ports'].nil?
     container_info['NetworkSettings']['Ports'].each do |_, hosts|
       hosts.each do |host|
         describe host['HostPort'].to_i.between?(1, 1024) do
@@ -298,7 +298,7 @@ control 'cis-docker-benchmark-5.13' do
 
   docker.containers.running?.ids.each do |id|
     container_info = docker.object(id)
-    next unless container_info['NetworkSettings']['Ports'].nil?
+    next if container_info['NetworkSettings']['Ports'].nil?
     container_info['NetworkSettings']['Ports'].each do |_, hosts|
       hosts.each do |host|
         describe host['HostIp'].to_i.between?(1, 1024) do
