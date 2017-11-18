@@ -1,7 +1,25 @@
 # Change Log
 
+## [1.3.1](https://github.com/dev-sec/cis-docker-benchmark/tree/1.3.1) (2017-11-18)
+[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.3.0...1.3.1)
+
+**Fixed bugs:**
+
+- undefined method `downcase' for nil:NilClass [\#32](https://github.com/dev-sec/cis-docker-benchmark/issues/32)
+
+**Closed issues:**
+
+- docker variable not defined [\#31](https://github.com/dev-sec/cis-docker-benchmark/issues/31)
+
+**Merged pull requests:**
+
+- updating check for container\_info networkings port [\#38](https://github.com/dev-sec/cis-docker-benchmark/pull/38) ([coolguru](https://github.com/coolguru))
+- add required docker cli version [\#35](https://github.com/dev-sec/cis-docker-benchmark/pull/35) ([chris-rock](https://github.com/chris-rock))
+- use recommended spdx license identifier [\#34](https://github.com/dev-sec/cis-docker-benchmark/pull/34) ([chris-rock](https://github.com/chris-rock))
+- Due to inspec deprecation warnings [\#33](https://github.com/dev-sec/cis-docker-benchmark/pull/33) ([alexpop](https://github.com/alexpop))
+
 ## [1.3.0](https://github.com/dev-sec/cis-docker-benchmark/tree/1.3.0) (2017-04-28)
-[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.1.1...1.3.0)
+[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.2.0...1.3.0)
 
 **Closed issues:**
 
@@ -17,6 +35,12 @@
 - use new inspec docker resource [\#29](https://github.com/dev-sec/cis-docker-benchmark/pull/29) ([chris-rock](https://github.com/chris-rock))
 - split up control files into components [\#26](https://github.com/dev-sec/cis-docker-benchmark/pull/26) ([chris-rock](https://github.com/chris-rock))
 - update tags and refs [\#23](https://github.com/dev-sec/cis-docker-benchmark/pull/23) ([chris-rock](https://github.com/chris-rock))
+
+## [1.2.0](https://github.com/dev-sec/cis-docker-benchmark/tree/1.2.0) (2017-04-18)
+[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.1.1...1.2.0)
+
+**Merged pull requests:**
+
 - update to CIS Benchmark 1.12, controls 1.1 to 2.16 [\#19](https://github.com/dev-sec/cis-docker-benchmark/pull/19) ([atomic111](https://github.com/atomic111))
 
 ## [1.1.1](https://github.com/dev-sec/cis-docker-benchmark/tree/1.1.1) (2017-03-01)
