@@ -1,8 +1,8 @@
 name: cis-docker-benchmark
 title: CIS Docker Benchmark Profile
-maintainer: Patrick Muench
+maintainer: DevSec Hardening Framework Team
 copyright: DevSec Hardening Framework Team
-copyright_email: patrick.muench111@gmail.com
+copyright_email: hello@dev-sec.io
 license: Apache-2.0
 summary: An InSpec Compliance Profile for the CIS Docker Benchmark
 version: 1.3.1
