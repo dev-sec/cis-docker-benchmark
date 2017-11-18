@@ -440,7 +440,27 @@ control 'daemon-2.18' do
   ref 'overlay networking with userland-proxy disabled prevents port exposure', url: 'https://github.com/moby/moby/issues/22741'
   ref 'Bind container ports to the host', url: 'https://docs.docker.com/engine/userguide/networking/default_network/binding/'
 
+  describe json('/etc/docker/daemon.json') do
+    its(['userland-proxy']) { should eq(false) }
   end
+  describe processes('dockerd').commands do
+    it { should include 'userland-proxy=false' }
+  end
+end
+
+control 'daemon-2.19' do
+  impact 1.0
+  title 'Encrypt data exchanged between containers on different nodes on the overlay network'
+  desc 'Encrypt data exchanged between containers on different nodes on the overlay network.
+
+  Rationale: By default, data exchanged between containers on different nodes on the overlay network is not encrypted. This could potentially expose traffic between the container nodes.'
+
+  tag 'daemon'
+  tag 'cis-docker-benchmark-1.12.0:2.19'
+  tag 'cis-docker-benchmark-1.13.0:2.19'
+  tag 'level:1'
+  ref 'Docker swarm mode overlay network security model', url: 'https://docs.docker.com/engine/userguide/networking/overlay-security-model/'
+  ref 'Docker swarm container-container traffic not encrypted when inspecting externally with tcpdump', url: 'https://github.com/moby/moby/issues/24253'
 
   describe json('/etc/docker/daemon.json') do
     its(['userland-proxy']) { should eq(false) }
