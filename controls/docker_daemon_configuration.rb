@@ -245,14 +245,17 @@ control 'daemon-2.8' do
   end
 end
 
-control 'cis-docker-benchmark-2.9' do
+control 'daemon-2.9' do
   impact 1.0
   title 'Confirm default cgroup usage'
-  desc 'The --cgroup-parent option allows you to set the default cgroup parent to use for all the containers. If there is no specific use case, this setting should be left at its default.'
+  desc 'The --cgroup-parent option allows you to set the default cgroup parent to use for all the containers. If there is no specific use case, this setting should be left at its default.
+
+  Rationale: System administrators typically define cgroups under which containers are supposed to run. Even if cgroups are not explicitly defined by the system administrators, containers run under docker cgroup by default. It is possible to attach to a different cgroup other than that is the default. This usage should be monitored and confirmed. By attaching to a different cgroup than the one that is a default, it is possible to share resources unevenly and thus might starve the host for resources.'
 
   tag 'daemon'
-  tag cis: 'docker:2.9'
-  tag level: 2
+  tag 'cis-docker-benchmark-1.12.0:2.9'
+  tag 'cis-docker-benchmark-1.13.0:2.9'
+  tag 'level:2'
   ref 'Docker daemon configuration', url: 'https://docs.docker.com/engine/reference/commandline/daemon/'
 
   describe json('/etc/docker/daemon.json') do
@@ -260,14 +263,17 @@ control 'cis-docker-benchmark-2.9' do
   end
 end
 
-control 'cis-docker-benchmark-2.10' do
+control 'daemon-2.10' do
   impact 1.0
   title 'Do not change base device size until needed'
-  desc 'In certain circumstances, you might need containers bigger than 10G in size. In these cases, carefully choose the base device size.'
+  desc 'In certain circumstances, you might need containers bigger than 10G in size. In these cases, carefully choose the base device size.
+
+  Rationale: The base device size can be increased at daemon restart. Increasing the base device size allows all future images and containers to be of the new base device size. A user can use this option to expand the base device size however shrinking is not permitted. This value affects the system-wide “base” empty filesystem that may already be initialized and inherited by pulled images. Though the file system does not allot the increased size if it is empty, it will use more space for the empty case depending upon the device size. This may cause a denial of service by ending up in file system being over-allocated or full.'
 
   tag 'daemon'
-  tag cis: 'docker:2.10'
-  tag level: 2
+  tag 'cis-docker-benchmark-1.12.0:2.10'
+  tag 'cis-docker-benchmark-1.13.0:2.10'
+  tag 'level:2'
   ref 'Docker daemon storage driver options', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#storage-driver-options'
 
   describe json('/etc/docker/daemon.json') do
@@ -275,14 +281,17 @@ control 'cis-docker-benchmark-2.10' do
   end
 end
 
-control 'cis-docker-benchmark-2.11' do
+control 'daemon-2.11' do
   impact 1.0
   title 'Use authorization plugin'
-  desc 'Docker’s out-of-the-box authorization model is all or nothing. Any user with permission to access the Docker daemon can run any Docker client command. The same is true for callers using Docker’s remote API to contact the daemon. If you require greater access control, you can create authorization plugins and add them to your Docker daemon configuration. Using an authorization plugin, a Docker administrator can configure granular access policies for managing access to Docker daemon.'
+  desc 'Docker’s out-of-the-box authorization model is all or nothing. Any user with permission to access the Docker daemon can run any Docker client command. The same is true for callers using Docker’s remote API to contact the daemon. If you require greater access control, you can create authorization plugins and add them to your Docker daemon configuration. Using an authorization plugin, a Docker administrator can configure granular access policies for managing access to Docker daemon.
+
+  Rationale: Docker’s out-of-the-box authorization model is all or nothing. Any user with permission to access the Docker daemon can run any Docker client command. The same is true for callers using Docker’s remote API to contact the daemon. If you require greater access control, you can create authorization plugins and add them to your Docker daemon configuration. Using an authorization plugin, a Docker administrator can configure granular access policies for managing access to Docker daemon.'
 
   tag 'daemon'
-  tag cis: 'docker:2.11'
-  tag level: 2
+  tag 'cis-docker-benchmark-1.12.0:2.11'
+  tag 'cis-docker-benchmark-1.13.0:2.11'
+  tag 'level:2'
   ref 'Access authorization', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#access-authorization'
   ref 'Auhtorization plugins', url: 'https://docs.docker.com/engine/extend/plugins_authorization/'
   ref 'Twistlock authorization plugin', url: 'https://github.com/twistlock/authz'
@@ -293,14 +302,17 @@ control 'cis-docker-benchmark-2.11' do
   end
 end
 
-control 'cis-docker-benchmark-2.12' do
+control 'daemon-2.12' do
   impact 1.0
   title 'Configure centralized and remote logging'
-  desc 'Docker now supports various log drivers. A preferable way to store logs is the one that supports centralized and remote logging.'
+  desc 'Docker now supports various log drivers. A preferable way to store logs is the one that supports centralized and remote logging.
+
+  Ratonale: Centralized and remote logging ensures that all important log records are safe despite catastrophic events. Docker now supports various such logging drivers. Use the one that suits your environment the best.'
 
   tag 'daemon'
-  tag cis: 'docker:2.12'
-  tag level: 2
+  tag 'cis-docker-benchmark-1.12.0:2.12'
+  tag 'cis-docker-benchmark-1.13.0:2.12'
+  tag 'level:2'
   ref 'Logging overview', url: 'https://docs.docker.com/engine/admin/logging/overview/'
 
   describe json('/etc/docker/daemon.json') do
@@ -310,14 +322,17 @@ control 'cis-docker-benchmark-2.12' do
   end
 end
 
-control 'cis-docker-benchmark-2.13' do
+control 'daemon-2.13' do
   impact 1.0
   title 'Disable operations on legacy registry (v1)'
-  desc 'The latest Docker registry is v2. All operations on the legacy registry version (v1) should be restricted.'
+  desc 'The latest Docker registry is v2. All operations on the legacy registry version (v1) should be restricted.
+
+  Rationale: Docker registry v2 brings in many performance and security improvements over v1. It supports container image provenance and other security features such as image signing and verification. Hence, operations on Docker legacy registry should be restricted.'
 
   tag 'daemon'
-  tag cis: 'docker:2.13'
-  tag level: 2
+  tag 'cis-docker-benchmark-1.12.0:2.13'
+  tag 'cis-docker-benchmark-1.13.0:2.13'
+  tag 'level:1'
   ref 'Docker daemon storage driver options', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#storage-driver-options'
   ref 'Proposal: Provenance step 1 - Transform images for validation and verification', url: 'https://github.com/docker/docker/issues/8093'
   ref 'Proposal: JSON Registry API V2.1', url: 'https://github.com/docker/docker/issues/9015'
@@ -332,14 +347,17 @@ control 'cis-docker-benchmark-2.13' do
   end
 end
 
-control 'cis-docker-benchmark-2.14' do
+control 'daemon-2.14' do
   impact 1.0
   title 'Enable live restore'
-  desc 'The \'--live-restore\' enables full support of daemon-less containers in docker. It ensures that docker does not stop containers on shutdown or restore and properly reconnects to the container when restarted.'
+  desc 'The \'--live-restore\' enables full support of daemon-less containers in docker. It ensures that docker does not stop containers on shutdown or restore and properly reconnects to the container when restarted.
+
+  Rationale: One of the important security triads is availability. Setting \'--live-restore\' flag in the docker daemon ensures that container execution is not interrupted when the docker daemon is not available. This also means that it is now easier to update and patch the docker daemon without execution downtime.'
 
   tag 'daemon'
-  tag cis: 'docker:2.14'
-  tag level: 2
+  tag 'cis-docker-benchmark-1.12.0:2.14'
+  tag 'cis-docker-benchmark-1.13.0:2.14'
+  tag 'level:1'
   ref 'Add --live-restore flag', url: 'https://github.com/docker/docker/pull/23213'
 
   describe json('/etc/docker/daemon.json') do
@@ -347,28 +365,37 @@ control 'cis-docker-benchmark-2.14' do
   end
 end
 
-control 'cis-docker-benchmark-2.15' do
+control 'daemon-2.15' do
   impact 1.0
   title 'Do not enable swarm mode, if not needed'
-  desc 'Do not enable swarm mode on a docker engine instance unless needed.'
+  desc 'Do not enable swarm mode on a docker engine instance unless needed.
+
+  Rationale: By default, a Docker engine instance will not listen on any network ports, with all communications with the client coming over the Unix socket. When Docker swarm mode is enabled on a docker engine instance, multiple network ports are opened on the system and made available to other systems on the network for the purposes of cluster management and node communications. Opening network ports on a system increase its attack surface and this should be avoided unless required.'
 
   tag 'daemon'
-  tag cis: 'docker:2.15'
-  tag level: 2
+  tag 'cis-docker-benchmark-1.12.0:2.15'
+  tag 'cis-docker-benchmark-1.13.0:2.15'
+  tag 'level:1'
   ref 'docker swarm init', url: 'https://docs.docker.com/engine/reference/commandline/swarm_init/'
+
   describe docker.info do
     its('Swarm.LocalNodeState') { should eq SWARM_MODE }
   end
 end
 
-control 'cis-docker-benchmark-2.16' do
+control 'daemon-2.16' do
   impact 1.0
   title 'Control the number of manager nodes in a swarm'
-  desc 'Ensure that the minimum number of required manager nodes is created in a swarm.'
+  desc 'Ensure that the minimum number of required manager nodes is created in a swarm.
+
+  Rationale: Manager nodes within a swarm have control over the swarm and change its configuration modifying security parameters. Having excessive manager nodes could render the swarm more susceptible to compromise. If fault tolerance is not required in the manager nodes, a single node should be elected as a manger. If fault tolerance is required then the smallest practical odd number to achieve the appropriate level of tolerance should be configured.'
 
   tag 'daemon'
-  tag cis: 'docker:2.16'
-  tag level: 2
+  tag 'cis-docker-benchmark-1.12.0:2.16'
+  tag 'cis-docker-benchmark-1.13.0:2.16'
+  tag 'level:1'
+  ref 'Manage nodes in a swarm', url: 'https://docs.docker.com/engine/swarm/manage-nodes/'
+  ref 'Administer and maintain a swarm of Docker Engines', url: 'https://docs.docker.com/engine/swarm/admin_guide/'
 
   only_if { SWARM_MODE == 'active' }
   describe docker.info do
@@ -376,13 +403,19 @@ control 'cis-docker-benchmark-2.16' do
   end
 end
 
-control 'cis-docker-benchmark-2.17' do
+control 'daemon-2.17' do
   impact 1.0
   title 'Bind swarm services to a specific host interface'
+  desc 'By default, the docker swarm services will listen to all interfaces on the host, which may not be necessary for the operation of the swarm where the host has multiple network interfaces.
+
+  Rationale: When a swarm is initialized the default value for the --listen-addr flag is 0.0.0.0:2377 which means that the swarm services will listen on all interfaces on the host. If a host has multiple network interfaces this may be undesirable as it may expose the docker swarm services to networks which are not involved in the operation of the swarm. By passing a specific IP address to the --listen-addr, a specific network interface can be specified limiting this exposure.'
 
   tag 'daemon'
-  tag cis: 'docker:2.17'
-  tag level: 2
+  tag 'cis-docker-benchmark-1.12.0:2.17'
+  tag 'cis-docker-benchmark-1.13.0:2.17'
+  tag 'level:1'
+  ref 'docker swarm init', url: 'https://docs.docker.com/engine/reference/commandline/swarm_init/'
+  ref 'Administer and maintain a swarm of Docker Engines', url: 'https://docs.docker.com/engine/swarm/admin_guide/'
 
   only_if { SWARM_MODE == 'active' }
   describe port(SWARM_PORT) do
@@ -391,13 +424,23 @@ control 'cis-docker-benchmark-2.17' do
   end
 end
 
-control 'cis-docker-benchmark-2.18' do
+control 'daemon-2.18' do
   impact 1.0
   title 'Disable Userland Proxy'
+  desc 'The docker daemon starts a userland proxy service for port forwarding whenever a port is exposed. Where hairpin NAT is available, this service is generally superfluous to requirements and can be disabled.
+
+  Rationale: Docker engine provides two mechanisms for forwarding ports from the host to containers, hairpin NAT, and a userland proxy. In most circumstances, the hairpin NAT mode is preferred as it improves performance and makes use of native Linux iptables functionality instead of an additional component. Where hairpin NAT is available, the userland proxy should be disabled on startup to reduce the attack surface of the installation.'
 
   tag 'daemon'
-  tag cis: 'docker:2.18'
-  tag level: 2
+  tag 'cis-docker-benchmark-1.12.0:2.18'
+  tag 'cis-docker-benchmark-1.13.0:2.18'
+  tag 'level:1'
+  ref 'The docker-proxy', url: 'http://windsock.io/the-docker-proxy/'
+  ref 'Disable Userland proxy by default', url: 'https://github.com/docker/docker/issues/14856'
+  ref 'overlay networking with userland-proxy disabled prevents port exposure', url: 'https://github.com/moby/moby/issues/22741'
+  ref 'Bind container ports to the host', url: 'https://docs.docker.com/engine/userguide/networking/default_network/binding/'
+
+  end
 
   describe json('/etc/docker/daemon.json') do
     its(['userland-proxy']) { should eq(false) }
