@@ -92,7 +92,7 @@ control 'daemon-2.1' do
   tag 'daemon'
   tag 'cis-docker-benchmark-1.12.0:2.1'
   tag 'cis-docker-benchmark-1.13.0:2.1'
-  tag 'level1'
+  tag 'level:1'
   ref 'Docker container networking', url: 'https://docs.docker.com/engine/userguide/networking/'
 
   describe json('/etc/docker/daemon.json') do
@@ -110,7 +110,7 @@ control 'daemon-2.2' do
   tag 'daemon'
   tag 'cis-docker-benchmark-1.12.0:2.2'
   tag 'cis-docker-benchmark-1.13.0:2.2'
-  tag 'level1'
+  tag 'level:1'
   ref 'Docker daemon', url: 'https://docs.docker.com/engine/reference/commandline/daemon/'
 
   describe json('/etc/docker/daemon.json') do
@@ -128,7 +128,7 @@ control 'daemon-2.3' do
   tag 'daemon'
   tag 'cis-docker-benchmark-1.12.0:2.3'
   tag 'cis-docker-benchmark-1.13.0:2.3'
-  tag 'level1'
+  tag 'level:1'
   ref 'Understand container communication', url: 'https://docs.docker.com/engine/userguide/networking/default_network/container-communication/'
 
   describe json('/etc/docker/daemon.json') do
@@ -146,7 +146,7 @@ control 'daemon-2.4' do
   tag 'daemon'
   tag 'cis-docker-benchmark-1.12.0:2.4'
   tag 'cis-docker-benchmark-1.13.0:2.4'
-  tag 'level1'
+  tag 'level:1'
   ref 'Insecure registry', url: 'https://docs.docker.com/registry/insecure/'
 
   describe json('/etc/docker/daemon.json') do
@@ -164,7 +164,7 @@ control 'daemon-2.5' do
   tag 'daemon'
   tag 'cis-docker-benchmark-1.12.0:2.5'
   tag 'cis-docker-benchmark-1.13.0:2.5'
-  tag 'level1'
+  tag 'level:1'
   ref 'Docker daemon storage driver options', url: 'https://docs.docker.com/engine/reference/commandline/cli/#daemon-storage-driver-option'
   ref 'Switch from aufs to devicemapper', url: 'http://muehe.org/posts/switching-docker-from-aufs-to-devicemapper/'
   ref 'Deep dive into docker storage drivers', url: 'http://jpetazzo.github.io/assets/2015-03-05-deep-dive-into-docker-storage-drivers.html#1'
@@ -185,7 +185,7 @@ control 'daemon-2.6' do
   tag 'daemon'
   tag 'cis-docker-benchmark-1.12.0:2.6'
   tag 'cis-docker-benchmark-1.13.0:2.6'
-  tag 'level1'
+  tag 'level:1'
   ref 'Protect Docker deamon socket', url: 'https://docs.docker.com/engine/security/https/'
 
   describe json('/etc/docker/daemon.json') do
@@ -197,7 +197,7 @@ control 'daemon-2.6' do
   end
 end
 
-control 'cis-docker-benchmark-2.7' do
+control 'daemon-2.7' do
   impact 1.0
   title 'Set default ulimit as appropriate'
   desc 'Set the default ulimit options as appropriate in your environment.
@@ -205,8 +205,9 @@ control 'cis-docker-benchmark-2.7' do
   Rationale: ulimit provides control over the resources available to the shell and to processes started by it. Setting system resource limits judiciously saves you from many disasters such as a fork bomb. Sometimes, even friendly users and legitimate processes can overuse system resources and in-turn can make the system unusable. Setting default ulimit for the Docker daemon would enforce the ulimit for all container instances. You would not need to setup ulimit for each container instance. However, the default ulimit can be overridden during container runtime, if needed. Hence, to control the system resources, define a default ulimit as needed in your environment.'
 
   tag 'daemon'
-  tag 'docker-1.13.0:2.6'
-  tag 'level1'
+  tag 'cis-docker-benchmark-1.12.0:2.7'
+  tag 'cis-docker-benchmark-1.13.0:2.7'
+  tag 'level:1'
   ref 'Docker daemon deafult ulimits', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#default-ulimits'
 
   describe json('/etc/docker/daemon.json') do
@@ -215,14 +216,17 @@ control 'cis-docker-benchmark-2.7' do
   end
 end
 
-control 'cis-docker-benchmark-2.8' do
+control 'daemon-2.8' do
   impact 1.0
   title 'Enable user namespace support'
-  desc 'Enable user namespace support in Docker daemon to utilize container user to host user re-mapping. This recommendation is beneficial where containers you are using do not have an explicit container user defined in the container image. If container images that you are using have a pre-defined non-root user, this recommendation may be skipped since this feature is still in its infancy and might give you unpredictable issues and complexities.'
+  desc 'Enable user namespace support in Docker daemon to utilize container user to host user re-mapping. This recommendation is beneficial where containers you are using do not have an explicit container user defined in the container image. If container images that you are using have a pre-defined non-root user, this recommendation may be skipped since this feature is still in its infancy and might give you unpredictable issues and complexities.
+
+  Rationale: The Linux kernel user namespace support in Docker daemon provides additional security for the Docker host system. It allows a container to have a unique range of user and group IDs which are outside the traditional user and group range utilized by the host system. For example, the root user will have expected administrative privilege inside the container but can effectively be mapped to an unprivileged UID on the host system.'
 
   tag 'daemon'
-  tag cis: 'docker:2.8'
-  tag level: 2
+  tag 'cis-docker-benchmark-1.12.0:2.8'
+  tag 'cis-docker-benchmark-1.13.0:2.8'
+  tag 'level:2'
   ref 'User namespeces', url: 'http://man7.org/linux/man-pages/man7/user_namespaces.7.html'
   ref 'Docker daemon configuration', url: 'https://docs.docker.com/engine/reference/commandline/daemon/'
   ref 'Routing out root: user namespaces in docker', url: 'http://events.linuxfoundation.org/sites/events/files/slides/User%20Namespaces%20-%20ContainerCon%202015%20-%2016-9-final_0.pdf'

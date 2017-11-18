@@ -56,7 +56,7 @@ control 'host-1.1' do
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.1'
   tag 'cis-docker-benchmark-1.13.0:1.1'
-  tag 'level1'
+  tag 'level:1'
   ref 'Docker storage recommendation', url: 'http://www.projectatomic.io/docs/docker-storage-recommendation/'
 
   describe mount('/var/lib/docker') do
@@ -72,7 +72,7 @@ control 'host-1.2' do
 
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.2'
-  tag 'level1'
+  tag 'level:1'
   ref 'Check kernel dependencies', url: 'https://docs.docker.com/engine/installation/binaries/#check-kernel-dependencies'
   ref 'Installation list', url: 'https://docs.docker.com/engine/installation/#installation-list'
 
@@ -98,7 +98,7 @@ control 'host-1.3' do
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.3'
   tag 'cis-docker-benchmark-1.13.0:1.2'
-  tag 'level1'
+  tag 'level:1'
   ref 'Dev-Sec Hardening Framework', url: 'http://dev-sec.io/'
   ref 'Secure Engine', url: 'https://docs.docker.com/engine/security/'
   ref 'Center of Internet Security Benchmarks', url: 'https://learn.cisecurity.org/benchmarks'
@@ -115,7 +115,7 @@ control 'host-1.4' do
 
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.4'
-  tag 'level1'
+  tag 'level:1'
   ref 'Containers & Docker: How Secure Are They?', url: 'https://blog.docker.com/2013/08/containers-docker-how-secure-are-they/'
 end
 
@@ -129,7 +129,7 @@ control 'host-1.5' do
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.5'
   tag 'cis-docker-benchmark-1.13.0:1.3'
-  tag 'level1'
+  tag 'level:1'
   ref 'Docker installation', url: 'https://docs.docker.com/engine/installation/'
   ref 'Docker releases', url: 'https://github.com/moby/moby/releases/tag/v17.03.2-ce'
   ref 'About Docker EE', url: 'https://docs.docker.com/enterprise/'
@@ -150,7 +150,7 @@ control 'host-1.6' do
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.6'
   tag 'cis-docker-benchmark-1.13.0:1.4'
-  tag 'level1'
+  tag 'level:1'
   ref 'Docker Engine Security', url: 'https://docs.docker.com/engine/security/'
   ref 'On Docker security: \'docker\' group considered harmful', url: 'https://www.zopyx.com/andreas-jung/contents/on-docker-security-docker-group-considered-harmful'
   ref 'Why we don\'t let non-root users run Docker in CentOS, Fedora, or RHEL', url: 'http://www.projectatomic.io/blog/2015/08/why-we-dont-let-non-root-users-run-docker-in-centos-fedora-or-rhel/'
@@ -174,7 +174,7 @@ control 'host-1.7' do
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.7'
   tag 'cis-docker-benchmark-1.13.0:1.5'
-  tag 'level1'
+  tag 'level:1'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   only_if { os.linux? }
@@ -198,7 +198,7 @@ control 'host-1.8' do
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.8'
   tag 'cis-docker-benchmark-1.13.0:1.6'
-  tag 'level1'
+  tag 'level:1'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   only_if { os.linux? }
@@ -217,7 +217,7 @@ control 'host-1.9' do
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.9'
   tag 'cis-docker-benchmark-1.13.0:1.7'
-  tag 'level1'
+  tag 'level:1'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   only_if { os.linux? }
@@ -236,7 +236,7 @@ control 'host-1.10' do
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.10'
   tag 'cis-docker-benchmark-1.13.0:1.8'
-  tag 'level1'
+  tag 'level:1'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   only_if { os.linux? }
@@ -262,7 +262,7 @@ control 'host-1.11' do
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.11'
   tag 'cis-docker-benchmark-1.13.0:1.9'
-  tag 'level1'
+  tag 'level:1'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   only_if { os.linux? }
@@ -288,7 +288,7 @@ control 'host-1.12' do
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.12'
   tag 'cis-docker-benchmark-1.13.0:1.10'
-  tag 'level1'
+  tag 'level:1'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   only_if { os.linux? }
@@ -307,7 +307,7 @@ control 'host-1.13' do
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.13'
   tag 'cis-docker-benchmark-1.13.0:1.11'
-  tag 'level1'
+  tag 'level:1'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
   ref 'Daemon configuration', url: 'https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file'
 
@@ -327,7 +327,7 @@ control 'host-1.14' do
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.14'
   tag 'cis-docker-benchmark-1.13.0:1.12'
-  tag 'level1'
+  tag 'level:1'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
   ref 'Containerd integration', url: 'https://github.com/docker/docker/pull/20662'
   ref 'Containerd tools', url: 'https://containerd.tools/'
@@ -348,7 +348,7 @@ control 'host-1.15' do
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.15'
   tag 'cis-docker-benchmark-1.13.0:1.13'
-  tag 'level1'
+  tag 'level:1'
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
   ref 'Containerd integration', url: 'https://github.com/docker/docker/pull/20662'
   ref 'Containerd tools', url: 'https://containerd.tools/'
