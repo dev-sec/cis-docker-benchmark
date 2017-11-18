@@ -82,14 +82,17 @@ only_if do
   command('docker').exist?
 end
 
-control 'cis-docker-benchmark-2.1' do
+control 'daemon-2.1' do
   impact 1.0
   title 'Restrict network traffic between containers'
-  desc 'By default, all network traffic is allowed between containers on the same host. If not desired, restrict all the intercontainer communication. Link specific containers together that require inter communication.'
+  desc 'By default, all network traffic is allowed between containers on the same host. If not desired, restrict all the intercontainer communication. Link specific containers together that require inter communication.
+
+  Rationale: By default, unrestricted network traffic is enabled between all containers on the same host. Thus, each container has the potential of reading all packets across the container network on the same host. This might lead to unintended and unwanted disclosure of information to other containers. Hence, restrict the inter container communication.'
 
   tag 'daemon'
-  tag cis: 'docker:2.1'
-  tag level: 1
+  tag 'cis-docker-benchmark-1.12.0:2.1'
+  tag 'cis-docker-benchmark-1.13.0:2.1'
+  tag 'level1'
   ref 'Docker container networking', url: 'https://docs.docker.com/engine/userguide/networking/'
 
   describe json('/etc/docker/daemon.json') do
@@ -97,14 +100,17 @@ control 'cis-docker-benchmark-2.1' do
   end
 end
 
-control 'cis-docker-benchmark-2.2' do
+control 'daemon-2.2' do
   impact 1.0
   title 'Set the logging level'
-  desc 'Setting up an appropriate log level, configures the Docker daemon to log events that you would want to review later. A ase log level of \'info\' and above would capture all logs except debug logs. Until and unless required, you should not run docker daemon at \'debug\' log level.'
+  desc 'Set Docker daemon log level to \'info\'.
+
+  Rationale: Setting up an appropriate log level, configures the Docker daemon to log events that you would want to review later. A ase log level of \'info\' and above would capture all logs except debug logs. Until and unless required, you should not run docker daemon at \'debug\' log level.'
 
   tag 'daemon'
-  tag cis: 'docker:2.2'
-  tag level: 1
+  tag 'cis-docker-benchmark-1.12.0:2.2'
+  tag 'cis-docker-benchmark-1.13.0:2.2'
+  tag 'level1'
   ref 'Docker daemon', url: 'https://docs.docker.com/engine/reference/commandline/daemon/'
 
   describe json('/etc/docker/daemon.json') do
@@ -112,29 +118,35 @@ control 'cis-docker-benchmark-2.2' do
   end
 end
 
-control 'cis-docker-benchmark-2.3' do
+control 'daemon-2.3' do
   impact 1.0
   title 'Allow Docker to make changes to iptables'
-  desc 'Iptables are used to set up, maintain, and inspect the tables of IP packet filter rules in the Linux kernel. Allow the Docker daemon to make changes to the iptables.'
+  desc 'Iptables are used to set up, maintain, and inspect the tables of IP packet filter rules in the Linux kernel. Allow the Docker daemon to make changes to the iptables.
+
+  Rationale: Docker will never make changes to your system iptables rules if you choose to do so. Docker server would automatically make the needed changes to iptables based on how you choose your networking options for the containers if it is allowed to do so. It is recommended to let Docker server make changes to iptables automatically to avoid networking misconfiguration that might hamper the communication between containers and to the outside world. Additionally, it would save you hassles of updating iptables every time you choose to run the containers or modify networking options.'
 
   tag 'daemon'
-  tag cis: 'docker:2.3'
-  tag level: 1
-  ref 'https://docs.docker.com/v1.8/articles/networking/'
+  tag 'cis-docker-benchmark-1.12.0:2.3'
+  tag 'cis-docker-benchmark-1.13.0:2.3'
+  tag 'level1'
+  ref 'Understand container communication', url: 'https://docs.docker.com/engine/userguide/networking/default_network/container-communication/'
 
   describe json('/etc/docker/daemon.json') do
     its(['iptables']) { should eq(true) }
   end
 end
 
-control 'cis-docker-benchmark-2.4' do
+control 'daemon-2.4' do
   impact 1.0
   title 'Do not use insecure registries'
-  desc 'Docker considers a private registry either secure or insecure. By default, registries are considered secure.'
+  desc 'Docker considers a private registry either secure or insecure. By default, registries are considered secure.
+
+  Rationale: A secure registry uses TLS. A copy of registry\'s CA certificate is placed on the Docker host at \'/etc/docker/certs.d/<registry-name>/\' directory. An insecure registry is the one not having either valid registry certificate or is not using TLS. You should not be using any insecure registries in the production environment. Insecure registries can be tampered with leading to possible compromise to your production system. Additionally, If a registry is marked as insecure then \'docker pull\', \'docker push\', and \'docker search\' commands will not result in an error message and the user might be indefinitely working with insecure registries without ever being notified of potential danger.'
 
   tag 'daemon'
-  tag cis: 'docker:2.4'
-  tag level: 1
+  tag 'cis-docker-benchmark-1.12.0:2.4'
+  tag 'cis-docker-benchmark-1.13.0:2.4'
+  tag 'level1'
   ref 'Insecure registry', url: 'https://docs.docker.com/registry/insecure/'
 
   describe json('/etc/docker/daemon.json') do
@@ -142,32 +154,38 @@ control 'cis-docker-benchmark-2.4' do
   end
 end
 
-control 'cis-docker-benchmark-2.5' do
+control 'daemon-2.5' do
   impact 1.0
   title 'Do not use the aufs storage driver'
-  desc 'The \'aufs\' storage driver is the oldest storage driver. It is based on a Linux kernel patch-set that is unlikely to be merged into the main Linux kernel. \'aufs\' driver is also known to cause some serious kernel crashes. \'aufs\' just has legacy support from Docker. Most importantly, \'aufs\' is not a supported driver in many Linux distributions using latest Linux kernels.'
+  desc 'Do not use \'aufs\' as storage driver for your Docker instance.
+
+  Rationale: The \'aufs\' storage driver is the oldest storage driver. It is based on a Linux kernel patch-set that is unlikely to be merged into the main Linux kernel. \'aufs\' driver is also known to cause some serious kernel crashes. \'aufs\' just has legacy support from Docker. Most importantly, \'aufs\' is not a supported driver in many Linux distributions using latest Linux kernels.'
 
   tag 'daemon'
-  tag cis: 'docker:2.5'
-  tag level: 1
+  tag 'cis-docker-benchmark-1.12.0:2.5'
+  tag 'cis-docker-benchmark-1.13.0:2.5'
+  tag 'level1'
   ref 'Docker daemon storage driver options', url: 'https://docs.docker.com/engine/reference/commandline/cli/#daemon-storage-driver-option'
-  ref 'permission denied if chown after chmod', url: 'https://github.com/docker/docker/issues/6047'
   ref 'Switch from aufs to devicemapper', url: 'http://muehe.org/posts/switching-docker-from-aufs-to-devicemapper/'
   ref 'Deep dive into docker storage drivers', url: 'http://jpetazzo.github.io/assets/2015-03-05-deep-dive-into-docker-storage-drivers.html#1'
+  ref 'Docker storage drivers', url: 'https://docs.docker.com/engine/userguide/storagedriver/'
 
   describe json('/etc/docker/daemon.json') do
     its(['storage-driver']) { should_not eq('aufs') }
   end
 end
 
-control 'cis-docker-benchmark-2.6' do
+control 'daemon-2.6' do
   impact 1.0
   title 'Configure TLS authentication for Docker daemon'
-  desc 'It is possible to make the Docker daemon to listen on a specific IP and port and any other Unix socket other than default Unix socket. Configure TLS authentication to restrict access to Docker daemon via IP and port.'
+  desc 'It is possible to make the Docker daemon to listen on a specific IP and port and any other Unix socket other than default Unix socket. Configure TLS authentication to restrict access to Docker daemon via IP and port.
+
+  Rationale: By default, Docker daemon binds to a non-networked Unix socket and runs with \'root\' privileges. If you change the default docker daemon binding to a TCP port or any other Unix socket, anyone with access to that port or socket can have full access to Docker daemon and in turn to the host system. Hence, you should not bind the Docker daemon to another IP/port or a Unix socket. If you must expose the Docker daemon via a network socket, configure TLS authentication for the daemon and Docker Swarm APIs (if using). This would restrict the connections to your Docker daemon over the network to a limited number of clients who could successfully authenticate over TLS.'
 
   tag 'daemon'
-  tag cis: 'docker:2.6'
-  tag level: 1
+  tag 'cis-docker-benchmark-1.12.0:2.6'
+  tag 'cis-docker-benchmark-1.13.0:2.6'
+  tag 'level1'
   ref 'Protect Docker deamon socket', url: 'https://docs.docker.com/engine/security/https/'
 
   describe json('/etc/docker/daemon.json') do
@@ -182,11 +200,13 @@ end
 control 'cis-docker-benchmark-2.7' do
   impact 1.0
   title 'Set default ulimit as appropriate'
-  desc 'ulimit provides control over the resources available to the shell and to processes started by it. Setting system resource limits judiciously saves you from many disasters such as a fork bomb. Sometimes, even friendly users and legitimate processes can overuse system resources and in-turn can make the system unusable.'
+  desc 'Set the default ulimit options as appropriate in your environment.
+
+  Rationale: ulimit provides control over the resources available to the shell and to processes started by it. Setting system resource limits judiciously saves you from many disasters such as a fork bomb. Sometimes, even friendly users and legitimate processes can overuse system resources and in-turn can make the system unusable. Setting default ulimit for the Docker daemon would enforce the ulimit for all container instances. You would not need to setup ulimit for each container instance. However, the default ulimit can be overridden during container runtime, if needed. Hence, to control the system resources, define a default ulimit as needed in your environment.'
 
   tag 'daemon'
-  tag cis: 'docker:2.7'
-  tag level: 1
+  tag 'docker-1.13.0:2.6'
+  tag 'level1'
   ref 'Docker daemon deafult ulimits', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#default-ulimits'
 
   describe json('/etc/docker/daemon.json') do
