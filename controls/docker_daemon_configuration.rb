@@ -462,10 +462,16 @@ control 'daemon-2.19' do
   ref 'Docker swarm mode overlay network security model', url: 'https://docs.docker.com/engine/userguide/networking/overlay-security-model/'
   ref 'Docker swarm container-container traffic not encrypted when inspecting externally with tcpdump', url: 'https://github.com/moby/moby/issues/24253'
 
-  describe json('/etc/docker/daemon.json') do
-    its(['userland-proxy']) { should eq(false) }
-  end
-  describe processes('dockerd').commands do
-    it { should include 'userland-proxy=false' }
+  if docker_helper.overlay_networks
+    #puts docker_helper.overlay_networks
+    docker_helper.overlay_networks.each do |k,v|
+      describe docker_helper.overlay_networks[k] do
+        its(['encrypted']) { should_not eq nil}
+      end
+    end
+  else
+    describe 'Encrypted overlay networks' do
+      skip 'Cannot determine overlay networks'
+    end
   end
 end
