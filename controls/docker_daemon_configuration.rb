@@ -467,6 +467,7 @@ control 'daemon-2.19' do
   ref 'Docker swarm mode overlay network security model', url: 'https://docs.docker.com/engine/userguide/networking/overlay-security-model/'
   ref 'Docker swarm container-container traffic not encrypted when inspecting externally with tcpdump', url: 'https://github.com/moby/moby/issues/24253'
 
+  only_if { SWARM_MODE == 'active' }
   if docker_helper.overlay_networks
     docker_helper.overlay_networks.each do |k,v|
       describe docker_helper.overlay_networks[k] do
@@ -500,8 +501,8 @@ end
 
 control 'daemon-2.21' do
   impact 1.0
-  title 'Avoid experimental features in production.'
-  desc ' Avoid experimental features in production
+  title 'Avoid experimental features in production'
+  desc 'Avoid experimental features in production.
 
   Rationale: Experimental is now a runtime docker daemon flag instead of a separate build. Passing --experimental as a runtime flag to the docker daemon, activates experimental features. Experimental is now considered a stable release, but with a couple of features which might not have tested and guaranteed API stability.'
 
@@ -511,6 +512,24 @@ control 'daemon-2.21' do
   ref 'Changing the definition of experimental', url: 'https://github.com/moby/moby/issues/26713'
   ref 'Make experimental a runtime flag', url: 'https://github.com/moby/moby/pull/27223'
 
+  describe command('docker version --format \'{{ .Server.Experimental }}\'').stdout.chomp do
+    it { should eq('false')}
+  end
+end
+
+control 'daemon-2.22' do
+  impact 1.0
+  title 'Use Docker\'s secret management commands for managing secrets in a Swarm cluster'
+  desc 'Use Docker\'s in-built secret management command.
+
+  Rationale: Docker has various commands for managing secrets in a Swarm cluster. This is the foundation for future secret support in Docker with potential improvements such as Windows support, different backing stores, etc.'
+
+  tag 'daemon'
+  tag 'cis-docker-benchmark-1.13.0:2.22'
+  tag 'level:2'
+  ref 'Secret Management', url: 'https://github.com/moby/moby/pull/27794'
+
+  only_if { SWARM_MODE == 'active' }
   describe command('docker version --format \'{{ .Server.Experimental }}\'').stdout.chomp do
     it { should eq('false')}
   end
