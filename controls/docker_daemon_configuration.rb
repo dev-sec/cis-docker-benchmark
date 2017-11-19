@@ -77,6 +77,12 @@ SWARM_PORT = attribute(
   default: 2377
 )
 
+SECCOMP_DEFAULT_PROFILE = attribute(
+  'seccomp_default_profile',
+  description: 'define the default seccomp profile',
+  default: 'default'
+)
+
 # check if docker exists
 only_if do
   command('docker').exist?
@@ -456,22 +462,56 @@ control 'daemon-2.19' do
   Rationale: By default, data exchanged between containers on different nodes on the overlay network is not encrypted. This could potentially expose traffic between the container nodes.'
 
   tag 'daemon'
-  tag 'cis-docker-benchmark-1.12.0:2.19'
   tag 'cis-docker-benchmark-1.13.0:2.19'
   tag 'level:1'
   ref 'Docker swarm mode overlay network security model', url: 'https://docs.docker.com/engine/userguide/networking/overlay-security-model/'
   ref 'Docker swarm container-container traffic not encrypted when inspecting externally with tcpdump', url: 'https://github.com/moby/moby/issues/24253'
 
   if docker_helper.overlay_networks
-    #puts docker_helper.overlay_networks
     docker_helper.overlay_networks.each do |k,v|
       describe docker_helper.overlay_networks[k] do
-        its(['encrypted']) { should_not eq nil}
+        its(['encrypted']) { should_not eq(nil)}
       end
     end
   else
     describe 'Encrypted overlay networks' do
       skip 'Cannot determine overlay networks'
     end
+  end
+end
+
+control 'daemon-2.20' do
+  impact 1.0
+  title 'Apply a daemon-wide custom seccomp profile, if needed'
+  desc 'You can choose to apply your custom seccomp profile at the daemon-wide level if needed and override Docker\'s default seccomp profile.
+
+  Rationale: A large number of system calls are exposed to every userland process with many of them going unused for the entire lifetime of the process. Most of the applications do not need all the system calls and thus benefit by having a reduced set of available system calls. The reduced set of system calls reduces the total kernel surface exposed to the application and thus improvises application security. You could apply your own custom seccomp profile instead of Docker\'s default seccomp profile. Alternatively, if Docker\'s default profile is good for your environment, you can choose to ignore this recommendation.'
+
+  tag 'daemon'
+  tag 'cis-docker-benchmark-1.13.0:2.20'
+  tag 'level:2'
+  ref 'daemon: add a flag to override the default seccomp profile', url: 'https://github.com/moby/moby/pull/26276'
+
+  describe json('/etc/docker/daemon.json') do
+    its(['seccomp-profile']) { should_not eq(nil)}
+    its(['seccomp-profile']) { should eq(SECCOMP_DEFAULT_PROFILE)}
+  end
+end
+
+control 'daemon-2.21' do
+  impact 1.0
+  title 'Avoid experimental features in production.'
+  desc ' Avoid experimental features in production
+
+  Rationale: Experimental is now a runtime docker daemon flag instead of a separate build. Passing --experimental as a runtime flag to the docker daemon, activates experimental features. Experimental is now considered a stable release, but with a couple of features which might not have tested and guaranteed API stability.'
+
+  tag 'daemon'
+  tag 'cis-docker-benchmark-1.13.0:2.21'
+  tag 'level:1'
+  ref 'Changing the definition of experimental', url: 'https://github.com/moby/moby/issues/26713'
+  ref 'Make experimental a runtime flag', url: 'https://github.com/moby/moby/pull/27223'
+
+  describe command('docker version --format \'{{ .Server.Experimental }}\'').stdout.chomp do
+    it { should eq('false')}
   end
 end

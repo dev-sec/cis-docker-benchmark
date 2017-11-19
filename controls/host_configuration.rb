@@ -178,7 +178,7 @@ control 'host-1.7' do
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   only_if { os.linux? }
-  describe auditd_rules do
+  describe auditd do
     its(:lines) { should include('-w /usr/bin/docker -p rwxa -k docker') }
   end
   describe service('auditd') do
@@ -202,7 +202,7 @@ control 'host-1.8' do
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   only_if { os.linux? }
-  describe auditd_rules do
+  describe auditd do
     its(:lines) { should include('-w /var/lib/docker/ -p rwxa -k docker') }
   end
 end
@@ -221,7 +221,7 @@ control 'host-1.9' do
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   only_if { os.linux? }
-  describe auditd_rules do
+  describe auditd do
     its(:lines) { should include('-w /etc/docker/ -p rwxa -k docker') }
   end
 end
@@ -242,7 +242,7 @@ control 'host-1.10' do
   only_if { os.linux? }
   if docker_helper.path
     rule = '-w ' + docker_helper.path + ' -p rwxa -k docker'
-    describe auditd_rules do
+    describe auditd do
       its(:lines) { should include(rule) }
     end
   else
@@ -268,7 +268,7 @@ control 'host-1.11' do
   only_if { os.linux? }
   if docker_helper.socket
     rule = '-w ' + docker_helper.socket + ' -p rwxa -k docker'
-    describe auditd_rules do
+    describe auditd do
       its(:lines) { should include(rule) }
     end
   else
@@ -292,7 +292,7 @@ control 'host-1.12' do
   ref 'System auditing', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security_Guide/chap-system_auditing.html'
 
   only_if { os.linux? }
-  describe auditd_rules do
+  describe auditd do
     its(:lines) { should include('-w /etc/default/docker -p rwxa -k docker') }
   end
 end
@@ -312,7 +312,7 @@ control 'host-1.13' do
   ref 'Daemon configuration', url: 'https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file'
 
   only_if { os.linux? }
-  describe auditd_rules do
+  describe auditd do
     its(:lines) { should include('-w /etc/docker/daemon.json -p rwxa -k docker') }
   end
 end
@@ -333,7 +333,7 @@ control 'host-1.14' do
   ref 'Containerd tools', url: 'https://containerd.tools/'
 
   only_if { os.linux? }
-  describe auditd_rules do
+  describe auditd do
     its(:lines) { should include('-w /usr/bin/docker-containerd -p rwxa -k docker') }
   end
 end
@@ -355,7 +355,7 @@ control 'host-1.15' do
   ref 'Opencontainers runc repository', url: 'https://github.com/opencontainers/runc'
 
   only_if { os.linux? }
-  describe auditd_rules do
+  describe auditd do
     its(:lines) { should include('-w /usr/bin/docker-runc -p rwxa -k docker') }
   end
 end
