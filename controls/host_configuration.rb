@@ -50,8 +50,7 @@ control 'host-1.1' do
   title 'Create a separate partition for containers'
   desc 'All Docker containers and their data and metadata is stored under /var/lib/docker directory. By default, /var/lib/docker would be mounted under / or /var partitions based on availability.
 
-  Rationale: Docker depends on /var/lib/docker as the default directory where all Docker related files, including the images, are stored. This directory might fill up fast and soon Docker and the host could become unusable. So, it is advisable to create a separate partition (logical volume) for storing Docker files.
-  '
+  Rationale: Docker depends on /var/lib/docker as the default directory where all Docker related files, including the images, are stored. This directory might fill up fast and soon Docker and the host could become unusable. So, it is advisable to create a separate partition (logical volume) for storing Docker files.'
 
   tag 'host'
   tag 'cis-docker-benchmark-1.12.0:1.1'
@@ -63,7 +62,6 @@ control 'host-1.1' do
     it { should be_mounted }
   end
 end
-
 
 control 'host-1.2' do
   impact 1.0
@@ -84,7 +82,6 @@ control 'host-1.2' do
   end
   only_if { CIS_OLD_BENCHMARK == TRUE }
 end
-
 
 control 'host-1.3' do
   impact 1.0

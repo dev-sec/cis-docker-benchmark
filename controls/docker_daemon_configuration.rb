@@ -469,9 +469,9 @@ control 'daemon-2.19' do
 
   only_if { SWARM_MODE == 'active' }
   if docker_helper.overlay_networks
-    docker_helper.overlay_networks.each do |k,v|
+    docker_helper.overlay_networks.each do |k, _v|
       describe docker_helper.overlay_networks[k] do
-        its(['encrypted']) { should_not eq(nil)}
+        its(['encrypted']) { should_not eq(nil) }
       end
     end
   else
@@ -494,8 +494,8 @@ control 'daemon-2.20' do
   ref 'daemon: add a flag to override the default seccomp profile', url: 'https://github.com/moby/moby/pull/26276'
 
   describe json('/etc/docker/daemon.json') do
-    its(['seccomp-profile']) { should_not eq(nil)}
-    its(['seccomp-profile']) { should eq(SECCOMP_DEFAULT_PROFILE)}
+    its(['seccomp-profile']) { should_not eq(nil) }
+    its(['seccomp-profile']) { should eq(SECCOMP_DEFAULT_PROFILE) }
   end
 end
 
@@ -513,7 +513,7 @@ control 'daemon-2.21' do
   ref 'Make experimental a runtime flag', url: 'https://github.com/moby/moby/pull/27223'
 
   describe command('docker version --format \'{{ .Server.Experimental }}\'').stdout.chomp do
-    it { should eq('false')}
+    it { should eq('false') }
   end
 end
 

@@ -55,8 +55,8 @@ class DockerHelper < Inspec.resource(1)
     params = parse_systemd_values(cmd.stdout.chomp)
 
     # parse data from docker network inspect output
-    params.each do |k, v|
-      params[k] = parse_network_values(inspec.command("docker network inspect #{k}").stdout.delete("\"").delete(",").chomp)
+    params.each do |k, _v|
+      params[k] = parse_network_values(inspec.command("docker network inspect #{k}").stdout.delete('\"').delete(',').chomp)
     end
 
     # return the value
