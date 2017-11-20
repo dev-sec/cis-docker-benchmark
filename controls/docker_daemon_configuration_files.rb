@@ -25,19 +25,19 @@ title 'Docker Daemon Configuration Files'
 # attributes
 REGISTRY_CERT_PATH = attribute(
   'registry_cert_path',
-  description: 'directory contains various Docker registry directories. cis-docker-benchmark-3.7',
+  description: 'directory contains various Docker registry directories.',
   default: '/etc/docker/certs.d'
 )
 
 REGISTRY_NAME = attribute(
   'registry_name',
-  description: 'directory contain certificate certain Docker registry. cis-docker-benchmark-3.7',
+  description: 'directory contain certificate certain Docker registry.',
   default: '/etc/docker/certs.d/registry_hostname:port'
 )
 
 REGISTRY_CA_FILE = attribute(
   'registry_ca_file',
-  description: 'certificate file for a certain Docker registry certificate files. cis-docker-benchmark-3.7 and cis-docker-benchmark-3.8',
+  description: 'certificate file for a certain Docker registry certificate files.',
   default: '/etc/docker/certs.d/registry_hostname:port/ca.crt'
 )
 

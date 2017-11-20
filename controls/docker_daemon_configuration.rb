@@ -43,19 +43,19 @@ DAEMON_TLSKEY = attribute(
 
 AUTHORIZATION_PLUGIN = attribute(
   'authorization_plugin',
-  description: 'define authorization plugin to manage access to Docker daemon. cis-docker-benchmark-2.11',
+  description: 'define authorization plugin to manage access to Docker daemon.',
   default: 'authz-broker'
 )
 
 LOG_DRIVER = attribute(
   'log_driver',
-  description: 'define preferable way to store logs. cis-docker-benchmark-2.12',
+  description: 'define preferable way to store logs.',
   default: 'syslog'
 )
 
 LOG_OPTS = attribute(
   'log_opts',
-  description: 'define Docker daemon log-opts. cis-docker-benchmark-2.12',
+  description: 'define Docker daemon log-opts.',
   default: /syslog-address/
 )
 

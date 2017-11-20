@@ -24,20 +24,20 @@ title 'Host Configuration'
 
 TRUSTED_USER = attribute(
   'trusted_user',
-  description: 'define trusted user to control Docker daemon. cis-docker-benchmark-1.6',
+  description: 'define trusted user to control Docker daemon.',
   default: 'vagrant'
 )
 
 MANAGEABLE_CONTAINER_NUMBER = attribute(
   'managable_container_number',
-  description: 'keep number of containers on a host to a manageable total. cis-docker-benchmark-6.5',
+  description: 'keep number of containers on a host to a manageable total.',
   default: 25
 )
 
 CIS_OLD_BENCHMARK = attribute(
   'cis_old_benchmark',
-  description: 'to execute also the old controls from previous benchmarks',
-  default: FALSE
+  description: 'to execute also the old controls from previous benchmarks. to execute the controls, define the value as 1.12.0',
+  default: ''
 )
 
 # check if docker exists
@@ -80,7 +80,7 @@ control 'host-1.2' do
   describe kernel_compare do
     it { should eq true }
   end
-  only_if { CIS_OLD_BENCHMARK == TRUE }
+  only_if { CIS_OLD_BENCHMARK = '1.12.0' }
 end
 
 control 'host-1.3' do

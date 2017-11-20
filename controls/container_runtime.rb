@@ -30,13 +30,13 @@ CONTAINER_CAPADD = attribute(
 
 APP_ARMOR_PROFILE = attribute(
   'app_armor_profile',
-  description: 'define apparmor profile for Docker containers. cis-docker-benchmark-5.1',
+  description: 'define apparmor profile for Docker containers.',
   default: 'docker-default'
 )
 
 SELINUX_PROFILE = attribute(
   'selinux_profile',
-  description: 'define SELinux profile for Docker containers. cis-docker-benchmark-5.2',
+  description: 'define SELinux profile for Docker containers.',
   default:  /label\:level\:s0-s0\:c1023/
 )
 

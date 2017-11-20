@@ -25,7 +25,7 @@ title 'Container Images and Build File'
 # attributes
 CONTAINER_USER = attribute(
   'container_user',
-  description: 'define user within containers. cis-docker-benchmark-4.1',
+  description: 'define user within containers.',
   default: 'ubuntu'
 )
 
