@@ -35,7 +35,7 @@ MANAGEABLE_CONTAINER_NUMBER = attribute(
 )
 
 CIS_OLD_BENCHMARK = attribute(
-  'CIS_OLD_BENCHMARK',
+  'cis_old_benchmark',
   description: 'to execute also the old controls from previous benchmarks',
   default: FALSE
 )
