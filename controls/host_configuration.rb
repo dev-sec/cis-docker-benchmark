@@ -103,6 +103,10 @@ control 'host-1.3' do
   ref 'Grsecurity Wiki', url: 'https://en.wikibooks.org/wiki/Grsecurity'
   ref 'PAX Security', url: 'https://pax.grsecurity.net/'
   ref 'PAX Security Wiki', url: 'https://en.wikipedia.org/wiki/PaX'
+
+  describe 'docker-test' do
+    skip 'Harden the container host. Use the Dev-Sec Hardening Framework'
+  end
 end
 
 control 'host-1.4' do
@@ -114,6 +118,11 @@ control 'host-1.4' do
   tag 'cis-docker-benchmark-1.12.0:1.4'
   tag 'level:1'
   ref 'Containers & Docker: How Secure Are They?', url: 'https://blog.docker.com/2013/08/containers-docker-how-secure-are-they/'
+  ref 'Dev-Sec Hardening Framework', url: 'http://dev-sec.io/'
+
+  describe 'docker-test' do
+    skip 'Remove all non-essential services from the host. Use the Dev-Sec Hardening Framework'
+  end
 end
 
 control 'host-1.5' do
