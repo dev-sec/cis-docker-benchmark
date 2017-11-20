@@ -96,8 +96,8 @@ control 'docker-2.1' do
   Rationale: By default, unrestricted network traffic is enabled between all containers on the same host. Thus, each container has the potential of reading all packets across the container network on the same host. This might lead to unintended and unwanted disclosure of information to other containers. Hence, restrict the inter container communication.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.1'
-  tag 'cis-docker-benchmark-1.13.0:2.1'
+  tag 'cis-docker-1.12.0': '2.1'
+  tag 'cis-docker-1.13.0': '2.1'
   tag 'level:1'
   ref 'Docker container networking', url: 'https://docs.docker.com/engine/userguide/networking/'
 
@@ -114,8 +114,8 @@ control 'docker-2.2' do
   Rationale: Setting up an appropriate log level, configures the Docker daemon to log events that you would want to review later. A ase log level of \'info\' and above would capture all logs except debug logs. Until and unless required, you should not run docker daemon at \'debug\' log level.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.2'
-  tag 'cis-docker-benchmark-1.13.0:2.2'
+  tag 'cis-docker-1.12.0': '2.2'
+  tag 'cis-docker-1.13.0': '2.2'
   tag 'level:1'
   ref 'Docker daemon', url: 'https://docs.docker.com/engine/reference/commandline/daemon/'
 
@@ -132,8 +132,8 @@ control 'docker-2.3' do
   Rationale: Docker will never make changes to your system iptables rules if you choose to do so. Docker server would automatically make the needed changes to iptables based on how you choose your networking options for the containers if it is allowed to do so. It is recommended to let Docker server make changes to iptables automatically to avoid networking misconfiguration that might hamper the communication between containers and to the outside world. Additionally, it would save you hassles of updating iptables every time you choose to run the containers or modify networking options.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.3'
-  tag 'cis-docker-benchmark-1.13.0:2.3'
+  tag 'cis-docker-1.12.0': '2.3'
+  tag 'cis-docker-1.13.0': '2.3'
   tag 'level:1'
   ref 'Understand container communication', url: 'https://docs.docker.com/engine/userguide/networking/default_network/container-communication/'
 
@@ -150,8 +150,8 @@ control 'docker-2.4' do
   Rationale: A secure registry uses TLS. A copy of registry\'s CA certificate is placed on the Docker host at \'/etc/docker/certs.d/<registry-name>/\' directory. An insecure registry is the one not having either valid registry certificate or is not using TLS. You should not be using any insecure registries in the production environment. Insecure registries can be tampered with leading to possible compromise to your production system. Additionally, If a registry is marked as insecure then \'docker pull\', \'docker push\', and \'docker search\' commands will not result in an error message and the user might be indefinitely working with insecure registries without ever being notified of potential danger.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.4'
-  tag 'cis-docker-benchmark-1.13.0:2.4'
+  tag 'cis-docker-1.12.0': '2.4'
+  tag 'cis-docker-1.13.0': '2.4'
   tag 'level:1'
   ref 'Insecure registry', url: 'https://docs.docker.com/registry/insecure/'
 
@@ -168,8 +168,8 @@ control 'docker-2.5' do
   Rationale: The \'aufs\' storage driver is the oldest storage driver. It is based on a Linux kernel patch-set that is unlikely to be merged into the main Linux kernel. \'aufs\' driver is also known to cause some serious kernel crashes. \'aufs\' just has legacy support from Docker. Most importantly, \'aufs\' is not a supported driver in many Linux distributions using latest Linux kernels.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.5'
-  tag 'cis-docker-benchmark-1.13.0:2.5'
+  tag 'cis-docker-1.12.0': '2.5'
+  tag 'cis-docker-1.13.0': '2.5'
   tag 'level:1'
   ref 'Docker daemon storage driver options', url: 'https://docs.docker.com/engine/reference/commandline/cli/#daemon-storage-driver-option'
   ref 'Switch from aufs to devicemapper', url: 'http://muehe.org/posts/switching-docker-from-aufs-to-devicemapper/'
@@ -189,8 +189,8 @@ control 'docker-2.6' do
   Rationale: By default, Docker daemon binds to a non-networked Unix socket and runs with \'root\' privileges. If you change the default docker daemon binding to a TCP port or any other Unix socket, anyone with access to that port or socket can have full access to Docker daemon and in turn to the host system. Hence, you should not bind the Docker daemon to another IP/port or a Unix socket. If you must expose the Docker daemon via a network socket, configure TLS authentication for the daemon and Docker Swarm APIs (if using). This would restrict the connections to your Docker daemon over the network to a limited number of clients who could successfully authenticate over TLS.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.6'
-  tag 'cis-docker-benchmark-1.13.0:2.6'
+  tag 'cis-docker-1.12.0': '2.6'
+  tag 'cis-docker-1.13.0': '2.6'
   tag 'level:1'
   ref 'Protect Docker deamon socket', url: 'https://docs.docker.com/engine/security/https/'
 
@@ -211,14 +211,14 @@ control 'docker-2.7' do
   Rationale: ulimit provides control over the resources available to the shell and to processes started by it. Setting system resource limits judiciously saves you from many disasters such as a fork bomb. Sometimes, even friendly users and legitimate processes can overuse system resources and in-turn can make the system unusable. Setting default ulimit for the Docker daemon would enforce the ulimit for all container instances. You would not need to setup ulimit for each container instance. However, the default ulimit can be overridden during container runtime, if needed. Hence, to control the system resources, define a default ulimit as needed in your environment.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.7'
-  tag 'cis-docker-benchmark-1.13.0:2.7'
+  tag 'cis-docker-1.12.0': '2.7'
+  tag 'cis-docker-1.13.0': '2.7'
   tag 'level:1'
   ref 'Docker daemon deafult ulimits', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#default-ulimits'
 
   describe json('/etc/docker/daemon.json') do
     its(['default-ulimits', 'nproc']) { should eq('1024:2408') }
-    its(['default-ulimits', 'nofile']) { should eq('100:200') }
+    its(['default-ulimits', 'nofile']) { should eq('100': '200') }
   end
 end
 
@@ -230,8 +230,8 @@ control 'docker-2.8' do
   Rationale: The Linux kernel user namespace support in Docker daemon provides additional security for the Docker host system. It allows a container to have a unique range of user and group IDs which are outside the traditional user and group range utilized by the host system. For example, the root user will have expected administrative privilege inside the container but can effectively be mapped to an unprivileged UID on the host system.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.8'
-  tag 'cis-docker-benchmark-1.13.0:2.8'
+  tag 'cis-docker-1.12.0': '2.8'
+  tag 'cis-docker-1.13.0': '2.8'
   tag 'level:2'
   ref 'User namespeces', url: 'http://man7.org/linux/man-pages/man7/user_namespaces.7.html'
   ref 'Docker daemon configuration', url: 'https://docs.docker.com/engine/reference/commandline/daemon/'
@@ -259,8 +259,8 @@ control 'docker-2.9' do
   Rationale: System administrators typically define cgroups under which containers are supposed to run. Even if cgroups are not explicitly defined by the system administrators, containers run under docker cgroup by default. It is possible to attach to a different cgroup other than that is the default. This usage should be monitored and confirmed. By attaching to a different cgroup than the one that is a default, it is possible to share resources unevenly and thus might starve the host for resources.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.9'
-  tag 'cis-docker-benchmark-1.13.0:2.9'
+  tag 'cis-docker-1.12.0': '2.9'
+  tag 'cis-docker-1.13.0': '2.9'
   tag 'level:2'
   ref 'Docker daemon configuration', url: 'https://docs.docker.com/engine/reference/commandline/daemon/'
 
@@ -277,8 +277,8 @@ control 'docker-2.10' do
   Rationale: The base device size can be increased at daemon restart. Increasing the base device size allows all future images and containers to be of the new base device size. A user can use this option to expand the base device size however shrinking is not permitted. This value affects the system-wide “base” empty filesystem that may already be initialized and inherited by pulled images. Though the file system does not allot the increased size if it is empty, it will use more space for the empty case depending upon the device size. This may cause a denial of service by ending up in file system being over-allocated or full.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.10'
-  tag 'cis-docker-benchmark-1.13.0:2.10'
+  tag 'cis-docker-1.12.0': '2.10'
+  tag 'cis-docker-1.13.0': '2.10'
   tag 'level:2'
   ref 'Docker daemon storage driver options', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#storage-driver-options'
 
@@ -295,8 +295,8 @@ control 'docker-2.11' do
   Rationale: Docker’s out-of-the-box authorization model is all or nothing. Any user with permission to access the Docker daemon can run any Docker client command. The same is true for callers using Docker’s remote API to contact the daemon. If you require greater access control, you can create authorization plugins and add them to your Docker daemon configuration. Using an authorization plugin, a Docker administrator can configure granular access policies for managing access to Docker daemon.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.11'
-  tag 'cis-docker-benchmark-1.13.0:2.11'
+  tag 'cis-docker-1.12.0': '2.11'
+  tag 'cis-docker-1.13.0': '2.11'
   tag 'level:2'
   ref 'Access authorization', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#access-authorization'
   ref 'Auhtorization plugins', url: 'https://docs.docker.com/engine/extend/plugins_authorization/'
@@ -316,8 +316,8 @@ control 'docker-2.12' do
   Ratonale: Centralized and remote logging ensures that all important log records are safe despite catastrophic events. Docker now supports various such logging drivers. Use the one that suits your environment the best.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.12'
-  tag 'cis-docker-benchmark-1.13.0:2.12'
+  tag 'cis-docker-1.12.0': '2.12'
+  tag 'cis-docker-1.13.0': '2.12'
   tag 'level:2'
   ref 'Logging overview', url: 'https://docs.docker.com/engine/admin/logging/overview/'
 
@@ -336,8 +336,8 @@ control 'docker-2.13' do
   Rationale: Docker registry v2 brings in many performance and security improvements over v1. It supports container image provenance and other security features such as image signing and verification. Hence, operations on Docker legacy registry should be restricted.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.13'
-  tag 'cis-docker-benchmark-1.13.0:2.13'
+  tag 'cis-docker-1.12.0': '2.13'
+  tag 'cis-docker-1.13.0': '2.13'
   tag 'level:1'
   ref 'Docker daemon storage driver options', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#storage-driver-options'
   ref 'Proposal: Provenance step 1 - Transform images for validation and verification', url: 'https://github.com/docker/docker/issues/8093'
@@ -361,8 +361,8 @@ control 'docker-2.14' do
   Rationale: One of the important security triads is availability. Setting \'--live-restore\' flag in the docker daemon ensures that container execution is not interrupted when the docker daemon is not available. This also means that it is now easier to update and patch the docker daemon without execution downtime.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.14'
-  tag 'cis-docker-benchmark-1.13.0:2.14'
+  tag 'cis-docker-1.12.0': '2.14'
+  tag 'cis-docker-1.13.0': '2.14'
   tag 'level:1'
   ref 'Add --live-restore flag', url: 'https://github.com/docker/docker/pull/23213'
 
@@ -379,8 +379,8 @@ control 'docker-2.15' do
   Rationale: By default, a Docker engine instance will not listen on any network ports, with all communications with the client coming over the Unix socket. When Docker swarm mode is enabled on a docker engine instance, multiple network ports are opened on the system and made available to other systems on the network for the purposes of cluster management and node communications. Opening network ports on a system increase its attack surface and this should be avoided unless required.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.15'
-  tag 'cis-docker-benchmark-1.13.0:2.15'
+  tag 'cis-docker-1.12.0': '2.15'
+  tag 'cis-docker-1.13.0': '2.15'
   tag 'level:1'
   ref 'docker swarm init', url: 'https://docs.docker.com/engine/reference/commandline/swarm_init/'
 
@@ -397,8 +397,8 @@ control 'docker-2.16' do
   Rationale: Manager nodes within a swarm have control over the swarm and change its configuration modifying security parameters. Having excessive manager nodes could render the swarm more susceptible to compromise. If fault tolerance is not required in the manager nodes, a single node should be elected as a manger. If fault tolerance is required then the smallest practical odd number to achieve the appropriate level of tolerance should be configured.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.16'
-  tag 'cis-docker-benchmark-1.13.0:2.16'
+  tag 'cis-docker-1.12.0': '2.16'
+  tag 'cis-docker-1.13.0': '2.16'
   tag 'level:1'
   ref 'Manage nodes in a swarm', url: 'https://docs.docker.com/engine/swarm/manage-nodes/'
   ref 'Administer and maintain a swarm of Docker Engines', url: 'https://docs.docker.com/engine/swarm/admin_guide/'
@@ -414,11 +414,11 @@ control 'docker-2.17' do
   title 'Bind swarm services to a specific host interface'
   desc 'By default, the docker swarm services will listen to all interfaces on the host, which may not be necessary for the operation of the swarm where the host has multiple network interfaces.
 
-  Rationale: When a swarm is initialized the default value for the --listen-addr flag is 0.0.0.0:2377 which means that the swarm services will listen on all interfaces on the host. If a host has multiple network interfaces this may be undesirable as it may expose the docker swarm services to networks which are not involved in the operation of the swarm. By passing a specific IP address to the --listen-addr, a specific network interface can be specified limiting this exposure.'
+  Rationale: When a swarm is initialized the default value for the --listen-addr flag is 0.0.0.0': '2377 which means that the swarm services will listen on all interfaces on the host. If a host has multiple network interfaces this may be undesirable as it may expose the docker swarm services to networks which are not involved in the operation of the swarm. By passing a specific IP address to the --listen-addr, a specific network interface can be specified limiting this exposure.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.17'
-  tag 'cis-docker-benchmark-1.13.0:2.17'
+  tag 'cis-docker-1.12.0': '2.17'
+  tag 'cis-docker-1.13.0': '2.17'
   tag 'level:1'
   ref 'docker swarm init', url: 'https://docs.docker.com/engine/reference/commandline/swarm_init/'
   ref 'Administer and maintain a swarm of Docker Engines', url: 'https://docs.docker.com/engine/swarm/admin_guide/'
@@ -438,8 +438,8 @@ control 'docker-2.18' do
   Rationale: Docker engine provides two mechanisms for forwarding ports from the host to containers, hairpin NAT, and a userland proxy. In most circumstances, the hairpin NAT mode is preferred as it improves performance and makes use of native Linux iptables functionality instead of an additional component. Where hairpin NAT is available, the userland proxy should be disabled on startup to reduce the attack surface of the installation.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:2.18'
-  tag 'cis-docker-benchmark-1.13.0:2.18'
+  tag 'cis-docker-1.12.0': '2.18'
+  tag 'cis-docker-1.13.0': '2.18'
   tag 'level:1'
   ref 'The docker-proxy', url: 'http://windsock.io/the-docker-proxy/'
   ref 'Disable Userland proxy by default', url: 'https://github.com/docker/docker/issues/14856'
@@ -462,7 +462,7 @@ control 'docker-2.19' do
   Rationale: By default, data exchanged between containers on different nodes on the overlay network is not encrypted. This could potentially expose traffic between the container nodes.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.13.0:2.19'
+  tag 'cis-docker-1.13.0': '2.19'
   tag 'level:1'
   ref 'Docker swarm mode overlay network security model', url: 'https://docs.docker.com/engine/userguide/networking/overlay-security-model/'
   ref 'Docker swarm container-container traffic not encrypted when inspecting externally with tcpdump', url: 'https://github.com/moby/moby/issues/24253'
@@ -489,7 +489,7 @@ control 'docker-2.20' do
   Rationale: A large number of system calls are exposed to every userland process with many of them going unused for the entire lifetime of the process. Most of the applications do not need all the system calls and thus benefit by having a reduced set of available system calls. The reduced set of system calls reduces the total kernel surface exposed to the application and thus improvises application security. You could apply your own custom seccomp profile instead of Docker\'s default seccomp profile. Alternatively, if Docker\'s default profile is good for your environment, you can choose to ignore this recommendation.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.13.0:2.20'
+  tag 'cis-docker-1.13.0': '2.20'
   tag 'level:2'
   ref 'daemon: add a flag to override the default seccomp profile', url: 'https://github.com/moby/moby/pull/26276'
 
@@ -507,7 +507,7 @@ control 'docker-2.21' do
   Rationale: Experimental is now a runtime docker daemon flag instead of a separate build. Passing --experimental as a runtime flag to the docker daemon, activates experimental features. Experimental is now considered a stable release, but with a couple of features which might not have tested and guaranteed API stability.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.13.0:2.21'
+  tag 'cis-docker-1.13.0': '2.21'
   tag 'level:1'
   ref 'Changing the definition of experimental', url: 'https://github.com/moby/moby/issues/26713'
   ref 'Make experimental a runtime flag', url: 'https://github.com/moby/moby/pull/27223'
@@ -525,7 +525,7 @@ control 'docker-2.22' do
   Rationale: Docker has various commands for managing secrets in a Swarm cluster. This is the foundation for future secret support in Docker with potential improvements such as Windows support, different backing stores, etc.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.13.0:2.22'
+  tag 'cis-docker-1.13.0': '2.22'
   tag 'level:2'
   ref 'Secret Management', url: 'https://github.com/moby/moby/pull/27794'
 
@@ -543,7 +543,7 @@ control 'docker-2.23' do
   Rationale: When Docker restarts, both the TLS key used to encrypt communication among swarm nodes, and the key used to encrypt and decrypt Raft logs on disk, are loaded into each manager node\'s memory. You should protect the mutual TLS encryption key and the key used to encrypt and decrypt Raft logs at rest. This protection could be enabled by initializing swarm with --autolock flag. With --autolock enabled, when Docker restarts, you must unlock the swarm first, using a key encryption key generated by Docker when the swarm was initialized.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.13.0:2.23'
+  tag 'cis-docker-1.13.0': '2.23'
   tag 'level:1'
   ref 'Initialize a swarm with autolocking enabled', url: 'https://github.com/mistyhacks/docker.github.io/blob/af7dfdba8504f9b102fb31a78cd08a06c33a8975/engine/swarm/swarm_manager_locking.md'
 
@@ -563,7 +563,7 @@ control 'docker-2.24' do
   Audit: Currently, there is no mechanism to find out when the key was last rotated on a swarm manager node. You should check with the system administrator if there is a key rotation record and the keys were rotated at a pre-defined frequency.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.13.0:2.24'
+  tag 'cis-docker-1.13.0': '2.24'
   tag 'level:1'
   ref 'Swarm Key rotation', url: 'https://github.com/mistyhacks/docker.github.io/blob/af7dfdba8504f9b102fb31a78cd08a06c33a8975/engine/swarm/swarm_manager_locking.md'
 end

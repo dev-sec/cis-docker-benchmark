@@ -54,8 +54,8 @@ control 'docker-3.1' do
   Rationale: \'docker.service\' file contains sensitive parameters that may alter the behavior of Docker daemon. Hence, it should be owned and group-owned by \'root\' to maintain the integrity of the file.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.1'
-  tag 'cis-docker-benchmark-1.13.0:3.1'
+  tag 'cis-docker-1.12.0': '3.1'
+  tag 'cis-docker-1.13.0': '3.1'
   tag 'level:1'
   ref 'Control and configure Docker with systemd', url: 'https://docs.docker.com/engine/admin/systemd/'
 
@@ -75,8 +75,8 @@ control 'docker-3.2' do
   Rationale: \'docker.service\' file contains sensitive parameters that may alter the behavior of Docker daemon. Hence, it should not be writable by any other user other than \'root\' to maintain the integrity of the file.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.2'
-  tag 'cis-docker-benchmark-1.13.0:3.2'
+  tag 'cis-docker-1.12.0': '3.2'
+  tag 'cis-docker-1.13.0': '3.2'
   tag 'level:1'
   ref 'Control and configure Docker with systemd', url: 'https://docs.docker.com/engine/admin/systemd/'
 
@@ -101,8 +101,8 @@ control 'docker-3.3' do
   Rationale: \'docker.socket\' file contains sensitive parameters that may alter the behavior of Docker remote API. Hence, it should be owned and group-owned by \'root\' to maintain the integrity of the file.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.3'
-  tag 'cis-docker-benchmark-1.13.0:3.3'
+  tag 'cis-docker-1.12.0': '3.3'
+  tag 'cis-docker-1.13.0': '3.3'
   tag 'level:1'
   ref 'Dockerd', url: 'https://docs.docker.com/engine/reference/commandline/dockerd/'
   ref 'YungSang/fedora-atomic-packer', url: 'https://github.com/YungSang/fedora-atomic-packer/blob/master/oem/docker.socket'
@@ -124,8 +124,8 @@ control 'docker-3.4' do
   Rationale: \'docker.socket\' file contains sensitive parameters that may alter the behavior of Docker remote API. Hence, it should be writable only by \'root\' to maintain the integrity of the file.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.4'
-  tag 'cis-docker-benchmark-1.13.0:3.4'
+  tag 'cis-docker-1.12.0': '3.4'
+  tag 'cis-docker-1.13.0': '3.4'
   tag 'level:1'
   ref 'Dockerd', url: 'https://docs.docker.com/engine/reference/commandline/dockerd/'
   ref 'YungSang/fedora-atomic-packer', url: 'https://github.com/YungSang/fedora-atomic-packer/blob/master/oem/docker.socket'
@@ -152,8 +152,8 @@ control 'docker-3.5' do
   Rationale: \'/etc/docker\' directory contains certificates and keys in addition to various sensitive files. Hence, it should be owned and group-owned by \'root\' to maintain the integrity of the directory.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.5'
-  tag 'cis-docker-benchmark-1.13.0:3.5'
+  tag 'cis-docker-1.12.0': '3.5'
+  tag 'cis-docker-1.13.0': '3.5'
   tag 'level:1'
   ref 'Protect the Docker daemon socket', url: 'https://docs.docker.com/engine/security/https/'
 
@@ -173,8 +173,8 @@ control 'docker-3.6' do
   Rationale: \'/etc/docker\' directory contains certificates and keys in addition to various sensitive files. Hence, it should only be writable by \'root\' to maintain the integrity of the directory.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.6'
-  tag 'cis-docker-benchmark-1.13.0:3.6'
+  tag 'cis-docker-1.12.0': '3.6'
+  tag 'cis-docker-1.13.0': '3.6'
   tag 'level:1'
   ref 'Docker Security', url: 'https://docs.docker.com/engine/security/security/#conclusions'
 
@@ -201,8 +201,8 @@ control 'docker-3.7' do
   Rationale: /etc/docker/certs.d/<registry-name> directory contains Docker registry certificates. These certificate files must be owned and group-owned by \'root\' to maintain the integrity of the certificates.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.7'
-  tag 'cis-docker-benchmark-1.13.0:3.7'
+  tag 'cis-docker-1.12.0': '3.7'
+  tag 'cis-docker-1.13.0': '3.7'
   tag 'level:1'
   ref 'Protect the Docker daemon socket', url: 'https://docs.docker.com/engine/security/https/'
   ref 'Verify repository client with certificates', url: 'https://docs.docker.com/engine/security/certificates/'
@@ -238,8 +238,8 @@ control 'docker-3.8' do
   Rationale: /etc/docker/certs.d/<registry-name> directory contains Docker registry certificates. These certificate files must have permissions of \'444\' to maintain the integrity of the certificates.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.8'
-  tag 'cis-docker-benchmark-1.13.0:3.8'
+  tag 'cis-docker-1.12.0': '3.8'
+  tag 'cis-docker-1.13.0': '3.8'
   tag 'level:1'
   ref 'Protect the Docker daemon socket', url: 'https://docs.docker.com/engine/security/https/'
   ref 'Verify repository client with certificates', url: 'https://docs.docker.com/engine/security/certificates/'
@@ -262,8 +262,8 @@ control 'docker-3.9' do
   Rationale: The TLS CA certificate file should be protected from any tampering. It is used to authenticate Docker server based on given CA certificate. Hence, it must be owned and group-owned by \'root\' to maintain the integrity of the CA certificate.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.9'
-  tag 'cis-docker-benchmark-1.13.0:3.9'
+  tag 'cis-docker-1.12.0': '3.9'
+  tag 'cis-docker-1.13.0': '3.9'
   tag 'level:1'
   ref 'Protect the Docker daemon socket', url: 'https://docs.docker.com/engine/security/https/'
   ref 'Verify repository client with certificates', url: 'https://docs.docker.com/engine/security/certificates/'
@@ -287,8 +287,8 @@ control 'docker-3.10' do
   Rationale: The TLS CA certificate file should be protected from any tampering. It is used to authenticate Docker server based on given CA certificate. Hence, it must have permissions of \'444\' to maintain the integrity of the CA certificate.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.10'
-  tag 'cis-docker-benchmark-1.13.0:3.10'
+  tag 'cis-docker-1.12.0': '3.10'
+  tag 'cis-docker-1.13.0': '3.10'
   tag 'level:1'
   ref 'Protect the Docker daemon socket', url: 'https://docs.docker.com/engine/security/https/'
   ref 'Verify repository client with certificates', url: 'https://docs.docker.com/engine/security/certificates/'
@@ -311,8 +311,8 @@ control 'docker-3.11' do
   Rationale: The Docker server certificate file should be protected from any tampering. It is used to authenticate Docker server based on the given server certificate. Hence, it must be owned and group-owned by \'root\' to maintain the integrity of the certificate.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.11'
-  tag 'cis-docker-benchmark-1.13.0:3.11'
+  tag 'cis-docker-1.12.0': '3.11'
+  tag 'cis-docker-1.13.0': '3.11'
   tag 'level:1'
   ref 'Protect the Docker daemon socket', url: 'https://docs.docker.com/engine/security/https/'
   ref 'Verify repository client with certificates', url: 'https://docs.docker.com/engine/security/certificates/'
@@ -334,8 +334,8 @@ control 'docker-3.12' do
   Rationale: The Docker server certificate file should be protected from any tampering. It is used to authenticate Docker server based on the given server certificate. Hence, it must have permissions of \'444\' to maintain the integrity of the certificate.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.12'
-  tag 'cis-docker-benchmark-1.13.0:3.12'
+  tag 'cis-docker-1.12.0': '3.12'
+  tag 'cis-docker-1.13.0': '3.12'
   tag 'level:1'
   ref 'Protect the Docker daemon socket', url: 'https://docs.docker.com/engine/security/https/'
   ref 'Verify repository client with certificates', url: 'https://docs.docker.com/engine/security/certificates/'
@@ -358,8 +358,8 @@ control 'docker-3.13' do
   Rationale: The Docker server certificate key file should be protected from any tampering or unneeded reads. It holds the private key for the Docker server certificate. Hence, it must be owned and group-owned by \'root\' to maintain the integrity of the Docker server certificate.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.13'
-  tag 'cis-docker-benchmark-1.13.0:3.13'
+  tag 'cis-docker-1.12.0': '3.13'
+  tag 'cis-docker-1.13.0': '3.13'
   tag 'level:1'
   ref 'Protect the Docker daemon socket', url: 'https://docs.docker.com/engine/security/https/'
   ref 'Verify repository client with certificates', url: 'https://docs.docker.com/engine/security/certificates/'
@@ -381,8 +381,8 @@ control 'docker-3.14' do
   Rationale: The Docker server certificate key file should be protected from any tampering or unneeded reads. It holds the private key for the Docker server certificate. Hence, it must have permissions of \'400\' to maintain the integrity of the Docker server certificate.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.14'
-  tag 'cis-docker-benchmark-1.13.0:3.14'
+  tag 'cis-docker-1.12.0': '3.14'
+  tag 'cis-docker-1.13.0': '3.14'
   tag 'level:1'
   ref 'Protect the Docker daemon socket', url: 'https://docs.docker.com/engine/security/https/'
   ref 'Verify repository client with certificates', url: 'https://docs.docker.com/engine/security/certificates/'
@@ -405,8 +405,8 @@ control 'docker-3.15' do
   Rationale: Docker daemon runs as \'root\'. The default Unix socket hence must be owned by \'root\'. If any other user or process owns this socket, then it might be possible for that non-privileged user or process to interact with Docker daemon. Also, such a non-privileged user or process might interact with containers. This is neither secure nor desired behavior. Additionally, the Docker installer creates a Unix group called \'docker\'. You can add users to this group, and then those users would be able to read and write to default Docker Unix socket. The membership to the \'docker\' group is tightly controlled by the system administrator. If any other group owns this socket, then it might be possible for members of that group to interact with Docker daemon. Also, such a group might not be as tightly controlled as the \'docker\' group. This is neither secure nor desired behavior. Hence, the default Docker Unix socket file must be owned by \'root\' and group-owned by \'docker\' to maintain the integrity of the socket file.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.15'
-  tag 'cis-docker-benchmark-1.13.0:3.15'
+  tag 'cis-docker-1.12.0': '3.15'
+  tag 'cis-docker-1.13.0': '3.15'
   tag 'level:1'
   ref 'Use the Docker command line', url: 'https://docs.docker.com/engine/reference/commandline/cli/#daemon-socket-option'
   ref 'Protect the Docker daemon socket', url: 'https://docs.docker.com/engine/security/https/'
@@ -427,8 +427,8 @@ control 'docker-3.16' do
   Rationale: Only \'root\' and members of \'docker\' group should be allowed to read and write to default Docker Unix socket. Hence, the Docket socket file must have permissions of \'660\' or more restrictive.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.16'
-  tag 'cis-docker-benchmark-1.13.0:3.16'
+  tag 'cis-docker-1.12.0': '3.16'
+  tag 'cis-docker-1.13.0': '3.16'
   tag 'level:1'
   ref 'Use the Docker command line', url: 'https://docs.docker.com/engine/reference/commandline/cli/#daemon-socket-option'
   ref 'Protect the Docker daemon socket', url: 'https://docs.docker.com/engine/security/https/'
@@ -456,8 +456,8 @@ control 'docker-3.17' do
   Rationale: \'daemon.json\' file contains sensitive parameters that may alter the behavior of docker daemon. Hence, it should be owned and group-owned by \'root\' to maintain the integrity of the file.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.17'
-  tag 'cis-docker-benchmark-1.13.0:3.17'
+  tag 'cis-docker-1.12.0': '3.17'
+  tag 'cis-docker-1.13.0': '3.17'
   tag 'level:1'
   ref 'dockerd', url: 'https://docs.docker.com/engine/reference/commandline/dockerd/#miscellaneous-options'
 
@@ -477,8 +477,8 @@ control 'docker-3.18' do
   Rationale: \'daemon.json\' file contains sensitive parameters that may alter the behavior of docker daemon. Hence, it should be writable only by \'root\' to maintain the integrity of the file.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.18'
-  tag 'cis-docker-benchmark-1.13.0:3.18'
+  tag 'cis-docker-1.12.0': '3.18'
+  tag 'cis-docker-1.13.0': '3.18'
   tag 'level:1'
   ref 'Use the Docker command line', url: 'https://docs.docker.com/engine/reference/commandline/cli/#daemon-socket-option'
   ref 'Protect the Docker daemon socket', url: 'https://docs.docker.com/engine/security/https/'
@@ -507,8 +507,8 @@ control 'docker-3.19' do
   Rationale: \'/etc/default/docker\' file contains sensitive parameters that may alter the behavior of docker daemon. Hence, it should be owned and group-owned by \'root\' to maintain the integrity of the file.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.19'
-  tag 'cis-docker-benchmark-1.13.0:3.19'
+  tag 'cis-docker-1.12.0': '3.19'
+  tag 'cis-docker-1.13.0': '3.19'
   tag 'level:1'
   ref 'Configure and troubleshoot the Docker daemon', url: 'https://docs.docker.com/engine/admin/'
 
@@ -529,8 +529,8 @@ control 'docker-3.20' do
   Rationale: \'/etc/default/docker\' file contains sensitive parameters that may alter the behavior of docker daemon. Hence, it should be writable only by \'root\' to maintain the integrity of the file.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:3.20'
-  tag 'cis-docker-benchmark-1.13.0:3.20'
+  tag 'cis-docker-1.12.0': '3.20'
+  tag 'cis-docker-1.13.0': '3.20'
   tag 'level:1'
   ref 'Configure and troubleshoot the Docker daemon', url: 'https://docs.docker.com/engine/admin/'
 

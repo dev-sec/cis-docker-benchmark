@@ -35,8 +35,8 @@ control 'docker-6.1' do
   Rationale: Performing regular and dedicated security audits of your host systems and containers could provide deep security insights that you might not know in your daily course of business. The identified security weaknesses should be then mitigated and this overall improves security posture of your environment.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:6.1'
-  tag 'cis-docker-benchmark-1.13.0:6.1'
+  tag 'cis-docker-1.12.0': '6.1'
+  tag 'cis-docker-1.13.0': '6.1'
   tag 'level:1'
   ref 'IT security auditing: Best practices for conducting audits', url: 'http://searchsecurity.techtarget.com/IT-security-auditing-Best-practices-for-conducting-audits'
 
@@ -59,8 +59,8 @@ control 'docker-6.2' do
   Such a deep visibility of container performance would help you ensure high availability of containers and minimum downtime.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:6.2'
-  tag 'cis-docker-benchmark-1.13.0:6.2'
+  tag 'cis-docker-1.12.0': '6.2'
+  tag 'cis-docker-1.13.0': '6.2'
   tag 'level:1'
   ref 'Runtime metrics', url: 'https://docs.docker.com/engine/admin/runmetrics/'
   ref 'cAdvisor (Container Advisor)', url: 'https://github.com/google/cadvisor'
@@ -79,8 +79,8 @@ control 'docker-6.3' do
   Rationale: Containers might run services that are critical for your business. Taking regular data backups would ensure that if there is ever any loss of data you would still have your data in backup. The loss of data could be devastating for your business.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:6.3'
-  tag 'cis-docker-benchmark-1.13.0:6.3'
+  tag 'cis-docker-1.12.0': '6.3'
+  tag 'cis-docker-1.13.0': '6.3'
   tag 'level:1'
   ref 'Backups and disaster recovery', url: 'https://docs.docker.com/datacenter/ucp/2.2/guides/admin/backups-and-disaster-recovery/'
   ref 'How can I backup a Docker-container with its data-volumes?', url: 'https://stackoverflow.com/questions/26331651/how-can-i-backup-a-docker-container-with-its-data-volumes'
@@ -99,8 +99,8 @@ control 'host-6.4' do
   Rationale: Tagged images are useful to fall back from "latest" to a specific version of an image in production. Images with unused or old tags may contain vulnerabilities that might be exploited, if instantiated. Additionally, if you fail to remove unused images from the system and there are various such redundant and unused images, the host filesystem may become full and could lead to denial of service.'
 
   tag 'host'
-  tag 'cis-docker-benchmark-1.12.0:6.4'
-  tag 'cis-docker-benchmark-1.13.0:6.4'
+  tag 'cis-docker-1.12.0': '6.4'
+  tag 'cis-docker-1.13.0': '6.4'
   tag 'level:1'
   ref 'Clean up unused Docker Containers and Images', url: 'http://craiccomputing.blogspot.de/2014/09/clean-up-unused-docker-containers-and.html'
   ref 'Command to remove all unused images', url: 'https://forums.docker.com/t/command-to-remove-all-unused-images/20/8'
@@ -125,8 +125,8 @@ control 'host-6.5' do
   Rationale: The flexibility of containers makes it easy to run multiple instances of applications and indirectly leads to Docker images that exist at varying security patch levels. It also means that you are consuming host resources that otherwise could have been used for running \'useful\' containers. Having more than just the manageable number of containers on a particular host makes the situation vulnerable to mishandling, misconfiguration and fragmentation. Thus, avoid container sprawl and keep the number of containers on a host to a manageable total.'
 
   tag 'host'
-  tag 'cis-docker-benchmark-1.12.0:6.5'
-  tag 'cis-docker-benchmark-1.13.0:6.5'
+  tag 'cis-docker-1.12.0': '6.5'
+  tag 'cis-docker-1.13.0': '6.5'
   tag 'level:1'
   ref 'Security Risks and Benefits of Docker Application Containers', url: 'https://zeltser.com/security-risks-and-benefits-of-docker-application/'
   ref 'Docker networking: How Linux containers will change your network', url: 'http://searchsdn.techtarget.com/feature/Docker-networking-How-Linux-containers-will-change-your-network'

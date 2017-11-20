@@ -53,8 +53,8 @@ control 'docker-5.1' do
   Rationale: AppArmor protects the Linux OS and applications from various threats by enforcing security policy which is also known as AppArmor profile. You can create your own AppArmor profile for containers or use the Docker\'s default AppArmor profile. This would enforce security policies on the containers as defined in the profile.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.1'
-  tag 'cis-docker-benchmark-1.13.0:5.1'
+  tag 'cis-docker-1.12.0': '5.1'
+  tag 'cis-docker-1.13.0': '5.1'
   tag 'level:1'
   ref 'Docker Security', url: 'https://docs.docker.com/engine/security/security/'
   ref 'Secure Engine', url: 'https://docs.docker.com/engine/security/'
@@ -77,8 +77,8 @@ control 'docker-5.2' do
   Rationale: SELinux provides a Mandatory Access Control (MAC) system that greatly augments the default Discretionary Access Control (DAC) model. You can thus add an extra layer of safety by enabling SELinux on your Linux host, if applicable.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.2'
-  tag 'cis-docker-benchmark-1.13.0:5.2'
+  tag 'cis-docker-1.12.0': '5.2'
+  tag 'cis-docker-1.13.0': '5.2'
   tag 'level:2'
   ref 'Docker Security', url: 'https://docs.docker.com/engine/security/security/'
   ref 'Secure Engine', url: 'https://docs.docker.com/engine/security/'
@@ -110,8 +110,8 @@ control 'docker-5.3' do
   For example, capabilities such as below are usually not needed for container process: NET_ADMIN, SYS_ADMIN, SYS_MODULE'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.3'
-  tag 'cis-docker-benchmark-1.13.0:5.3'
+  tag 'cis-docker-1.12.0': '5.3'
+  tag 'cis-docker-1.13.0': '5.3'
   tag 'level:1'
   ref 'Docker Security', url: 'https://docs.docker.com/engine/security/security/'
   ref 'Secure Engine', url: 'https://docs.docker.com/engine/security/'
@@ -135,8 +135,8 @@ control 'docker-5.4' do
   Rationale: The --privileged flag gives all capabilities to the container, and it also lifts all the limitations enforced by the device cgroup controller. In other words, the container can then do almost everything that the host can do. This flag exists to allow special use-cases, like running Docker within Docker.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.4'
-  tag 'cis-docker-benchmark-1.13.0:5.4'
+  tag 'cis-docker-1.12.0': '5.4'
+  tag 'cis-docker-1.13.0': '5.4'
   tag 'level:1'
   ref 'Use the Docker command line', url: 'https://docs.docker.com/engine/reference/commandline/cli/'
 
@@ -156,8 +156,8 @@ control 'docker-5.5' do
   Rationale: If sensitive directories are mounted in read-write mode, it would be possible to make changes to files within those sensitive directories. The changes might bring down security implications or unwarranted changes that could put the Docker host in compromised state.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.5'
-  tag 'cis-docker-benchmark-1.13.0:5.5'
+  tag 'cis-docker-1.12.0': '5.5'
+  tag 'cis-docker-1.13.0': '5.5'
   tag 'level:1'
   ref 'Use volumes', url: 'https://docs.docker.com/engine/admin/volumes/volumes/'
 
@@ -192,8 +192,8 @@ control 'docker-5.6' do
   It is possible to have shell access to a container without using SSH, the needlessly increasing the complexity of security management should be avoided.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.6'
-  tag 'cis-docker-benchmark-1.13.0:5.6'
+  tag 'cis-docker-1.12.0': '5.6'
+  tag 'cis-docker-1.13.0': '5.6'
   tag 'level:1'
   ref 'Why you don\'t need to run SSHd in your Docker containers', url: 'https://blog.docker.com/2014/06/why-you-dont-need-to-run-sshd-in-docker/'
 
@@ -213,8 +213,8 @@ control 'docker-5.7' do
   Rationale: By default, if the user does not specifically declare the container port to host port mapping, Docker automatically and correctly maps the container port to one available in 49153-65535 block on the host. But, Docker allows a container port to be mapped to a privileged port on the host if the user explicitly declared it. This is so because containers are executed with NET_BIND_SERVICE Linux kernel capability that does not restrict the privileged port mapping. The privileged ports receive and transmit various sensitive and privileged data. Allowing containers to use them can bring serious implications.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.7'
-  tag 'cis-docker-benchmark-1.13.0:5.7'
+  tag 'cis-docker-1.12.0': '5.7'
+  tag 'cis-docker-1.13.0': '5.7'
   tag 'level:1'
   ref 'Bind container ports to the host', url: 'https://docs.docker.com/engine/userguide/networking/default_network/binding/'
   ref 'Why putting SSH on another port than 22 is bad idea', url: 'https://www.adayinthelifeof.nl/2012/03/12/why-putting-ssh-on-another-port-than-22-is-bad-idea/'
@@ -240,8 +240,8 @@ control 'docker-5.8' do
   Rationale: A container can be run just with the ports defined in the Dockerfile for its image or can be arbitrarily passed run time parameters to open a list of ports. Additionally, Overtime, Dockerfile may undergo various changes and the list of exposed ports may or may not be relevant to the application you are running within the container. Opening unneeded ports increase the attack surface of the container and the containerized application. As a recommended practice, do not open unneeded ports.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.8'
-  tag 'cis-docker-benchmark-1.13.0:5.8'
+  tag 'cis-docker-1.12.0': '5.8'
+  tag 'cis-docker-1.13.0': '5.8'
   tag 'level:1'
   ref 'Bind container ports to the host', url: 'https://docs.docker.com/engine/userguide/networking/default_network/binding/'
 end
@@ -254,8 +254,8 @@ control 'docker-5.9' do
   Rationale: This is potentially dangerous. It allows the container process to open low-numbered ports like any other root process. It also allows the container to access network services like D-bus on the Docker host. Thus, a container process can potentially do unexpected things such as shutting down the Docker host. You should not use this option.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.9'
-  tag 'cis-docker-benchmark-1.13.0:5.9'
+  tag 'cis-docker-1.12.0': '5.9'
+  tag 'cis-docker-1.13.0': '5.9'
   tag 'level:1'
   ref 'Docker container networking', url: 'https://docs.docker.com/engine/userguide/networking/'
   ref 'Rebooting within docker container actually reboots the host', url: 'https://github.com/docker/docker/issues/6401'
@@ -275,8 +275,8 @@ control 'docker-5.10' do
   Rationale: By default, container can use all of the memory on the host. You can use memory limit mechanism to prevent a denial of service arising from one container consuming all of the host’s resources such that other containers on the same host cannot perform their intended functions. Having no limit on memory can lead to issues where one container can easily make the whole system unstable and as a result unusable.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.10'
-  tag 'cis-docker-benchmark-1.13.0:5.10'
+  tag 'cis-docker-1.12.0': '5.10'
+  tag 'cis-docker-1.13.0': '5.10'
   tag 'level:1'
   ref 'Resource management in Docker', url: 'https://goldmann.pl/blog/2014/09/11/resource-management-in-docker/'
   ref 'Use the Docker command line', url: 'https://docs.docker.com/engine/reference/commandline/cli/'
@@ -297,8 +297,8 @@ control 'docker-5.11' do
   Rationale: By default, CPU time is divided between containers equally. If it is desired, to control the CPU time amongst the container instances, you can use CPU sharing feature. CPU sharing allows to prioritize one container over the other and forbids the lower priority container to claim CPU resources more often. This ensures that the high priority containers are served better.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.11'
-  tag 'cis-docker-benchmark-1.13.0:5.11'
+  tag 'cis-docker-1.12.0': '5.11'
+  tag 'cis-docker-1.13.0': '5.11'
   tag 'level:1'
   ref 'Resource management in Docker', url: 'https://goldmann.pl/blog/2014/09/11/resource-management-in-docker/'
   ref 'Use the Docker command line', url: 'https://docs.docker.com/engine/reference/commandline/cli/'
@@ -325,8 +325,8 @@ control 'docker-5.12' do
       Ability to use a purely volume based backup without backing up anything from theinstance'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.12'
-  tag 'cis-docker-benchmark-1.13.0:5.12'
+  tag 'cis-docker-1.12.0': '5.12'
+  tag 'cis-docker-1.13.0': '5.12'
   tag 'level:1'
   ref 'Use the Docker command line', url: 'https://docs.docker.com/engine/reference/commandline/cli/'
 
@@ -345,8 +345,8 @@ control 'docker-5.13' do
   Rationale: If you have multiple network interfaces on your host machine, the container can accept connections on the exposed ports on any network interface. This might not be desired and may not be secured. Many a times a particular interface is exposed externally and services such as intrusion detection, intrusion prevention, firewall, load balancing, etc. are run on those interfaces to screen incoming public traffic. Hence, you should not accept incoming connections on any interface. You should only allow incoming connections from a particular external interface.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.13'
-  tag 'cis-docker-benchmark-1.13.0:5.13'
+  tag 'cis-docker-1.12.0': '5.13'
+  tag 'cis-docker-1.13.0': '5.13'
   tag 'level:1'
   ref 'Docker container networking', url: 'https://docs.docker.com/engine/userguide/networking/'
 
@@ -371,8 +371,8 @@ control 'docker-5.14' do
   Rationale: If you indefinitely keep trying to start the container, it could possibly lead to a denial of service on the host. It could be an easy way to do a distributed denial of service attack especially if you have many containers on the same host. Additionally, ignoring the exit status of the container and \'always\' attempting to restart the container leads to non-investigation of the root cause behind containers getting terminated. If a container gets terminated, you should investigate on the reason behind it instead of just attempting to restart it indefinitely. Thus, it is recommended to use \'on-failure\' restart policy and limit it to maximum of 5 restart attempts.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.14'
-  tag 'cis-docker-benchmark-1.13.0:5.14'
+  tag 'cis-docker-1.12.0': '5.14'
+  tag 'cis-docker-1.13.0': '5.14'
   tag 'level:1'
   ref 'Start containers automatically', url: 'https://docs.docker.com/engine/admin/start-containers-automatically/'
 
@@ -397,8 +397,8 @@ control 'docker-5.15' do
   Rationale: PID namespace provides separation of processes. The PID Namespace removes the view of the system processes, and allows process ids to be reused including PID 1. If the host\'s PID namespace is shared with the container, it would basically allow processes within the container to see all of the processes on the host system. This breaks the benefit of process level isolation between the host and the containers. Someone having access to the container can eventually know all the processes running on the host system and can even kill the host system processes from within the container. This can be catastrophic. Hence, do not share the host\'s process namespace with the containers.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.15'
-  tag 'cis-docker-benchmark-1.13.0:5.15'
+  tag 'cis-docker-1.12.0': '5.15'
+  tag 'cis-docker-1.13.0': '5.15'
   tag 'level:1'
   ref 'PID settings (–pid)', url: 'https://docs.docker.com/engine/reference/run/#pid-equivalent'
   ref 'pid_namespaces - overview of Linux PID namespaces', url: 'http://man7.org/linux/man-pages/man7/pid_namespaces.7.html'
@@ -418,8 +418,8 @@ control 'docker-5.16' do
   Rationale: IPC namespace provides separation of IPC between the host and containers. If the host\'s IPC namespace is shared with the container, it would basically allow processes within the container to see all of the IPC on the host system. This breaks the benefit of IPC level isolation between the host and the containers. Someone having access to the container can eventually manipulate the host IPC. This can be catastrophic. Hence, do not share the host\'s IPC namespace with the containers.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.16'
-  tag 'cis-docker-benchmark-1.13.0:5.16'
+  tag 'cis-docker-1.12.0': '5.16'
+  tag 'cis-docker-1.13.0': '5.16'
   tag 'level:1'
   ref 'IPC settings (–ipc)', url: 'https://docs.docker.com/engine/reference/run/#ipc-settings---ipc'
   ref 'namespaces - overview of Linux namespaces', url: 'http://man7.org/linux/man-pages/man7/namespaces.7.html'
@@ -443,8 +443,8 @@ control 'docker-5.17' do
       m - mknod allowed'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.17'
-  tag 'cis-docker-benchmark-1.13.0:5.17'
+  tag 'cis-docker-1.12.0': '5.17'
+  tag 'cis-docker-1.13.0': '5.17'
   tag 'level:1'
   ref 'Use the Docker command line', url: 'https://docs.docker.com/engine/reference/commandline/cli/'
 
@@ -463,8 +463,8 @@ control 'docker-5.18' do
   Rationale: ulimit provides control over the resources available to the shell and to processes started by it. Setting system resource limits judiciously saves you from many disasters such as a fork bomb. Sometimes, even friendly users and legitimate processes can overuse system resources and in-turn can make the system unusable. The default ulimit set at the Docker daemon level should be honored. If the default ulimit settings are not appropriate for a particular container instance, you may override them as an exception. But, do not make this a practice. If most of the container instances are overriding default ulimit settings, consider changing the default ulimit settings to something that is appropriate for your needs.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.18'
-  tag 'cis-docker-benchmark-1.13.0:5.18'
+  tag 'cis-docker-1.12.0': '5.18'
+  tag 'cis-docker-1.13.0': '5.18'
   tag 'level:1'
   ref 'docker run', url: 'https://docs.docker.com/engine/reference/commandline/run/'
   ref 'Command: man setrlimit'
@@ -485,8 +485,8 @@ control 'docker-5.19' do
   Rationale: A shared mount is replicated at all mounts and the changes made at any mount point are propagated to all mounts. Mounting a volume in shared mode does not restrict any other container to mount and make changes to that volume. This might be catastrophic if the mounted volume is sensitive to changes. Do not set mount propagation mode to shared until needed.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.19'
-  tag 'cis-docker-benchmark-1.13.0:5.19'
+  tag 'cis-docker-1.12.0': '5.19'
+  tag 'cis-docker-1.13.0': '5.19'
   tag 'level:1'
   ref 'Capability to specify per volume mount propagation mode', url: 'https://github.com/docker/docker/pull/17034'
   ref 'Docker run reference', url: 'https://docs.docker.com/engine/reference/run/'
@@ -508,8 +508,8 @@ control 'docker-5.20' do
   Rationale: Sharing the UTS namespace with the host provides full permission to the container to change the hostname of the host. This is insecure and should not be allowed.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.20'
-  tag 'cis-docker-benchmark-1.13.0:5.20'
+  tag 'cis-docker-1.12.0': '5.20'
+  tag 'cis-docker-1.13.0': '5.20'
   tag 'level:1'
   ref 'Docker run reference', url: 'https://docs.docker.com/engine/reference/run/'
   ref 'namespaces - overview of Linux namespaces', url: ' http://man7.org/linux/man-pages/man7/namespaces.7.html'
@@ -529,8 +529,8 @@ control 'docker-5.21' do
   Rationale: A large number of system calls are exposed to every userland process with many of them going unused for the entire lifetime of the process. Most of the applications do not need all the system calls and thus benefit by having a reduced set of available system calls. The reduced set of system calls reduces the total kernel surface exposed to the application and thus improvises application security.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.21'
-  tag 'cis-docker-benchmark-1.13.0:5.21'
+  tag 'cis-docker-1.12.0': '5.21'
+  tag 'cis-docker-1.13.0': '5.21'
   tag 'level:1'
   ref 'New Docker Security Features and What They Mean: Seccomp Profiles', url: 'http://blog.aquasec.com/new-docker-security-features-and-what-they-mean-seccomp-profiles'
   ref 'Docker run reference', url: 'https://docs.docker.com/engine/reference/run/'
@@ -555,8 +555,8 @@ control 'docker-5.22' do
   Rationale: Using --privileged option in docker exec gives extended Linux capabilities to the command. This could potentially be insecure and unsafe to do especially when you are running containers with dropped capabilities or with enhanced restrictions.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.22'
-  tag 'cis-docker-benchmark-1.13.0:5.22'
+  tag 'cis-docker-1.12.0': '5.22'
+  tag 'cis-docker-1.13.0': '5.22'
   tag 'level:2'
   ref 'docker exec', url: 'https://docs.docker.com/engine/reference/commandline/exec/'
 
@@ -573,8 +573,8 @@ control 'docker-5.23' do
   Rationale: Using --user option in docker exec executes the command within the container as that user. This could potentially be insecure and unsafe to do especially when you are running containers with dropped capabilities or with enhanced restrictions. For example, suppose your container is running as tomcat user (or any other non-root user), it would be possible to run a command through docker exec as root with --user=root option. This could potentially be dangerous.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.23'
-  tag 'cis-docker-benchmark-1.13.0:5.23'
+  tag 'cis-docker-1.12.0': '5.23'
+  tag 'cis-docker-1.13.0': '5.23'
   tag 'level:2'
   ref 'docker exec', url: 'https://docs.docker.com/engine/reference/commandline/exec/'
 
@@ -591,8 +591,8 @@ control 'docker-5.24' do
   Rationale: System administrators typically define cgroups under which containers are supposed to run. Even if cgroups are not explicitly defined by the system administrators, containers run under docker cgroup by default. At run-time, it is possible to attach to a different cgroup other than the one that was expected to be used. This usage should be monitored and confirmed. By attaching to a different cgroup than the one that is expected, excess permissions and resources might be granted to the container and thus, can prove to be unsafe.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.24'
-  tag 'cis-docker-benchmark-1.13.0:5.24'
+  tag 'cis-docker-1.12.0': '5.24'
+  tag 'cis-docker-1.13.0': '5.24'
   tag 'level:1'
   ref 'Specify custom cgroups', url: 'https://docs.docker.com/engine/reference/run/'
   ref 'Chapter 1. Introduction to Control Groups (Cgroups)', url: 'https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Resource_Management_Guide/ch01.html'
@@ -612,8 +612,8 @@ control 'docker-5.25' do
   Rationale: A process can set the no_new_priv bit in the kernel. It persists across fork, clone and execve. The no_new_priv bit ensures that the process or its children processes do not gain any additional privileges via suid or sgid bits. This way a lot of dangerous operations become a lot less dangerous because there is no possibility of subverting privileged binaries.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.25'
-  tag 'cis-docker-benchmark-1.13.0:5.25'
+  tag 'cis-docker-1.12.0': '5.25'
+  tag 'cis-docker-1.13.0': '5.25'
   tag 'level:1'
   ref 'BLOG: No New Privileges support in docker', url: 'https://github.com/projectatomic/atomic-site/issues/269'
   ref 'Add support for NoNewPrivileges in docker', url: 'https://github.com/moby/moby/pull/20727'
@@ -636,8 +636,8 @@ control 'docker-5.26' do
   Rationale: One of the important security triads is availability. If the container image you are using does not have a pre-defined HEALTHCHECK instruction, use the --health-cmd parameter to check container health at runtime. Based on the reported health status, you could take necessary actions.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.26'
-  tag 'cis-docker-benchmark-1.13.0:5.26'
+  tag 'cis-docker-1.12.0': '5.26'
+  tag 'cis-docker-1.13.0': '5.26'
   tag 'level:1'
   ref 'Add support for user-defined healthchecks', url: 'https://github.com/moby/moby/pull/22719'
 
@@ -656,8 +656,8 @@ control 'docker-5.27' do
   Rationale: Multiple docker commands such as docker pull, docker run, etc. are known to have an issue that by default, they extract the local copy of the image, if present, even though there is an updated version of the image with the "same tag" in the upstream repository. This could lead to using older and vulnerable images.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.27'
-  tag 'cis-docker-benchmark-1.13.0:5.27'
+  tag 'cis-docker-1.12.0': '5.27'
+  tag 'cis-docker-1.13.0': '5.27'
   tag 'level:1'
   ref 'Modifying trusted/untrusted pull behavior for create/run/build', url: 'https://github.com/moby/moby/pull/16609'
 
@@ -674,8 +674,8 @@ control 'docker-5.28' do
   Rationale: Attackers could launch a fork bomb with a single command inside the container. This fork bomb can crash the entire system and requires a restart of the host to make the system functional again. PIDs cgroup --pids-limit will prevent this kind of attacks by restricting the number of forks that can happen inside a container at a given time.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.28'
-  tag 'cis-docker-benchmark-1.13.0:5.28'
+  tag 'cis-docker-1.12.0': '5.28'
+  tag 'cis-docker-1.13.0': '5.28'
   tag 'level:1'
   ref 'Add PIDs cgroup support to Docker', url: 'https://github.com/moby/moby/pull/18697'
   ref 'docker run', url: 'https://docs.docker.com/engine/reference/commandline/run/'
@@ -696,8 +696,8 @@ control 'docker-5.29' do
   Rationale: Docker connects virtual interfaces created in the bridge mode to a common bridge called docker0. This default networking model is vulnerable to ARP spoofing and MAC flooding attacks since there is no filtering applied.'
 
   tag 'do cker'
-  tag 'cis-docker-benchmark-1.12.0:5.29'
-  tag 'cis-docker-benchmark-1.13.0:5.29'
+  tag 'cis-docker-1.12.0': '5.29'
+  tag 'cis-docker-1.13.0': '5.29'
   tag 'level:2'
   ref 'narwhal – secure Docker networking', url: 'https://github.com/nyantec/narwhal'
   ref 'Analysis of Docker Security', url: 'https://arxiv.org/pdf/1501.02967.pdf'
@@ -716,8 +716,8 @@ control 'docker-5.30' do
   Rationale: User namespaces ensure that a root process inside the container will be mapped to a non-root process outside the container. Sharing the user namespaces of the host with the container thus does not isolate users on the host with users on the containers.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.30'
-  tag 'cis-docker-benchmark-1.13.0:5.30'
+  tag 'cis-docker-1.12.0': '5.30'
+  tag 'cis-docker-1.13.0': '5.30'
   tag 'level:1'
   ref 'docker run', url: 'https://docs.docker.com/engine/reference/commandline/run/'
   ref 'Rooting out Root: User namespaces in Docker', url: 'https://events.linuxfoundation.org/sites/events/files/slides/User%20Namespaces%20-%20ContainerCon%202015%20-%2016-9-final_0.pdf'
@@ -738,8 +738,8 @@ control 'docker-5.31' do
   Rationale: If the docker socket is mounted inside a container it would allow processes running within the container to execute docker commands which effectively allows for full control of the host.'
 
   tag 'docker'
-  tag 'cis-docker-benchmark-1.12.0:5.31'
-  tag 'cis-docker-benchmark-1.13.0:5.31'
+  tag 'cis-docker-1.12.0': '5.31'
+  tag 'cis-docker-1.13.0': '5.31'
   tag 'level:1'
   ref 'The Dangers of Docker.sock', url: 'https://raesene.github.io/blog/2016/03/06/The-Dangers-Of-Docker.sock/'
   ref 'Docker-in-docker vs mounting /var/run/docker.sock', url: 'https://forums.docker.com/t/docker-in-docker-vs-mounting-var-run-docker-sock/9450/2'
