@@ -79,8 +79,8 @@ We use a yml attribute file to steer the configuration, the following options ar
   * `swarm_port: 2377`
     configure the swarm port.
 
-  * `cis_old_benchmark`
-    to execute also the old controls from previous benchmarks
+  * `benchmark_version`
+    to execute also the old controls from previous benchmarks, e.g. set it to 1.12.0 to execute also the tests from cis-benchmark-1.12.0
 
 ## Usage
 
