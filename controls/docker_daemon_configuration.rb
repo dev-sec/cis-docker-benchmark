@@ -414,7 +414,7 @@ control 'docker-2.17' do
   title 'Bind swarm services to a specific host interface'
   desc 'By default, the docker swarm services will listen to all interfaces on the host, which may not be necessary for the operation of the swarm where the host has multiple network interfaces.
 
-  Rationale: When a swarm is initialized the default value for the --listen-addr flag is 0.0.0.0': '2377 which means that the swarm services will listen on all interfaces on the host. If a host has multiple network interfaces this may be undesirable as it may expose the docker swarm services to networks which are not involved in the operation of the swarm. By passing a specific IP address to the --listen-addr, a specific network interface can be specified limiting this exposure.'
+  Rationale: When a swarm is initialized the default value for the --listen-addr flag is 0.0.0.0\': \'2377 which means that the swarm services will listen on all interfaces on the host. If a host has multiple network interfaces this may be undesirable as it may expose the docker swarm services to networks which are not involved in the operation of the swarm. By passing a specific IP address to the --listen-addr, a specific network interface can be specified limiting this exposure.'
 
   tag 'docker'
   tag 'cis-docker-1.12.0': '2.17'
