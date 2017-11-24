@@ -1,7 +1,7 @@
 # Change Log
 
-## [1.3.1](https://github.com/dev-sec/cis-docker-benchmark/tree/1.3.1) (2017-11-18)
-[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.3.0...1.3.1)
+## [2.0.0](https://github.com/dev-sec/cis-docker-benchmark/tree/2.0.0) (2017-11-24)
+[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.3.0...2.0.0)
 
 **Fixed bugs:**
 
@@ -9,10 +9,18 @@
 
 **Closed issues:**
 
+- Verify enable content trust per-shell or per-invocation check [\#44](https://github.com/dev-sec/cis-docker-benchmark/issues/44)
+- load\_with\_context': undefined method `each' for nil:NilClass \(NoMethodError\) exception in cis-docker-benchmark-master/controls/container\_runtime.rb:194 [\#37](https://github.com/dev-sec/cis-docker-benchmark/issues/37)
 - docker variable not defined [\#31](https://github.com/dev-sec/cis-docker-benchmark/issues/31)
+- use own control number scheme [\#25](https://github.com/dev-sec/cis-docker-benchmark/issues/25)
+- Update to CIS 1.13 [\#24](https://github.com/dev-sec/cis-docker-benchmark/issues/24)
 
 **Merged pull requests:**
 
+- Update to CIS Docker Benchmark 1.13.0 [\#43](https://github.com/dev-sec/cis-docker-benchmark/pull/43) ([atomic111](https://github.com/atomic111))
+- correct the maintainer and email in inspec.yml [\#42](https://github.com/dev-sec/cis-docker-benchmark/pull/42) ([atomic111](https://github.com/atomic111))
+- update gemfile [\#41](https://github.com/dev-sec/cis-docker-benchmark/pull/41) ([atomic111](https://github.com/atomic111))
+- 1.3.1 [\#40](https://github.com/dev-sec/cis-docker-benchmark/pull/40) ([chris-rock](https://github.com/chris-rock))
 - updating check for container\_info networkings port [\#38](https://github.com/dev-sec/cis-docker-benchmark/pull/38) ([coolguru](https://github.com/coolguru))
 - add required docker cli version [\#35](https://github.com/dev-sec/cis-docker-benchmark/pull/35) ([chris-rock](https://github.com/chris-rock))
 - use recommended spdx license identifier [\#34](https://github.com/dev-sec/cis-docker-benchmark/pull/34) ([chris-rock](https://github.com/chris-rock))
