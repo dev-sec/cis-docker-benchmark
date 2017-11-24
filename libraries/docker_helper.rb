@@ -1,5 +1,5 @@
 # encoding: utf-8
-#
+
 # Copyright 2016, Christoph Hartmann
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
