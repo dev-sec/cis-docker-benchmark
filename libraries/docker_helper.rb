@@ -47,6 +47,22 @@ class DockerHelper < Inspec.resource(1)
     params['FragmentPath']
   end
 
+  def overlay_networks
+    cmd = inspec.command('docker network ls -f driver=overlay -q')
+    return nil if cmd.exit_status.to_i.nonzero?
+
+    # parse data from docker network ls
+    params = parse_systemd_values(cmd.stdout.chomp)
+
+    # parse data from docker network inspect output
+    params.each do |k, _v|
+      params[k] = parse_network_values(inspec.command("docker network inspect #{k}").stdout.delete('\"').delete(',').chomp)
+    end
+
+    # return the value
+    params
+  end
+
   private
 
   # returns parsed params
@@ -54,6 +70,15 @@ class DockerHelper < Inspec.resource(1)
     SimpleConfig.new(
       stdout,
       assignment_regex: /^\s*([^=]*?)\s*=\s*(.*?)\s*$/,
+      multiple_values: false
+    ).params
+  end
+
+  # returns parsed params
+  def parse_network_values(stdout)
+    SimpleConfig.new(
+      stdout,
+      assignment_regex: /^\s*([^:]*?)\s*:\s*(.*?)\s*$/,
       multiple_values: false
     ).params
   end

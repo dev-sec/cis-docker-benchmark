@@ -6,7 +6,7 @@
 
 ## Description
 
-This [InSpec](https://github.com/chef/inspec) compliance profile implement the [CIS Docker 1.12.0 Benchmark](https://benchmarks.cisecurity.org/downloads/show-single/index.cfm?file=docker16.120) in an automated way to provide security best-practice tests around Docker daemon and containers in a production environment.
+This [InSpec](https://github.com/chef/inspec) compliance profile implement the [CIS Docker 1.13.0 Benchmark](https://downloads.cisecurity.org/) in an automated way to provide security best-practice tests around Docker daemon and containers in a production environment.
 
 InSpec is an open-source run-time framework and rule language used to specify compliance, security, and policy requirements for testing any node in your infrastructure.
 
@@ -26,59 +26,61 @@ InSpec is an open-source run-time framework and rule language used to specify co
 We use a yml attribute file to steer the configuration, the following options are available:
 
   * `trusted_user: vagrant`
-    define trusted user to control Docker daemon. cis-docker-benchmark-1.6
+    define trusted user to control Docker daemon.
 
   * `authorization_plugin: authz-broker`
-    define authorization plugin to manage access to Docker daemon. cis-docker-benchmark-2.11
+    define authorization plugin to manage access to Docker daemon.
 
   * `log_driver: syslog`
-    define preferable way to store logs. cis-docker-benchmark-2.12
+    define preferable way to store logs.
 
   * `log_opts: /syslog-address/`
-    define Docker daemon log-opts. cis-docker-benchmark-2.12
+    define Docker daemon log-opts.
 
   * `registry_cert_path: /etc/docker/certs.d`
-    directory contains various Docker registry directories. cis-docker-benchmark-3.7
+    directory contains various Docker registry directories.
 
   * `registry_name: /etc/docker/certs.d/registry_hostname:port`
-    directory contain certificate certain Docker registry. cis-docker-benchmark-3.7
+    directory contain certificate certain Docker registry.
 
   * `registry_ca_file: /etc/docker/certs.d/registry_hostname:port/ca.crt`
-    certificate file for a certain Docker registry certificate files. cis-docker-benchmark-3.7 and cis-docker-benchmark-3.8
+    certificate file for a certain Docker registry certificate files.
 
   * `container_user: vagrant`
-    define user within containers. cis-docker-benchmark-4.1
+    define user within containers.
 
   * `app_armor_profile: docker-default`
-    define apparmor profile for Docker containers. cis-docker-benchmark-5.1
+    define apparmor profile for Docker containers.
 
   * `selinux_profile: /label\:level\:s0-s0\:c1023/`
-    define SELinux profile for Docker containers. cis-docker-benchmark-5.2
+    define SELinux profile for Docker containers.
 
   * `container_capadd: null`
-    define needed capabilities for containers. example: `container_capadd: NET_ADMIN,SYS_ADMIN` cis-docker-benchmark-5.3
+    define needed capabilities for containers. example: `container_capadd: NET_ADMIN,SYS_ADMIN`
 
   * `managable_container_number: 25`
-    keep number of containers on a host to a manageable total. cis-docker-benchmark-6.5
+    keep number of containers on a host to a manageable total.
 
   * `daemon_tlscacert : /etc/docker/ssl/ca.pem`
-    configure the Trust certs. cis-docker-benchmark-2.6
+    configure the Trust certs.
 
   * `daemon_tlscert: /etc/docker/ssl/server_cert.pem`
-    configure the server certificate. cis-docker-benchmark-2.6
+    configure the server certificate.
 
   * `daemon_tlskey: /etc/docker/ssl/server_key.pem`
-    configure the server key. cis-docker-benchmark-2.6
+    configure the server key.
 
   * `swarm_mode: inactive`
-    configure the swarm mode. cis-docker-benchmark-2.15
+    configure the swarm mode.
 
   * `swarm_max_manager_nodes: 3`
-    configure the maximum number of swarm leaders. cis-docker-benchmark-2.16
+    configure the maximum number of swarm leaders.
 
   * `swarm_port: 2377`
-    configure the swarm port. cis-docker-benchmark-2.17
+    configure the swarm port.
 
+  * `benchmark_version`
+    to execute also the old controls from previous benchmarks, e.g. set it to 1.12.0 to execute also the tests from cis-benchmark-1.12.0
 
 ## Usage
 
@@ -139,4 +141,4 @@ limitations under the License.
 
 [1]: http://travis-ci.org/dev-sec/cis-docker-benchmark
 [2]: https://gitter.im/dev-sec/general
-[3]: https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.12.0_Benchmark_v1.0.0.pdf
+[3]: https://downloads.cisecurity.org/

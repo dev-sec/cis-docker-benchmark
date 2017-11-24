@@ -26,3 +26,5 @@ Metrics/AbcSize:
   Max: 29
 Metrics/BlockLength:
   Max: 29
+AllCops:
+  TargetRubyVersion: 2.2
