@@ -220,7 +220,7 @@ control 'docker-4.9' do
   ref 'Best practices for writing Dockerfiles', url: 'https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/'
 
   docker.images.ids.each do |id|
-    describe command("docker history #{id}| grep 'ADD'") do
+    describe command("docker --no-trunc history #{id}| grep 'ADD'") do
       its('stdout') { should eq '' }
     end
   end
