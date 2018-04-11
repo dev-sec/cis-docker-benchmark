@@ -178,7 +178,7 @@ control 'docker-4.7' do
   ref 'caching and apt-get update', url: 'https://github.com/moby/moby/issues/3313'
 
   docker.images.ids.each do |id|
-    describe command("docker history #{id}| grep -e 'update'") do
+    describe command("docker --no-trunc history #{id}| grep -e 'update'") do
       its('stdout') { should eq '' }
     end
   end
