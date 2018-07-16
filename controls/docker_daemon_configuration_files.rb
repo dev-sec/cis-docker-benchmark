@@ -269,8 +269,6 @@ control 'docker-3.9' do
   ref 'Verify repository client with certificates', url: 'https://docs.docker.com/engine/security/certificates/'
   ref 'Insecure Registry', url: 'https://docs.docker.com/engine/reference/commandline/dockerd/'
 
-  json('/etc/docker/daemon.json').params['tlscacert']
-
   describe file(json('/etc/docker/daemon.json').params['tlscacert']) do
     it { should exist }
     it { should be_file }
