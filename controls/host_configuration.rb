@@ -22,26 +22,12 @@
 
 title 'Host Configuration'
 
-TRUSTED_USER = attribute(
-  'trusted_user',
-  description: 'define trusted user to control Docker daemon.',
-  default: 'vagrant'
-)
-
-MANAGEABLE_CONTAINER_NUMBER = attribute(
-  'managable_container_number',
-  description: 'keep number of containers on a host to a manageable total.',
-  default: 25
-)
-
-BENCHMARK_VERSION = attribute(
-  'benchmark_version',
-  description: 'to execute also the old controls from previous benchmarks. to execute the controls, define the value as 1.12.0',
-  default: ''
-)
+TRUSTED_USER = attribute('trusted_user')
+MANAGEABLE_CONTAINER_NUMBER = attribute('managable_container_number')
+BENCHMARK_VERSION = attribute('benchmark_version')
 
 # check if docker exists
-only_if do
+only_if('docker not found') do
   command('docker').exist?
 end
 

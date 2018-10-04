@@ -23,14 +23,10 @@
 title 'Container Images and Build File'
 
 # attributes
-CONTAINER_USER = attribute(
-  'container_user',
-  description: 'define user within containers.',
-  default: 'ubuntu'
-)
+CONTAINER_USER = attribute('container_user')
 
 # check if docker exists
-only_if do
+only_if('docker not found') do
   command('docker').exist?
 end
 
