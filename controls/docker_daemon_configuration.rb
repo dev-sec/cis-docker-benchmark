@@ -23,68 +23,19 @@
 title 'Docker Daemon Configuration'
 
 # attributes
-DAEMON_TLSCACERT = attribute(
-  'daemon_tlscacert',
-  description: 'Trust certs signed only by this CA',
-  default: '/etc/docker/ssl/ca.pem'
-)
-
-DAEMON_TLSCERT = attribute(
-  'daemon_tlscert',
-  description: 'Path to TLS certificate file',
-  default: '/etc/docker/ssl/server_cert.pem'
-)
-
-DAEMON_TLSKEY = attribute(
-  'daemon_tlskey',
-  description: 'Path to TLS key file',
-  default: '/etc/docker/ssl/server_key.pem'
-)
-
-AUTHORIZATION_PLUGIN = attribute(
-  'authorization_plugin',
-  description: 'define authorization plugin to manage access to Docker daemon.',
-  default: 'authz-broker'
-)
-
-LOG_DRIVER = attribute(
-  'log_driver',
-  description: 'define preferable way to store logs.',
-  default: 'syslog'
-)
-
-LOG_OPTS = attribute(
-  'log_opts',
-  description: 'define Docker daemon log-opts.',
-  default: /syslog-address/
-)
-
-SWARM_MODE = attribute(
-  'swarm_mode',
-  description: 'define the swarm mode, `active` or `inactive`',
-  default: 'inactive'
-)
-
-SWARM_MAX_MANAGER_NODES = attribute(
-  'swarm_max_manager_nodes',
-  description: 'number of manager nodes in a swarm',
-  default: 3
-)
-
-SWARM_PORT = attribute(
-  'swarm_port',
-  description: 'port of the swarm node',
-  default: 2377
-)
-
-SECCOMP_DEFAULT_PROFILE = attribute(
-  'seccomp_default_profile',
-  description: 'define the default seccomp profile',
-  default: 'default'
-)
+DAEMON_TLSCACERT = attribute('daemon_tlscacert')
+DAEMON_TLSCERT = attribute('daemon_tlscert')
+DAEMON_TLSKEY = attribute('daemon_tlskey')
+AUTHORIZATION_PLUGIN = attribute('authorization_plugin')
+LOG_DRIVER = attribute('log_driver')
+LOG_OPTS = attribute('log_opts')
+SWARM_MODE = attribute('swarm_mode')
+SWARM_MAX_MANAGER_NODES = attribute('swarm_max_manager_nodes')
+SWARM_PORT = attribute('swarm_port')
+SECCOMP_DEFAULT_PROFILE = attribute('seccomp_default_profile')
 
 # check if docker exists
-only_if do
+only_if('docker not found') do
   command('docker').exist?
 end
 

@@ -6,3 +6,103 @@ copyright_email: hello@dev-sec.io
 license: Apache-2.0
 summary: An InSpec Compliance Profile for the CIS Docker Benchmark
 version: 2.1.0
+inspec_version: '>= 2.3.23'
+attributes:
+  - name: container_user
+    required: false
+    description: 'define user within containers.'
+    default: 'ubuntu'
+    type: string
+  - name: container_capadd
+    required: true
+    description: 'define needed capabilities for containers.'
+    type: string
+  - name: app_armor_profile
+    required: false
+    description: 'define apparmor profile for Docker containers.'
+    default: 'docker-default'
+    type: string
+  - name: selinux_profile
+    required: false
+    description: 'define SELinux profile for Docker containers.'
+    default: label:level:s0-s0:c1023
+    type: string
+  - name: trusted_user
+    required: false
+    description: 'define trusted user to control Docker daemon.'
+    default: vagrant
+    type: string
+  - name: managable_container_number
+    required: true
+    description: 'keep number of containers on a host to a manageable total.'
+    default: 25
+    type: numeric
+  - name: benchmark_version
+    required: true
+    description: 'to execute also the old controls from previous benchmarks. to execute the controls, define the value as 1.12.0'
+    type: string
+  - name: registry_cert_path
+    required: true
+    description: 'directory contains various Docker registry directories.'
+    default: '/etc/docker/certs.d'
+    type: string
+  - name: registry_name
+    required: true
+    description: 'directory contain certificate certain Docker registry.'
+    default: '/etc/docker/certs.d/registry_hostname:port'
+    type: string
+  - name: registry_ca_file
+    required: false
+    description: 'directory contain certificate certain Docker registry.'
+    default: '/etc/docker/certs.d/registry_hostname:port/ca.crt'
+    type: string
+  - name: daemon_tlscacert
+    required: false
+    description: 'Trust certs signed only by this CA'
+    default: '/etc/docker/ssl/ca.pem'
+    type: string
+  - name: daemon_tlscert
+    required: false
+    description: 'Path to TLS certificate file'
+    default: '/etc/docker/ssl/server_cert.pem'
+    type: string
+  - name: daemon_tlskey
+    required: false
+    description: 'Path to TLS key file'
+    default: '/etc/docker/ssl/server_key.pem'
+    type: string
+  - name: authorization_plugin
+    required: false
+    description: 'define authorization plugin to manage access to Docker daemon.'
+    default: 'authz-broker'
+    type: string
+  - name: log_driver
+    required: false
+    description: 'define preferable way to store logs.'
+    default: 'syslog'
+    type: string
+  - name: log_opts
+    required: false
+    description: 'define Docker daemon log-opts.'
+    default: syslog-address
+    type: string
+  - name: swarm_mode
+    required: false
+    description: 'define the swarm mode, `active` or `inactive`'
+    default: inactive
+    type: string
+  - name: swarm_max_manager_nodes
+    required: false
+    description: 'number of manager nodes in a swarm'
+    default: 3
+    type: numeric
+  - name: swarm_port
+    required: false
+    description: 'port of the swarm node'
+    default: 2377
+    type: numeric
+  - name: seccomp_default_profile
+    required: false
+    description: 'define the default seccomp profile'
+    default: 'default'
+    type: string

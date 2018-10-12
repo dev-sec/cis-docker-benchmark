@@ -12,7 +12,7 @@ InSpec is an open-source run-time framework and rule language used to specify co
 
 ## Requirements
 
-* at least [InSpec](http://inspec.io/) version 1.38.8
+* at least [InSpec](http://inspec.io/) version 2.3.23
 * Docker 1.13+
 
 ### Platform

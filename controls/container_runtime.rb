@@ -23,25 +23,12 @@
 title 'Container Runtime'
 
 # attributes
-CONTAINER_CAPADD = attribute(
-  'container_capadd',
-  description: 'define needed capabilities for containers.'
-)
-
-APP_ARMOR_PROFILE = attribute(
-  'app_armor_profile',
-  description: 'define apparmor profile for Docker containers.',
-  default: 'docker-default'
-)
-
-SELINUX_PROFILE = attribute(
-  'selinux_profile',
-  description: 'define SELinux profile for Docker containers.',
-  default:  /label\:level\:s0-s0\:c1023/
-)
+CONTAINER_CAPADD = attribute('container_capadd')
+APP_ARMOR_PROFILE = attribute('app_armor_profile')
+SELINUX_PROFILE = attribute('selinux_profile')
 
 # check if docker exists
-only_if do
+only_if('docker not found') do
   command('docker').exist?
 end
 

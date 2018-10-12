@@ -23,7 +23,7 @@
 title 'Docker Security Operations'
 
 # check if docker exists
-only_if do
+only_if('docker not found') do
   command('docker').exist?
 end
 
