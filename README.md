@@ -17,9 +17,9 @@ InSpec is an open-source run-time framework and rule language used to specify co
 
 ### Platform
 
-- Debian 8
-- Ubuntu 16.04
-- CentOS 7
+* Debian 8
+* Ubuntu 16.04
+* CentOS 7
 
 ## Attributes
 
@@ -111,7 +111,7 @@ inspec supermarket exec dev-sec/cis-docker-benchmark -t ssh://user@hostname --ke
 
 In order to verify individual controls, just provide the control ids to InSpec:
 
-```
+```sh
 inspec exec cis-docker-benchmark --controls 'cis-docker-benchmark-1.4 cis-docker-benchmark-1.5'
 ```
 
@@ -120,7 +120,6 @@ inspec exec cis-docker-benchmark --controls 'cis-docker-benchmark-1.4 cis-docker
 * Patrick Muench [atomic111](https://github.com/atomic111)
 * Dominik Richter [arlimus](https://github.com/arlimus)
 * Christoph Hartmann [chris-rock](https://github.com/chris-rock)
-
 
 ## License and Author
 
@@ -131,7 +130,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
