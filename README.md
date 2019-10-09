@@ -25,62 +25,46 @@ InSpec is an open-source run-time framework and rule language used to specify co
 
 We use a yml attribute file to steer the configuration, the following options are available:
 
-  * `trusted_user: vagrant`
-    define trusted user to control Docker daemon.
+* `trusted_user: vagrant`
+  define trusted user to control Docker daemon.
+* `authorization_plugin: authz-broker`
+  define authorization plugin to manage access to Docker daemon.]
+* `log_driver: syslog`
+  define preferable way to store logs.
+* `log_opts: /syslog-address/`
+  define Docker daemon log-opts.
+* `registry_cert_path: /etc/docker/certs.d`
+  directory contains various Docker registry directories.
+* `registry_name: /etc/docker/certs.d/registry_hostname:port`
+  directory contain certificate certain Docker registry.
+* `registry_ca_file: /etc/docker/certs.d/registry_hostname:port/ca.crt`
+  certificate file for a certain Docker registry certificate files.
+* `container_user: vagrant`
+  define user within containers.
+* `app_armor_profile: docker-default`
+  define apparmor profile for Docker containers.
+* `selinux_profile: /label\:level\:s0-s0\:c1023/`
+  define SELinux profile for Docker containers.
+* `container_capadd: null`
+  define needed capabilities for containers. example: `container_capadd: NET_ADMIN,SYS_ADMIN`
+* `managable_container_number: 25`
+  keep number of containers on a host to a manageable total.
+* `daemon_tlscacert : /etc/docker/ssl/ca.pem`
+  configure the Trust certs.
+* `daemon_tlscert: /etc/docker/ssl/server_cert.pem`
+  configure the server certificate.
+* `daemon_tlskey: /etc/docker/ssl/server_key.pem`
+  configure the server key.
+* `swarm_mode: inactive`
+  configure the swarm mode.
+* `swarm_max_manager_nodes: 3`
+  configure the maximum number of swarm leaders.
+* `swarm_port: 2377`
+  configure the swarm port.
+* `benchmark_version`
+  to execute also the old controls from previous benchmarks, e.g. set it to 1.12.0 to execute also the tests from cis-benchmark-1.12.0
 
-  * `authorization_plugin: authz-broker`
-    define authorization plugin to manage access to Docker daemon.
-
-  * `log_driver: syslog`
-    define preferable way to store logs.
-
-  * `log_opts: /syslog-address/`
-    define Docker daemon log-opts.
-
-  * `registry_cert_path: /etc/docker/certs.d`
-    directory contains various Docker registry directories.
-
-  * `registry_name: /etc/docker/certs.d/registry_hostname:port`
-    directory contain certificate certain Docker registry.
-
-  * `registry_ca_file: /etc/docker/certs.d/registry_hostname:port/ca.crt`
-    certificate file for a certain Docker registry certificate files.
-
-  * `container_user: vagrant`
-    define user within containers.
-
-  * `app_armor_profile: docker-default`
-    define apparmor profile for Docker containers.
-
-  * `selinux_profile: /label\:level\:s0-s0\:c1023/`
-    define SELinux profile for Docker containers.
-
-  * `container_capadd: null`
-    define needed capabilities for containers. example: `container_capadd: NET_ADMIN,SYS_ADMIN`
-
-  * `managable_container_number: 25`
-    keep number of containers on a host to a manageable total.
-
-  * `daemon_tlscacert : /etc/docker/ssl/ca.pem`
-    configure the Trust certs.
-
-  * `daemon_tlscert: /etc/docker/ssl/server_cert.pem`
-    configure the server certificate.
-
-  * `daemon_tlskey: /etc/docker/ssl/server_key.pem`
-    configure the server key.
-
-  * `swarm_mode: inactive`
-    configure the swarm mode.
-
-  * `swarm_max_manager_nodes: 3`
-    configure the maximum number of swarm leaders.
-
-  * `swarm_port: 2377`
-    configure the swarm port.
-
-  * `benchmark_version`
-    to execute also the old controls from previous benchmarks, e.g. set it to 1.12.0 to execute also the tests from cis-benchmark-1.12.0
+See `sample_attributes.yml` as an example for these configuration settings.
 
 ## Usage
 
