@@ -86,7 +86,7 @@ We use a yml attribute file to steer the configuration, the following options ar
 
 InSpec makes it easy to run your tests wherever you need. More options listed here: [InSpec cli](http://inspec.io/docs/reference/cli/)
 
-```
+```sh
 # run profile locally
 $ git clone https://github.com/dev-sec/cis-docker-benchmark
 $ inspec exec cis-docker-benchmark
