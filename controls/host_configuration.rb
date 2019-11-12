@@ -195,7 +195,7 @@ control 'host-1.8' do
 
   only_if { os.linux? }
   describe auditd do
-    its(:lines) { should include('-w /var/lib/docker/ -p rwxa -k docker') }
+    its(:lines) { should include('-w /var/lib/docker -p rwxa -k docker') }
   end
 end
 
@@ -214,7 +214,7 @@ control 'host-1.9' do
 
   only_if { os.linux? }
   describe auditd do
-    its(:lines) { should include('-w /etc/docker/ -p rwxa -k docker') }
+    its(:lines) { should include('-w /etc/docker -p rwxa -k docker') }
   end
 end
 
