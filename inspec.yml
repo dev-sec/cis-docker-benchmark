@@ -6,7 +6,7 @@ copyright: DevSec Hardening Framework Team
 copyright_email: hello@dev-sec.io
 license: Apache-2.0
 summary: An InSpec Compliance Profile for the CIS Docker Benchmark
-version: 2.1.1
+version: 2.1.2
 inspec_version: '>= 2.3.23'
 attributes:
     - name: container_user

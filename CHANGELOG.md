@@ -1,8 +1,16 @@
 # Changelog
 
-## [1.3.1](https://github.com/dev-sec/cis-docker-benchmark/tree/1.3.1) (2020-06-18)
+## [2.1.2](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.2) (2020-06-18)
 
-[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/2.1.0...1.3.1)
+[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/2.1.1...2.1.2)
+
+**Merged pull requests:**
+
+- version alignment [\#68](https://github.com/dev-sec/cis-docker-benchmark/pull/68) ([micheelengronne](https://github.com/micheelengronne))
+
+## [2.1.1](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.1) (2020-06-18)
+
+[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/2.1.0...2.1.1)
 
 **Closed issues:**
 
