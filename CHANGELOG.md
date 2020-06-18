@@ -1,6 +1,27 @@
-# Change Log
+# Changelog
+
+## [1.3.1](https://github.com/dev-sec/cis-docker-benchmark/tree/1.3.1) (2020-06-18)
+
+[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/2.1.0...1.3.1)
+
+**Closed issues:**
+
+- Examples not working [\#58](https://github.com/dev-sec/cis-docker-benchmark/issues/58)
+- incompatible character encodings: UTF-8 and ASCII-8BIT [\#51](https://github.com/dev-sec/cis-docker-benchmark/issues/51)
+
+**Merged pull requests:**
+
+- github release action [\#67](https://github.com/dev-sec/cis-docker-benchmark/pull/67) ([micheelengronne](https://github.com/micheelengronne))
+- Update Inspec.yml [\#66](https://github.com/dev-sec/cis-docker-benchmark/pull/66) ([MoisesTapia](https://github.com/MoisesTapia))
+- Removed trailing slashes in 1.8, 1.9 [\#63](https://github.com/dev-sec/cis-docker-benchmark/pull/63) ([presidenten](https://github.com/presidenten))
+- Remove .gitkeep file [\#62](https://github.com/dev-sec/cis-docker-benchmark/pull/62) ([james-stocks](https://github.com/james-stocks))
+- Simple fix for \#58 [\#61](https://github.com/dev-sec/cis-docker-benchmark/pull/61) ([commjoen](https://github.com/commjoen))
+- Update issue templates [\#57](https://github.com/dev-sec/cis-docker-benchmark/pull/57) ([rndmh3ro](https://github.com/rndmh3ro))
+- unified attributes [\#56](https://github.com/dev-sec/cis-docker-benchmark/pull/56) ([chris-rock](https://github.com/chris-rock))
+- Removed unneeded processing step [\#55](https://github.com/dev-sec/cis-docker-benchmark/pull/55) ([tstuber](https://github.com/tstuber))
 
 ## [2.1.0](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.0) (2018-04-20)
+
 [Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/2.0.0...2.1.0)
 
 **Closed issues:**
@@ -10,6 +31,7 @@
 
 **Merged pull requests:**
 
+- 2.1.0 [\#54](https://github.com/dev-sec/cis-docker-benchmark/pull/54) ([chris-rock](https://github.com/chris-rock))
 - Fix utf8 truncated output [\#53](https://github.com/dev-sec/cis-docker-benchmark/pull/53) ([aschmidt75](https://github.com/aschmidt75))
 - update inspec version to 2.0 [\#52](https://github.com/dev-sec/cis-docker-benchmark/pull/52) ([atomic111](https://github.com/atomic111))
 - Fixes \#37 prevent NoMethodError when no hosts available [\#49](https://github.com/dev-sec/cis-docker-benchmark/pull/49) ([Nowheresly](https://github.com/Nowheresly))
@@ -17,6 +39,7 @@
 - update changelog [\#45](https://github.com/dev-sec/cis-docker-benchmark/pull/45) ([chris-rock](https://github.com/chris-rock))
 
 ## [2.0.0](https://github.com/dev-sec/cis-docker-benchmark/tree/2.0.0) (2017-11-24)
+
 [Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.3.1...2.0.0)
 
 **Closed issues:**
@@ -33,6 +56,7 @@
 - update gemfile [\#41](https://github.com/dev-sec/cis-docker-benchmark/pull/41) ([atomic111](https://github.com/atomic111))
 
 ## [1.3.1](https://github.com/dev-sec/cis-docker-benchmark/tree/1.3.1) (2017-11-18)
+
 [Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.3.0...1.3.1)
 
 **Fixed bugs:**
@@ -52,6 +76,7 @@
 - Due to inspec deprecation warnings [\#33](https://github.com/dev-sec/cis-docker-benchmark/pull/33) ([alexpop](https://github.com/alexpop))
 
 ## [1.3.0](https://github.com/dev-sec/cis-docker-benchmark/tree/1.3.0) (2017-04-28)
+
 [Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.2.0...1.3.0)
 
 **Closed issues:**
@@ -70,6 +95,7 @@
 - update tags and refs [\#23](https://github.com/dev-sec/cis-docker-benchmark/pull/23) ([chris-rock](https://github.com/chris-rock))
 
 ## [1.2.0](https://github.com/dev-sec/cis-docker-benchmark/tree/1.2.0) (2017-04-18)
+
 [Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.1.1...1.2.0)
 
 **Merged pull requests:**
@@ -77,6 +103,7 @@
 - update to CIS Benchmark 1.12, controls 1.1 to 2.16 [\#19](https://github.com/dev-sec/cis-docker-benchmark/pull/19) ([atomic111](https://github.com/atomic111))
 
 ## [1.1.1](https://github.com/dev-sec/cis-docker-benchmark/tree/1.1.1) (2017-03-01)
+
 [Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.1.0...1.1.1)
 
 **Merged pull requests:**
@@ -85,6 +112,7 @@
 - add changelog [\#16](https://github.com/dev-sec/cis-docker-benchmark/pull/16) ([chris-rock](https://github.com/chris-rock))
 
 ## [1.1.0](https://github.com/dev-sec/cis-docker-benchmark/tree/1.1.0) (2016-12-13)
+
 [Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/1.0.0...1.1.0)
 
 **Merged pull requests:**
@@ -95,6 +123,9 @@
 - Fix README.md [\#12](https://github.com/dev-sec/cis-docker-benchmark/pull/12) ([netflash](https://github.com/netflash))
 
 ## [1.0.0](https://github.com/dev-sec/cis-docker-benchmark/tree/1.0.0) (2016-07-05)
+
+[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/b7947d9bfea0a7fb961874f94a7fa0375bef31ba...1.0.0)
+
 **Implemented enhancements:**
 
 - use new InSpec attributes [\#10](https://github.com/dev-sec/cis-docker-benchmark/pull/10) ([chris-rock](https://github.com/chris-rock))
@@ -112,4 +143,4 @@
 
 
 
-\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
