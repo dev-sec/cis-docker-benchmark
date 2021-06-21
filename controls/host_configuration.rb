@@ -1,8 +1,7 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
-# Copyright 2016, Patrick Muench
-# Copyright 2017, Christoph Hartmann
+# Copyright:: 2016, Patrick Muench
+# Copyright:: 2017, Christoph Hartmann
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,9 +21,9 @@
 
 title 'Host Configuration'
 
-TRUSTED_USER = attribute('trusted_user')
-MANAGEABLE_CONTAINER_NUMBER = attribute('managable_container_number')
-BENCHMARK_VERSION = attribute('benchmark_version')
+TRUSTED_USER = input('trusted_user')
+MANAGEABLE_CONTAINER_NUMBER = input('managable_container_number')
+BENCHMARK_VERSION = input('benchmark_version')
 
 # check if docker exists
 only_if('docker not found') do

@@ -1,10 +1,7 @@
-# encoding: utf-8
-
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
 Vagrant.configure(2) do |config|
-
   config.vm.define :ubuntu1604 do |ubuntu1604|
     ubuntu1604.vm.box = 'ubuntu/xenial64' # https://atlas.hashicorp.com/ubuntu/boxes/xenial64
     # install docker

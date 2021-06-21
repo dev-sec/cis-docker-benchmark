@@ -1,8 +1,7 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
-# Copyright 2016, Patrick Muench
-# Copyright 2017, Christoph Hartmann
+# Copyright:: 2016, Patrick Muench
+# Copyright:: 2017, Christoph Hartmann
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,9 +22,9 @@
 title 'Docker Daemon Configuration Files'
 
 # attributes
-REGISTRY_CERT_PATH = attribute('registry_cert_path')
-REGISTRY_NAME = attribute('registry_name')
-REGISTRY_CA_FILE = attribute('registry_ca_file')
+REGISTRY_CERT_PATH = input('registry_cert_path')
+REGISTRY_NAME = input('registry_name')
+REGISTRY_CA_FILE = input('registry_ca_file')
 
 # check if docker exists
 only_if('docker not found') do
