@@ -1,8 +1,7 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
-# Copyright 2016, Patrick Muench
-# Copyright 2017, Christoph Hartmann
+# Copyright:: 2016, Patrick Muench
+# Copyright:: 2017, Christoph Hartmann
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,9 +22,9 @@
 title 'Container Runtime'
 
 # attributes
-CONTAINER_CAPADD = attribute('container_capadd')
-APP_ARMOR_PROFILE = attribute('app_armor_profile')
-SELINUX_PROFILE = attribute('selinux_profile')
+CONTAINER_CAPADD = input('container_capadd')
+APP_ARMOR_PROFILE = input('app_armor_profile')
+SELINUX_PROFILE = input('selinux_profile')
 
 # check if docker exists
 only_if('docker not found') do
@@ -47,7 +46,7 @@ control 'docker-5.1' do
   ref 'Secure Engine', url: 'https://docs.docker.com/engine/security/'
   ref 'AppArmor security profiles for Docker', url: 'https://docs.docker.com/engine/security/apparmor/'
 
-  only_if { %w[ubuntu debian].include? os[:name] }
+  only_if { %w(ubuntu debian).include? os[:name] }
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
       its(['AppArmorProfile']) { should include(APP_ARMOR_PROFILE) }
@@ -74,15 +73,15 @@ control 'docker-5.2' do
   ref 'Bug: selinux break docker user namespace', url: 'https://bugzilla.redhat.com/show_bug.cgi?id=1312665'
   ref 'Security-Enhanced Linux', url: 'https://docs-old.fedoraproject.org/en-US/Fedora/13/html/Security-Enhanced_Linux/'
 
-  only_if { %w[centos redhat].include? os[:name] }
+  only_if { %w(centos redhat).include? os[:name] }
   describe json('/etc/docker/daemon.json') do
     its(['selinux-enabled']) { should eq(true) }
   end
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig SecurityOpt]) { should_not eq nil }
-      its(%w[HostConfig SecurityOpt]) { should include(SELINUX_PROFILE) }
+      its(%w(HostConfig SecurityOpt)) { should_not eq nil }
+      its(%w(HostConfig SecurityOpt)) { should include(SELINUX_PROFILE) }
     end
   end
 end
@@ -107,9 +106,9 @@ control 'docker-5.3' do
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig CapDrop]) { should include(/all/) }
-      its(%w[HostConfig CapDrop]) { should_not eq nil }
-      its(%w[HostConfig CapAdd]) { should eq CONTAINER_CAPADD }
+      its(%w(HostConfig CapDrop)) { should include(/all/) }
+      its(%w(HostConfig CapDrop)) { should_not eq nil }
+      its(%w(HostConfig CapAdd)) { should eq CONTAINER_CAPADD }
     end
   end
 end
@@ -129,8 +128,8 @@ control 'docker-5.4' do
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig Privileged]) { should eq false }
-      its(%w[HostConfig Privileged]) { should_not eq true }
+      its(%w(HostConfig Privileged)) { should eq false }
+      its(%w(HostConfig Privileged)) { should_not eq true }
     end
   end
 end
@@ -250,7 +249,7 @@ control 'docker-5.9' do
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig NetworkMode]) { should_not eq 'host' }
+      its(%w(HostConfig NetworkMode)) { should_not eq 'host' }
     end
   end
 end
@@ -272,7 +271,7 @@ control 'docker-5.10' do
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig Memory]) { should_not eq 0 }
+      its(%w(HostConfig Memory)) { should_not eq 0 }
     end
   end
 end
@@ -294,8 +293,8 @@ control 'docker-5.11' do
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig CpuShares]) { should_not eq 0 }
-      its(%w[HostConfig CpuShares]) { should_not eq 1024 }
+      its(%w(HostConfig CpuShares)) { should_not eq 0 }
+      its(%w(HostConfig CpuShares)) { should_not eq 1024 }
     end
   end
 end
@@ -320,7 +319,7 @@ control 'docker-5.12' do
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig ReadonlyRootfs]) { should eq true }
+      its(%w(HostConfig ReadonlyRootfs)) { should eq true }
     end
   end
 end
@@ -368,11 +367,11 @@ control 'docker-5.14' do
   docker.containers.running?.ids.each do |id|
     describe.one do
       describe docker.object(id) do
-        its(%w[HostConfig RestartPolicy Name]) { should eq 'no' }
+        its(%w(HostConfig RestartPolicy Name)) { should eq 'no' }
       end
       describe docker.object(id) do
-        its(%w[HostConfig RestartPolicy Name]) { should eq 'on-failure' }
-        its(%w[HostConfig RestartPolicy MaximumRetryCount]) { should eq 5 }
+        its(%w(HostConfig RestartPolicy Name)) { should eq 'on-failure' }
+        its(%w(HostConfig RestartPolicy MaximumRetryCount)) { should eq 5 }
       end
     end
   end
@@ -394,7 +393,7 @@ control 'docker-5.15' do
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig PidMode]) { should_not eq 'host' }
+      its(%w(HostConfig PidMode)) { should_not eq 'host' }
     end
   end
 end
@@ -415,7 +414,7 @@ control 'docker-5.16' do
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig IpcMode]) { should_not eq 'host' }
+      its(%w(HostConfig IpcMode)) { should_not eq 'host' }
     end
   end
 end
@@ -439,7 +438,7 @@ control 'docker-5.17' do
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig Devices]) { should be_empty }
+      its(%w(HostConfig Devices)) { should be_empty }
     end
   end
 end
@@ -461,7 +460,7 @@ control 'docker-5.18' do
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig Ulimits]) { should eq nil }
+      its(%w(HostConfig Ulimits)) { should eq nil }
     end
   end
 end
@@ -505,7 +504,7 @@ control 'docker-5.20' do
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig UTSMode]) { should_not eq 'host' }
+      its(%w(HostConfig UTSMode)) { should_not eq 'host' }
     end
   end
 end
@@ -530,8 +529,8 @@ control 'docker-5.21' do
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig SecurityOpt]) { should include(/seccomp/) }
-      its(%w[HostConfig SecurityOpt]) { should_not include(/seccomp[=|:]unconfined/) }
+      its(%w(HostConfig SecurityOpt)) { should include(/seccomp/) }
+      its(%w(HostConfig SecurityOpt)) { should_not include(/seccomp[=|:]unconfined/) }
     end
   end
 end
@@ -588,7 +587,7 @@ control 'docker-5.24' do
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig CgroupParent]) { should be_empty }
+      its(%w(HostConfig CgroupParent)) { should be_empty }
     end
   end
 end
@@ -612,7 +611,7 @@ control 'docker-5.25' do
 
   docker.containers.running?.ids.each do |id|
     describe docker.object(id) do
-      its(%w[HostConfig SecurityOpt]) { should include(/no-new-privileges/) }
+      its(%w(HostConfig SecurityOpt)) { should include(/no-new-privileges/) }
     end
   end
 end
