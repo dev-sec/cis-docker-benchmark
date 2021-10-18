@@ -50,7 +50,7 @@ We use a yml attribute file to steer the configuration, the following options ar
 * `managable_container_number: 25`
   keep number of containers on a host to a manageable total.
 * `daemon_tlscacert : /etc/docker/ssl/ca.pem`
-  configure the
+  configure the certificate authority.
 * `daemon_tlscert: /etc/docker/ssl/server_cert.pem`
   configure the server certificate.
 * `daemon_tlskey: /etc/docker/ssl/server_key.pem`
