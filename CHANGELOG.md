@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.1.3](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.3) (2021-10-30)
+
+[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/2.1.2...2.1.3)
+
+**Merged pull requests:**
+
+- update release workflow to match other projects [\#71](https://github.com/dev-sec/cis-docker-benchmark/pull/71) ([schurzi](https://github.com/schurzi))
+- Missing words "certificate authority." [\#70](https://github.com/dev-sec/cis-docker-benchmark/pull/70) ([adamoutler](https://github.com/adamoutler))
+
 ## [2.1.2](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.2) (2020-06-18)
 
 [Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/2.1.1...2.1.2)
@@ -53,7 +62,7 @@
 **Closed issues:**
 
 - Verify enable content trust per-shell or per-invocation check [\#44](https://github.com/dev-sec/cis-docker-benchmark/issues/44)
-- load\_with\_context': undefined method `each' for nil:NilClass \(NoMethodError\) exception in cis-docker-benchmark-master/controls/container\_runtime.rb:194 [\#37](https://github.com/dev-sec/cis-docker-benchmark/issues/37)
+- load_with_context': undefined method `each' for nil:NilClass \(NoMethodError\) exception in cis-docker-benchmark-master/controls/container\_runtime.rb:194 [\#37](https://github.com/dev-sec/cis-docker-benchmark/issues/37)
 - use own control number scheme [\#25](https://github.com/dev-sec/cis-docker-benchmark/issues/25)
 - Update to CIS 1.13 [\#24](https://github.com/dev-sec/cis-docker-benchmark/issues/24)
 
@@ -78,7 +87,7 @@
 **Merged pull requests:**
 
 - 1.3.1 [\#40](https://github.com/dev-sec/cis-docker-benchmark/pull/40) ([chris-rock](https://github.com/chris-rock))
-- updating check for container\_info networkings port [\#38](https://github.com/dev-sec/cis-docker-benchmark/pull/38) ([coolguru](https://github.com/coolguru))
+- updating check for container\_info networkings port [\#38](https://github.com/dev-sec/cis-docker-benchmark/pull/38) ([nandeshguru](https://github.com/nandeshguru))
 - add required docker cli version [\#35](https://github.com/dev-sec/cis-docker-benchmark/pull/35) ([chris-rock](https://github.com/chris-rock))
 - use recommended spdx license identifier [\#34](https://github.com/dev-sec/cis-docker-benchmark/pull/34) ([chris-rock](https://github.com/chris-rock))
 - Due to inspec deprecation warnings [\#33](https://github.com/dev-sec/cis-docker-benchmark/pull/33) ([alexpop](https://github.com/alexpop))
@@ -116,7 +125,7 @@
 
 **Merged pull requests:**
 
-- Fix 'or' in controls 5.1 and 5.2 [\#18](https://github.com/dev-sec/cis-docker-benchmark/pull/18) ([emilyh315](https://github.com/emilyh315))
+- Fix 'or' in controls 5.1 and 5.2 [\#18](https://github.com/dev-sec/cis-docker-benchmark/pull/18) ([emilyay](https://github.com/emilyay))
 - add changelog [\#16](https://github.com/dev-sec/cis-docker-benchmark/pull/16) ([chris-rock](https://github.com/chris-rock))
 
 ## [1.1.0](https://github.com/dev-sec/cis-docker-benchmark/tree/1.1.0) (2016-12-13)
@@ -126,8 +135,8 @@
 **Merged pull requests:**
 
 - update Gemfile and fix rubocop issues [\#15](https://github.com/dev-sec/cis-docker-benchmark/pull/15) ([atomic111](https://github.com/atomic111))
-- Edit control "cis-docker-benchmark-3.4" [\#14](https://github.com/dev-sec/cis-docker-benchmark/pull/14) ([emilyh315](https://github.com/emilyh315))
-- Edit control "cis-docker-benchmark-1.11" [\#13](https://github.com/dev-sec/cis-docker-benchmark/pull/13) ([emilyh315](https://github.com/emilyh315))
+- Edit control "cis-docker-benchmark-3.4" [\#14](https://github.com/dev-sec/cis-docker-benchmark/pull/14) ([emilyay](https://github.com/emilyay))
+- Edit control "cis-docker-benchmark-1.11" [\#13](https://github.com/dev-sec/cis-docker-benchmark/pull/13) ([emilyay](https://github.com/emilyay))
 - Fix README.md [\#12](https://github.com/dev-sec/cis-docker-benchmark/pull/12) ([netflash](https://github.com/netflash))
 
 ## [1.0.0](https://github.com/dev-sec/cis-docker-benchmark/tree/1.0.0) (2016-07-05)
