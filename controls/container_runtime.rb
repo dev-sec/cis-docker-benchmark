@@ -23,9 +23,9 @@
 title 'Container Runtime'
 
 # attributes
-CONTAINER_CAPADD = attribute('container_capadd')
-APP_ARMOR_PROFILE = attribute('app_armor_profile')
-SELINUX_PROFILE = attribute('selinux_profile')
+CONTAINER_CAPADD = input('container_capadd')
+APP_ARMOR_PROFILE = input('app_armor_profile')
+SELINUX_PROFILE = input('selinux_profile')
 
 # check if docker exists
 only_if('docker not found') do
