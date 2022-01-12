@@ -23,7 +23,7 @@
 title 'Container Images and Build File'
 
 # attributes
-CONTAINER_USER = attribute('container_user')
+CONTAINER_USER = input('container_user')
 
 # check if docker exists
 only_if('docker not found') do

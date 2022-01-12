@@ -23,16 +23,16 @@
 title 'Docker Daemon Configuration'
 
 # attributes
-DAEMON_TLSCACERT = attribute('daemon_tlscacert')
-DAEMON_TLSCERT = attribute('daemon_tlscert')
-DAEMON_TLSKEY = attribute('daemon_tlskey')
-AUTHORIZATION_PLUGIN = attribute('authorization_plugin')
-LOG_DRIVER = attribute('log_driver')
-LOG_OPTS = attribute('log_opts')
-SWARM_MODE = attribute('swarm_mode')
-SWARM_MAX_MANAGER_NODES = attribute('swarm_max_manager_nodes')
-SWARM_PORT = attribute('swarm_port')
-SECCOMP_DEFAULT_PROFILE = attribute('seccomp_default_profile')
+DAEMON_TLSCACERT = input('daemon_tlscacert')
+DAEMON_TLSCERT = input('daemon_tlscert')
+DAEMON_TLSKEY = input('daemon_tlskey')
+AUTHORIZATION_PLUGIN = input('authorization_plugin')
+LOG_DRIVER = input('log_driver')
+LOG_OPTS = input('log_opts')
+SWARM_MODE = input('swarm_mode')
+SWARM_MAX_MANAGER_NODES = input('swarm_max_manager_nodes')
+SWARM_PORT = input('swarm_port')
+SECCOMP_DEFAULT_PROFILE = input('seccomp_default_profile')
 
 # check if docker exists
 only_if('docker not found') do
@@ -168,8 +168,8 @@ control 'docker-2.7' do
   ref 'Docker daemon deafult ulimits', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#default-ulimits'
 
   describe json('/etc/docker/daemon.json') do
-    its(['default-ulimits', 'nproc']) { should eq('1024:2408') }
-    its(['default-ulimits', 'nofile']) { should eq('100': '200') }
+    its(%w[default-ulimits nproc]) { should eq('1024:2408') }
+    its(%w[default-ulimits nofile]) { should eq('100': '200') }
   end
 end
 

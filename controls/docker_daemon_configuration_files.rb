@@ -23,9 +23,9 @@
 title 'Docker Daemon Configuration Files'
 
 # attributes
-REGISTRY_CERT_PATH = attribute('registry_cert_path')
-REGISTRY_NAME = attribute('registry_name')
-REGISTRY_CA_FILE = attribute('registry_ca_file')
+REGISTRY_CERT_PATH = input('registry_cert_path')
+REGISTRY_NAME = input('registry_name')
+REGISTRY_CA_FILE = input('registry_ca_file')
 
 # check if docker exists
 only_if('docker not found') do

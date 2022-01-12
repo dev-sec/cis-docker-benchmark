@@ -22,9 +22,9 @@
 
 title 'Host Configuration'
 
-TRUSTED_USER = attribute('trusted_user')
-MANAGEABLE_CONTAINER_NUMBER = attribute('managable_container_number')
-BENCHMARK_VERSION = attribute('benchmark_version')
+TRUSTED_USER = input('trusted_user')
+MANAGEABLE_CONTAINER_NUMBER = input('managable_container_number')
+BENCHMARK_VERSION = input('benchmark_version')
 
 # check if docker exists
 only_if('docker not found') do
@@ -233,7 +233,7 @@ control 'host-1.10' do
 
   only_if { os.linux? }
   if docker_helper.path
-    rule = '-w ' + docker_helper.path + ' -p rwxa -k docker'
+    rule = "-w #{docker_helper.path} -p rwxa -k docker"
     describe auditd do
       its(:lines) { should include(rule) }
     end
@@ -259,7 +259,7 @@ control 'host-1.11' do
 
   only_if { os.linux? }
   if docker_helper.socket
-    rule = '-w ' + docker_helper.socket + ' -p rwxa -k docker'
+    rule = "-w #{docker_helper.socket} -p rwxa -k docker"
     describe auditd do
       its(:lines) { should include(rule) }
     end
