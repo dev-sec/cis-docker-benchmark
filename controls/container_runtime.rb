@@ -153,13 +153,13 @@ control 'docker-5.5' do
     info['Mounts'].each do |mounts|
       describe mounts['Source'] do
         it { should_not eq '/' }
-        it { should_not match(%r{\/boot}) }
-        it { should_not match(%r{\/dev}) }
-        it { should_not match(%r{\/etc}) }
-        it { should_not match(%r{\/lib}) }
-        it { should_not match(%r{\/proc}) }
-        it { should_not match(%r{\/sys}) }
-        it { should_not match(%r{\/usr}) }
+        it { should_not match(%r{/boot}) }
+        it { should_not match(%r{/dev}) }
+        it { should_not match(%r{/etc}) }
+        it { should_not match(%r{/lib}) }
+        it { should_not match(%r{/proc}) }
+        it { should_not match(%r{/sys}) }
+        it { should_not match(%r{/usr}) }
       end
     end
   end
@@ -185,7 +185,7 @@ control 'docker-5.6' do
   ref 'Why you don\'t need to run SSHd in your Docker containers', url: 'https://blog.docker.com/2014/06/why-you-dont-need-to-run-sshd-in-docker/'
 
   docker.containers.running?.ids.each do |id|
-    execute_command = 'docker exec ' + id + ' ps -e'
+    execute_command = "docker exec #{id} ps -e"
     describe command(execute_command) do
       its('stdout') { should_not match(/ssh/) }
     end
@@ -209,8 +209,10 @@ control 'docker-5.7' do
   docker.containers.running?.ids.each do |id|
     container_info = docker.object(id)
     next if container_info['NetworkSettings']['Ports'].nil?
+
     container_info['NetworkSettings']['Ports'].each do |_, hosts|
       next if hosts.nil?
+  
       hosts.each do |host|
         describe host['HostPort'].to_i.between?(1, 1024) do
           it { should eq false }
@@ -341,8 +343,10 @@ control 'docker-5.13' do
   docker.containers.running?.ids.each do |id|
     container_info = docker.object(id)
     next if container_info['NetworkSettings']['Ports'].nil?
+
     container_info['NetworkSettings']['Ports'].each do |_, hosts|
       next if hosts.nil?
+
       hosts.each do |host|
         describe host['HostIp'].to_i.between?(1, 1024) do
           it { should_not eq '0.0.0.0' }
