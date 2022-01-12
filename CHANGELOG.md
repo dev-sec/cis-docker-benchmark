@@ -1,11 +1,12 @@
 # Changelog
 
-## [2.1.3](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.3) (2021-10-30)
+## [2.1.3](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.3) (2022-01-12)
 
 [Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/2.1.2...2.1.3)
 
 **Merged pull requests:**
 
+- use input instead of attribute [\#74](https://github.com/dev-sec/cis-docker-benchmark/pull/74) ([micheelengronne](https://github.com/micheelengronne))
 - update release workflow to match other projects [\#71](https://github.com/dev-sec/cis-docker-benchmark/pull/71) ([schurzi](https://github.com/schurzi))
 - Missing words "certificate authority." [\#70](https://github.com/dev-sec/cis-docker-benchmark/pull/70) ([adamoutler](https://github.com/adamoutler))
 
