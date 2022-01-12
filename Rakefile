@@ -1,5 +1,5 @@
-#!/usr/bin/env rake
 # encoding: utf-8
+# frozen_string_literal: true
 
 require 'rake/testtask'
 require 'rubocop/rake_task'
@@ -21,7 +21,7 @@ namespace :test do
   # run inspec check to verify that the profile is properly configured
   task :check do
     dir = File.join(File.dirname(__FILE__))
-    sh("bundle exec inspec check #{dir}")
+    sh("bundle exec cinc-auditor check #{dir} --format json --log-level=error | jq .")
   end
 end
 
