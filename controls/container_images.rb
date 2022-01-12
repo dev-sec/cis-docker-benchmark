@@ -1,5 +1,6 @@
-# encoding: utf-8
 # frozen_string_literal: true
+
+# encoding: utf-8
 
 # Copyright 2016, Patrick Muench
 # Copyright 2017, Christoph Hartmann
