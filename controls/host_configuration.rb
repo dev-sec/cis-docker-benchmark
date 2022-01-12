@@ -1,5 +1,6 @@
-# encoding: utf-8
 # frozen_string_literal: true
+
+# encoding: utf-8
 
 # Copyright 2016, Patrick Muench
 # Copyright 2017, Christoph Hartmann
@@ -233,7 +234,7 @@ control 'host-1.10' do
 
   only_if { os.linux? }
   if docker_helper.path
-    rule = '-w ' + docker_helper.path + ' -p rwxa -k docker'
+    rule = "-w #{docker_helper.path} -p rwxa -k docker"
     describe auditd do
       its(:lines) { should include(rule) }
     end
@@ -259,7 +260,7 @@ control 'host-1.11' do
 
   only_if { os.linux? }
   if docker_helper.socket
-    rule = '-w ' + docker_helper.socket + ' -p rwxa -k docker'
+    rule = "-w #{docker_helper.socket} -p rwxa -k docker"
     describe auditd do
       its(:lines) { should include(rule) }
     end
