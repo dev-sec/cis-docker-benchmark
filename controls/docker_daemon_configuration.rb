@@ -23,16 +23,16 @@
 title 'Docker Daemon Configuration'
 
 # attributes
-DAEMON_TLSCACERT = attribute('daemon_tlscacert')
-DAEMON_TLSCERT = attribute('daemon_tlscert')
-DAEMON_TLSKEY = attribute('daemon_tlskey')
-AUTHORIZATION_PLUGIN = attribute('authorization_plugin')
-LOG_DRIVER = attribute('log_driver')
-LOG_OPTS = attribute('log_opts')
-SWARM_MODE = attribute('swarm_mode')
-SWARM_MAX_MANAGER_NODES = attribute('swarm_max_manager_nodes')
-SWARM_PORT = attribute('swarm_port')
-SECCOMP_DEFAULT_PROFILE = attribute('seccomp_default_profile')
+DAEMON_TLSCACERT = input('daemon_tlscacert')
+DAEMON_TLSCERT = input('daemon_tlscert')
+DAEMON_TLSKEY = input('daemon_tlskey')
+AUTHORIZATION_PLUGIN = input('authorization_plugin')
+LOG_DRIVER = input('log_driver')
+LOG_OPTS = input('log_opts')
+SWARM_MODE = input('swarm_mode')
+SWARM_MAX_MANAGER_NODES = input('swarm_max_manager_nodes')
+SWARM_PORT = input('swarm_port')
+SECCOMP_DEFAULT_PROFILE = input('seccomp_default_profile')
 
 # check if docker exists
 only_if('docker not found') do
