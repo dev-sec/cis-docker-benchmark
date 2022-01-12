@@ -22,9 +22,9 @@
 
 title 'Host Configuration'
 
-TRUSTED_USER = attribute('trusted_user')
-MANAGEABLE_CONTAINER_NUMBER = attribute('managable_container_number')
-BENCHMARK_VERSION = attribute('benchmark_version')
+TRUSTED_USER = input('trusted_user')
+MANAGEABLE_CONTAINER_NUMBER = input('managable_container_number')
+BENCHMARK_VERSION = input('benchmark_version')
 
 # check if docker exists
 only_if('docker not found') do
