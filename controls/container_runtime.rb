@@ -212,7 +212,7 @@ control 'docker-5.7' do
 
     container_info['NetworkSettings']['Ports'].each do |_, hosts|
       next if hosts.nil?
-  
+
       hosts.each do |host|
         describe host['HostPort'].to_i.between?(1, 1024) do
           it { should eq false }
