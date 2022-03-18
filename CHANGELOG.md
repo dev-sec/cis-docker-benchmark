@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.4](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.4) (2022-03-18)
+
+[Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/2.1.3...2.1.4)
+
+**Merged pull requests:**
+
+- Change linting to Cookstyle [\#75](https://github.com/dev-sec/cis-docker-benchmark/pull/75) ([schurzi](https://github.com/schurzi))
+
 ## [2.1.3](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.3) (2022-01-12)
 
 [Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/2.1.2...2.1.3)
