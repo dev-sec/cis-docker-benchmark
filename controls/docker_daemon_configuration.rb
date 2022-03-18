@@ -1,8 +1,7 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
-# Copyright 2016, Patrick Muench
-# Copyright 2017, Christoph Hartmann
+# Copyright:: 2016, Patrick Muench
+# Copyright:: 2017, Christoph Hartmann
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -168,8 +167,8 @@ control 'docker-2.7' do
   ref 'Docker daemon deafult ulimits', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#default-ulimits'
 
   describe json('/etc/docker/daemon.json') do
-    its(%w[default-ulimits nproc]) { should eq('1024:2408') }
-    its(%w[default-ulimits nofile]) { should eq('100': '200') }
+    its(%w(default-ulimits nproc)) { should eq('1024:2408') }
+    its(%w(default-ulimits nofile)) { should eq('100': '200') }
   end
 end
 
