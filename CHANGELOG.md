@@ -1,8 +1,12 @@
 # Changelog
 
-## [2.1.4](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.4) (2022-03-18)
+## [2.1.4](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.4) (2022-12-05)
 
 [Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/2.1.3...2.1.4)
+
+**Implemented enhancements:**
+
+- use centralised issue templates and workflows [\#77](https://github.com/dev-sec/cis-docker-benchmark/pull/77) ([schurzi](https://github.com/schurzi))
 
 **Merged pull requests:**
 
