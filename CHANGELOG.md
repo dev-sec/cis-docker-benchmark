@@ -1,12 +1,17 @@
 # Changelog
 
-## [2.1.4](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.4) (2022-12-05)
+## [2.1.4](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.4) (2023-02-25)
 
 [Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/2.1.3...2.1.4)
 
 **Implemented enhancements:**
 
 - use centralised issue templates and workflows [\#77](https://github.com/dev-sec/cis-docker-benchmark/pull/77) ([schurzi](https://github.com/schurzi))
+
+**Fixed bugs:**
+
+- Wrong placement of flag in command [\#72](https://github.com/dev-sec/cis-docker-benchmark/issues/72)
+- Wrong placement of flag in command  [\#73](https://github.com/dev-sec/cis-docker-benchmark/pull/73) ([nnickie23](https://github.com/nnickie23))
 
 **Merged pull requests:**
 
