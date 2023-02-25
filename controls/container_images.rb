@@ -174,7 +174,7 @@ control 'docker-4.7' do
   ref 'caching and apt-get update', url: 'https://github.com/moby/moby/issues/3313'
 
   docker.images.ids.each do |id|
-    describe command("docker history #{id} --no-trunc| grep -e 'update'") do
+    describe command("docker history --no-trunc #{id}| grep -e 'update'") do
       its('stdout') { should eq '' }
     end
   end
@@ -216,7 +216,7 @@ control 'docker-4.9' do
   ref 'Best practices for writing Dockerfiles', url: 'https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/'
 
   docker.images.ids.each do |id|
-    describe command("docker history #{id} --no-trunc| grep 'ADD'") do
+    describe command("docker history --no-trunc #{id}| grep 'ADD'") do
       its('stdout') { should eq '' }
     end
   end
