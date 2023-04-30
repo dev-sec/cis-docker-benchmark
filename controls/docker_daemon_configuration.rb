@@ -142,7 +142,7 @@ control 'docker-2.6' do
   tag 'cis-docker-1.12.0': '2.6'
   tag 'cis-docker-1.13.0': '2.6'
   tag 'level:1'
-  ref 'Protect Docker deamon socket', url: 'https://docs.docker.com/engine/security/https/'
+  ref 'Protect Docker daemon socket', url: 'https://docs.docker.com/engine/security/https/'
 
   describe json('/etc/docker/daemon.json') do
     its(['tls']) { should eq(true) }
@@ -164,7 +164,7 @@ control 'docker-2.7' do
   tag 'cis-docker-1.12.0': '2.7'
   tag 'cis-docker-1.13.0': '2.7'
   tag 'level:1'
-  ref 'Docker daemon deafult ulimits', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#default-ulimits'
+  ref 'Docker daemon default ulimits', url: 'https://docs.docker.com/engine/reference/commandline/daemon/#default-ulimits'
 
   describe json('/etc/docker/daemon.json') do
     its(%w(default-ulimits nproc)) { should eq('1024:2408') }
@@ -344,7 +344,7 @@ control 'docker-2.16' do
   title 'Control the number of manager nodes in a swarm'
   desc 'Ensure that the minimum number of required manager nodes is created in a swarm.
 
-  Rationale: Manager nodes within a swarm have control over the swarm and change its configuration modifying security parameters. Having excessive manager nodes could render the swarm more susceptible to compromise. If fault tolerance is not required in the manager nodes, a single node should be elected as a manger. If fault tolerance is required then the smallest practical odd number to achieve the appropriate level of tolerance should be configured.'
+  Rationale: Manager nodes within a swarm have control over the swarm and change its configuration modifying security parameters. Having excessive manager nodes could render the swarm more susceptible to compromise. If fault tolerance is not required in the manager nodes, a single node should be elected as a manager. If fault tolerance is required then the smallest practical odd number to achieve the appropriate level of tolerance should be configured.'
 
   tag 'docker'
   tag 'cis-docker-1.12.0': '2.16'
