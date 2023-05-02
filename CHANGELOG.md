@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.1.4](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.4) (2023-03-31)
+## [2.1.4](https://github.com/dev-sec/cis-docker-benchmark/tree/2.1.4) (2023-05-02)
 
 [Full Changelog](https://github.com/dev-sec/cis-docker-benchmark/compare/2.1.3...2.1.4)
 
@@ -15,6 +15,7 @@
 
 **Merged pull requests:**
 
+- add spellchecking with codespell [\#79](https://github.com/dev-sec/cis-docker-benchmark/pull/79) ([schurzi](https://github.com/schurzi))
 - Configure Renovate [\#78](https://github.com/dev-sec/cis-docker-benchmark/pull/78) ([renovate[bot]](https://github.com/apps/renovate))
 - Change linting to Cookstyle [\#75](https://github.com/dev-sec/cis-docker-benchmark/pull/75) ([schurzi](https://github.com/schurzi))
 
